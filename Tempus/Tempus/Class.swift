@@ -11,14 +11,21 @@ import Foundation
 struct Class_ {
     var courseName: String
     var day: Int
-    var sections: [Int]
-    var time: (DateComponents, DateComponents) {
-        let startTime = Class_.section2Time(sectionNum: sections.first!).start!
-        let finishTime = Class_.section2Time(sectionNum: sections.last!).finish!
+    var sections: (from: Int, to: Int)
+    var time: (start: DateComponents, finish: DateComponents) {
+        let startTime = Class_.section2Time(sectionNum: sections.from).start!
+        let finishTime = Class_.section2Time(sectionNum: sections.to).finish!
         
         return (startTime, finishTime)
     }
     var classroom: String
+    
+    var timeString: String {
+        let start = time.start
+        let finish = time.finish
+        
+        return "\(start.hour!):\(start.minute!) - \(finish.hour!):\(finish.minute!)"
+    }
     
     static func section2Time(sectionNum: Int) -> (start: DateComponents?, finish: DateComponents?) {
         var start: DateComponents?
@@ -79,20 +86,20 @@ struct Class_ {
     }
     
     static var timeTableOfSophomoreSecondSemester = [
-        Class_(courseName: "Computer Network", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: [1, 2], classroom: "F402"),
-        Class_(courseName: "Probability", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: [3, 4, 5], classroom: "F202"),
-        Class_(courseName: "World Heritage and Tourism Management", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: [6, 7], classroom: "F102"),
+        Class_(courseName: "Computer Network", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: (1, 2), classroom: "F402"),
+        Class_(courseName: "Probability", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: (3, 5), classroom: "F202"),
+        Class_(courseName: "World Heritage and Tourism Management", day: Calendar.gregorianShortWeekdaySymbols.mon.rawValue, sections: (6, 7), classroom: "F102"),
         
-        Class_(courseName: "Movie English", day: Calendar.gregorianShortWeekdaySymbols.tue.rawValue, sections: [3, 4], classroom: "Lab E304"),
-        Class_(courseName: "Web Development", day: Calendar.gregorianShortWeekdaySymbols.tue.rawValue, sections: [9, 10, 11], classroom: "Lab C505"),
+        Class_(courseName: "Movie English", day: Calendar.gregorianShortWeekdaySymbols.tue.rawValue, sections: (3, 4), classroom: "Lab E304"),
+        Class_(courseName: "Web Development", day: Calendar.gregorianShortWeekdaySymbols.tue.rawValue, sections: (9, 11), classroom: "Lab C505"),
         
-        Class_(courseName: "Computer Network", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: [3, 4], classroom: "F402"),
-        Class_(courseName: "Database", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: [8, 9], classroom: "F511"),
-        Class_(courseName: "Badminton", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: [10, 11], classroom: "Badminton Court 1"),
-        Class_(courseName: "Dialects and Regional Culture", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: [12, 13], classroom: "D512"),
+        Class_(courseName: "Computer Network", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: (3, 4), classroom: "F402"),
+        Class_(courseName: "Database", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: (8, 9), classroom: "F511"),
+        Class_(courseName: "Badminton", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: (10, 11), classroom: "Badminton Court 1"),
+        Class_(courseName: "Dialects and Regional Culture", day: Calendar.gregorianShortWeekdaySymbols.wed.rawValue, sections: (12, 13), classroom: "D512"),
         
-        Class_(courseName: "Database", day: Calendar.gregorianShortWeekdaySymbols.thu.rawValue, sections: [1, 2], classroom: "F203"),
-        Class_(courseName: "Interpretation", day: Calendar.gregorianShortWeekdaySymbols.thu.rawValue, sections: [3, 4], classroom: "Lab E307")
+        Class_(courseName: "Database", day: Calendar.gregorianShortWeekdaySymbols.thu.rawValue, sections: (1, 2), classroom: "F203"),
+        Class_(courseName: "Interpretation", day: Calendar.gregorianShortWeekdaySymbols.thu.rawValue, sections: (3, 4), classroom: "Lab E307")
     ]
     
     static func loadTimeTable() -> [Class_]? {
@@ -102,6 +109,18 @@ struct Class_ {
     static func saveTimeTable() {
         
     }
+}
+
+extension Array where Element == Class_ {
+    var classDict: [Int: Int] {
+        var classDict: [Int: Int] = [0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0]
+            
+            for class_ in self {
+                    classDict[class_.day]! += 1
+            }
+            
+            return classDict
+        }
 }
 
 extension Calendar {

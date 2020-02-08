@@ -10,6 +10,6 @@ import Foundation
 
 struct Course {
     var name: String
-    var classes: [Class_]
+    var semester: String
 }
 
