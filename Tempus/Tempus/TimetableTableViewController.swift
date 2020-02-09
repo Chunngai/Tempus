@@ -45,15 +45,15 @@ class TimetableTableViewController: UITableViewController {
                 
         tableView.rowHeight = 80
         tableView.separatorStyle = .none
-        tableView.backgroundColor = .black
+        //tableView.backgroundColor = .black
 
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barStyle = .black
+        //navigationController?.navigationBar.barStyle = .black
         
         navigationController?.tabBarItem.title = "Courses"
         navigationItem.title = "Timetable"
         
-        tabBarController?.tabBar.barStyle = .black
+        //tabBarController?.tabBar.barStyle = .black
     }
     
     func getClassIndex(indexPath: IndexPath) -> Int {
@@ -179,7 +179,7 @@ class TimetableTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
         
-        headerView.textLabel?.textColor = .white
+        //headerView.textLabel?.textColor = .white
     }
             
 //    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

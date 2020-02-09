@@ -121,6 +121,18 @@ extension Array where Element == Class_ {
             
             return classDict
         }
+    
+    var courses: [String] {
+        var courses: [String] = []
+        
+        for class_ in self {
+            if !courses.contains(class_.courseName) {
+                courses.append(class_.courseName)
+            }
+        }
+        
+        return courses
+    }
 }
 
 extension Calendar {

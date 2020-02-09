@@ -8,24 +8,20 @@
 
 import Foundation
 
-struct Assignment {
+struct Assignment: Equatable {
     var content: String
     var courseName: String
     var dueDate: Date
-    var isFinished: Bool
+    var status: Bool
     
     var dueDateString: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        
-        return dateFormatter.string(from: dueDate)
+        return dueDate.shortStyleString
     }
     
     static var assignmentSamples = [
-        Assignment(content: "ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1ChineseTaskContent1", courseName: "Chinese", dueDate: Date(), isFinished: false),
-        Assignment(content: "ChinsesTaskContent2", courseName: "Chinese", dueDate: Date(), isFinished: false),
-        Assignment(content: "MathsTaskContent1", courseName: "Maths", dueDate: Date(), isFinished: false),
+        Assignment(content: "Computer Network Task Content 1", courseName: "Computer Network", dueDate: Date(), status: false),
+        Assignment(content: "Computer Network Task Content 2", courseName: "Computer Network", dueDate: Date(), status: false),
+        Assignment(content: "Probability Task Content 1", courseName: "Probability", dueDate: Date(), status: true),
     ]
     
     static func loadAssignments() -> [Assignment]? {
@@ -60,5 +56,23 @@ extension Array where Element == Assignment {
         }
         
         return assignmentDictArray.sorted { $0.courseName < $1.courseName }
+    }
+    
+    func firstIndex(with indexPathForSelectedRow: IndexPath) -> Int? {
+        let index = self.firstIndex { (assignment) -> Bool in
+            assignment == self.assignmentDictArray[indexPathForSelectedRow.section].assignments[indexPathForSelectedRow.row]
+        }
+        
+        return index
+    }
+}
+
+extension Date {
+    var shortStyleString: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        
+        return dateFormatter.string(from: self)
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FF20725423ED42D500BFC5E8 /* TimetableClassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */; };
 		FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */; };
+		FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */; };
 		FF94FF5B23EC514800740A95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5A23EC514800740A95 /* AppDelegate.swift */; };
 		FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5C23EC514800740A95 /* SceneDelegate.swift */; };
 		FF94FF6223EC514800740A95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6023EC514800740A95 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableClassTableViewCell.swift; sourceTree = "<group>"; };
 		FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		FF94FF5723EC514800740A95 /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF94FF5A23EC514800740A95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FF94FF5C23EC514800740A95 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,15 +77,16 @@
 				FF94FF7823EC617300740A95 /* Course.swift */,
 				FF94FF8023ED08B300740A95 /* Class.swift */,
 				FFBD8D6523EEC9C200948ED8 /* Assignment.swift */,
-				FF94FF5A23EC514800740A95 /* AppDelegate.swift */,
-				FF94FF5C23EC514800740A95 /* SceneDelegate.swift */,
 				FF94FF6023EC514800740A95 /* Main.storyboard */,
+				FF94FF5C23EC514800740A95 /* SceneDelegate.swift */,
 				FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */,
 				FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */,
 				FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */,
+				FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */,
 				FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */,
 				FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */,
 				FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */,
+				FF94FF5A23EC514800740A95 /* AppDelegate.swift */,
 				FF94FF6323EC514A00740A95 /* Assets.xcassets */,
 				FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */,
 				FF94FF6823EC514A00740A95 /* Info.plist */,
@@ -173,6 +176,7 @@
 				FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */,
 				FF94FF8123ED08B300740A95 /* Class.swift in Sources */,
 				FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */,
+				FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

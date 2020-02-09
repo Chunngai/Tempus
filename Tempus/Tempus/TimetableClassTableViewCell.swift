@@ -26,21 +26,21 @@ class TimetableClassTableViewCell: UITableViewCell {
     }
 
     func update(class_: Class_) {
-        self.backgroundColor = .black
+        //self.backgroundColor = .black
         self.selectionStyle = .none
         self.accessoryType = .disclosureIndicator
         
         courseNameLabel.font = UIFont.systemFont(ofSize: 23)
         courseNameLabel.text = class_.courseName
-        courseNameLabel.textColor = .systemTeal
+        //courseNameLabel.textColor = .systemTeal
         
         let classTime = class_.time
         timeLabel.text = "\(classTime.0.hour!):\(classTime.0.minute!) - \(classTime.1.hour!):\(classTime.1.minute!)"
-        timeLabel.textColor = .systemTeal
+        //timeLabel.textColor = .systemTeal
         
         classroomLabel.textAlignment = .right
         classroomLabel.text = class_.classroom
-        classroomLabel.textColor = .systemTeal
+        //classroomLabel.textColor = .systemTeal
     }
     
 }

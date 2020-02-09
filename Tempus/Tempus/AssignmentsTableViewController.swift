@@ -8,27 +8,37 @@
 
 import UIKit
 
-class AssignmentsTableViewController: UITableViewController {
+class AssignmentsTableViewController: UITableViewController, AssignmentTableViewCellDelegate {
 
     var assignments: [Assignment]?
-    var assignmentDictArray: [(courseName: String, assignments: [Assignment])]?
+    var assignmentDictArray: [(courseName: String, assignments: [Assignment])]? {
+        return assignments!.assignmentDictArray
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.backgroundColor = .black
+//        tableView.backgroundColor = .black
         tableView.separatorStyle = .none
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barStyle = .black
+//        navigationController?.navigationBar.barStyle = .black
         navigationItem.title = "Assignments"
         
-        tabBarController?.tabBar.barStyle = .black
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarButtonItemTapped))
         
-//        tableView.register(AssignmentTableViewCell.self, forCellReuseIdentifier: "AssignmentCell")
+        
+//        tabBarController?.tabBar.barStyle = .black
+        
+        tableView.register(AssignmentTableViewCell.classForCoder(), forCellReuseIdentifier: "AssignmentCell")
         
         assignments = Assignment.loadAssignments() ?? Assignment.assignmentSamples
-        assignmentDictArray = assignments!.assignmentDictArray
+        
+    }
+    
+    @objc func addBarButtonItemTapped() {
+        let destination = AssignmentDetailTableViewController()
+        self.present(destination, animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
@@ -45,7 +55,8 @@ class AssignmentsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AssignmentCell", for: indexPath) as! AssignmentTableViewCell
         let assignment = assignmentDictArray![indexPath.section].assignments[indexPath.row]
         
-        cell.update(assignment: assignment)
+        cell.delegate = self
+        cell.updateValue(assignment: assignment)
 
         return cell
     }
@@ -89,8 +100,14 @@ class AssignmentsTableViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "assignmentEditSegue",
+            let navController = segue.destination as? UINavigationController,
+            let assignmentDetailTableViewController = navController.topViewController as? AssignmentDetailTableViewController {
+            
+            let indexPathForSelectedRow = tableView.indexPathForSelectedRow!
+            
+            assignmentDetailTableViewController.assignment = assignmentDictArray![indexPathForSelectedRow.section].assignments[indexPathForSelectedRow.row]
+        }
     }
 
     // MARK: - Delegate
@@ -101,6 +118,43 @@ class AssignmentsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView = view as! UITableViewHeaderFooterView
         
-        headerView.textLabel?.textColor = .white
+        //headerView.textLabel?.textColor = .white
+        
+    }
+    
+    
+    @IBAction func unwindToAssignmentsTableViewController(segue: UIStoryboardSegue) {
+        let sourceViewController = segue.source as! AssignmentDetailTableViewController
+        let assignment = sourceViewController.assignment
+        
+        if let indexPathForSelectedRow = tableView.indexPathForSelectedRow {
+            let index = assignments!.firstIndex(with: indexPathForSelectedRow)
+            
+            if segue.identifier == "saveUnwindSegue" {
+                if let index = index {
+                    assignments![index] = assignment!
+                }
+            } else if segue.identifier == "deleteUnwindSegue" {
+                if let index = index {
+                    assignments!.remove(at: index)
+                }
+            }
+        } else if segue.identifier == "saveUnwindSegue" {
+            assignments!.append(assignment!)
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func checkMarkTapped(sender: AssignmentTableViewCell) {
+        if let indexPath = tableView.indexPath(for: sender) {
+            let index = assignments!.firstIndex(with: indexPath)!
+            
+            
+            assignments![index].status = sender.status!
+            
+            tableView.reloadData()
+            
+        }
     }
 }

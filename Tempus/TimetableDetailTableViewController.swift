@@ -39,14 +39,14 @@ class TimetableDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = .black
+        //tableView.backgroundColor = .black
         
-        navigationController?.navigationBar.barStyle = .black
+        //navigationController?.navigationBar.barStyle = .black
         
         navigationController?.navigationBar.titleTextAttributes = [:]
         
         navigationItem.title = ""
-        navigationController?.navigationBar.titleTextAttributes![NSAttributedString.Key.foregroundColor] = UIColor.white
+        //navigationController?.navigationBar.titleTextAttributes![NSAttributedString.Key.foregroundColor] = UIColor.white
         
         updateCourseNameSection()
         updateDaySection()
@@ -77,20 +77,20 @@ class TimetableDetailTableViewController: UITableViewController {
     }
     
     func updateCourseNameSection() {
-        courseNameTextField.backgroundColor = .black
-        courseNameTextField.textColor = .white
+        //courseNameTextField.backgroundColor = .black
+        //courseNameTextField.textColor = .white
     }
     
     @IBAction func dayButtonTapped(_ sender: UIButton) {
         for button in dayButtons {
-            if button.titleColor(for: .normal) == .systemPink {
-                button.setTitleColor(.systemTeal, for: .normal)
+            if button.titleColor(for: .normal) == .lightGray {
+                button.setTitleColor(.black, for: .normal)
             }
         }
         
         day = dayButtons.firstIndex(of: sender)
         
-        sender.setTitleColor(.systemPink, for: .normal)
+        sender.setTitleColor(.lightGray, for: .normal)
         tryEnableSaveBarButtonItem()
     }
     
@@ -143,7 +143,7 @@ class TimetableDetailTableViewController: UITableViewController {
     func updateTimeSection() {
         timeLabel.text = ""
         timeLabel.textAlignment = .center
-        timeLabel.textColor = .systemTeal
+        //timeLabel.textColor = .systemTeal
         
         timeVerticalStack.axis = .vertical
         timeVerticalStack.distribution = .fillEqually
@@ -152,15 +152,15 @@ class TimetableDetailTableViewController: UITableViewController {
         sectionToStack.distribution = .fill
                 
         sectionFromLabel.text = "from section (1 - 14)"
-        sectionFromLabel.textColor = .systemTeal
+        //sectionFromLabel.textColor = .systemTeal
         sectionToLabel.text = "to     section (2 - 15)"
-        sectionToLabel.textColor = .systemTeal
+        //sectionToLabel.textColor = .systemTeal
         
-        sectionFromTextField.backgroundColor = .black
-        sectionFromTextField.textColor = .white
+        //sectionFromTextField.backgroundColor = .black
+        //sectionFromTextField.textColor = .white
         sectionFromTextField.keyboardType = .numberPad
-        sectionToTextField.backgroundColor = .black
-        sectionToTextField.textColor = .white
+        //sectionToTextField.backgroundColor = .black
+        //sectionToTextField.textColor = .white
         sectionToTextField.keyboardType = .numberPad
     }
         
@@ -169,8 +169,8 @@ class TimetableDetailTableViewController: UITableViewController {
     }
 
     func updateClassroomSection() {
-        classroomTextField.backgroundColor = .black
-        classroomTextField.textColor = .white
+        //classroomTextField.backgroundColor = .black
+        //classroomTextField.textColor = .white
     }
     
     @IBAction func deleteButtonTapped(_ sender: UIButton) {
@@ -184,12 +184,14 @@ class TimetableDetailTableViewController: UITableViewController {
         }
         alertController.addAction(deleteAction)
         
+        alertController.popoverPresentationController?.sourceView = sender
+        
         present(alertController, animated: true, completion: nil)
     }
     
     
     func updateDeleteButton() {
-        deleteButton.backgroundColor = .black
+        //deleteButton.backgroundColor = .black
         deleteButton.setTitleColor(.red, for: .normal)
         deleteButton.setTitle("DELETE", for: .normal)
     }
