@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FF20725423ED42D500BFC5E8 /* TimetableClassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */; };
+		FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */; };
+		FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */; };
+		FF94FF5B23EC514800740A95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5A23EC514800740A95 /* AppDelegate.swift */; };
+		FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5C23EC514800740A95 /* SceneDelegate.swift */; };
+		FF94FF6223EC514800740A95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6023EC514800740A95 /* Main.storyboard */; };
+		FF94FF6423EC514A00740A95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6323EC514A00740A95 /* Assets.xcassets */; };
+		FF94FF6723EC514A00740A95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */; };
+		FF94FF7923EC617300740A95 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF7823EC617300740A95 /* Course.swift */; };
+		FF94FF8123ED08B300740A95 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF8023ED08B300740A95 /* Class.swift */; };
+		FF94FF8323ED1BF600740A95 /* TimetableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */; };
+		FFBD8D6023EEBAC300948ED8 /* CoursesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */; };
+		FFBD8D6223EEBF4000948ED8 /* AssignmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */; };
+		FFBD8D6423EEC4C300948ED8 /* AssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */; };
+		FFBD8D6623EEC9C200948ED8 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6523EEC9C200948ED8 /* Assignment.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableClassTableViewCell.swift; sourceTree = "<group>"; };
+		FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		FF94FF5723EC514800740A95 /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF94FF5A23EC514800740A95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FF94FF5C23EC514800740A95 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FF94FF6123EC514800740A95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FF94FF6323EC514A00740A95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FF94FF6623EC514A00740A95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FF94FF6823EC514A00740A95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF94FF7823EC617300740A95 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = SOURCE_ROOT; };
+		FF94FF8023ED08B300740A95 /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
+		FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableTableViewController.swift; sourceTree = "<group>"; };
+		FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesViewController.swift; sourceTree = "<group>"; };
+		FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewController.swift; sourceTree = "<group>"; };
+		FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTableViewCell.swift; sourceTree = "<group>"; };
+		FFBD8D6523EEC9C200948ED8 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FF94FF5423EC514800740A95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FF94FF4E23EC514800740A95 = {
+			isa = PBXGroup;
+			children = (
+				FF94FF5923EC514800740A95 /* Tempus */,
+				FF94FF5823EC514800740A95 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FF94FF5823EC514800740A95 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF94FF5723EC514800740A95 /* Tempus.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FF94FF5923EC514800740A95 /* Tempus */ = {
+			isa = PBXGroup;
+			children = (
+				FF94FF7823EC617300740A95 /* Course.swift */,
+				FF94FF8023ED08B300740A95 /* Class.swift */,
+				FFBD8D6523EEC9C200948ED8 /* Assignment.swift */,
+				FF94FF6023EC514800740A95 /* Main.storyboard */,
+				FF94FF5C23EC514800740A95 /* SceneDelegate.swift */,
+				FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */,
+				FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */,
+				FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */,
+				FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */,
+				FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */,
+				FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */,
+				FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */,
+				FF94FF5A23EC514800740A95 /* AppDelegate.swift */,
+				FF94FF6323EC514A00740A95 /* Assets.xcassets */,
+				FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */,
+				FF94FF6823EC514A00740A95 /* Info.plist */,
+			);
+			path = Tempus;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF94FF5623EC514800740A95 /* Tempus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF94FF6B23EC514A00740A95 /* Build configuration list for PBXNativeTarget "Tempus" */;
+			buildPhases = (
+				FF94FF5323EC514800740A95 /* Sources */,
+				FF94FF5423EC514800740A95 /* Frameworks */,
+				FF94FF5523EC514800740A95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tempus;
+			productName = Tempus;
+			productReference = FF94FF5723EC514800740A95 /* Tempus.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF94FF4F23EC514800740A95 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = Sola;
+				TargetAttributes = {
+					FF94FF5623EC514800740A95 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+				};
+			};
+			buildConfigurationList = FF94FF5223EC514800740A95 /* Build configuration list for PBXProject "Tempus" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FF94FF4E23EC514800740A95;
+			productRefGroup = FF94FF5823EC514800740A95 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF94FF5623EC514800740A95 /* Tempus */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FF94FF5523EC514800740A95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF94FF6723EC514A00740A95 /* LaunchScreen.storyboard in Resources */,
+				FF94FF6423EC514A00740A95 /* Assets.xcassets in Resources */,
+				FF94FF6223EC514800740A95 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF94FF5323EC514800740A95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF20725423ED42D500BFC5E8 /* TimetableClassTableViewCell.swift in Sources */,
+				FFBD8D6023EEBAC300948ED8 /* CoursesViewController.swift in Sources */,
+				FFBD8D6423EEC4C300948ED8 /* AssignmentTableViewCell.swift in Sources */,
+				FFBD8D6623EEC9C200948ED8 /* Assignment.swift in Sources */,
+				FF94FF7923EC617300740A95 /* Course.swift in Sources */,
+				FF94FF8323ED1BF600740A95 /* TimetableTableViewController.swift in Sources */,
+				FFBD8D6223EEBF4000948ED8 /* AssignmentsTableViewController.swift in Sources */,
+				FF94FF5B23EC514800740A95 /* AppDelegate.swift in Sources */,
+				FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */,
+				FF94FF8123ED08B300740A95 /* Class.swift in Sources */,
+				FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */,
+				FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FF94FF6023EC514800740A95 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF94FF6123EC514800740A95 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FF94FF6623EC514A00740A95 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FF94FF6923EC514A00740A95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FF94FF6A23EC514A00740A95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FF94FF6C23EC514A00740A95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Tempus/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Sola.Tempus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FF94FF6D23EC514A00740A95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Tempus/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Sola.Tempus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FF94FF5223EC514800740A95 /* Build configuration list for PBXProject "Tempus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF94FF6923EC514A00740A95 /* Debug */,
+				FF94FF6A23EC514A00740A95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF94FF6B23EC514A00740A95 /* Build configuration list for PBXNativeTarget "Tempus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF94FF6C23EC514A00740A95 /* Debug */,
+				FF94FF6D23EC514A00740A95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FF94FF4F23EC514800740A95 /* Project object */;
+}

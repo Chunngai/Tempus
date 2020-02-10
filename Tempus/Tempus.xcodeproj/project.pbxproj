@@ -7,45 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FF20725423ED42D500BFC5E8 /* TimetableClassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */; };
-		FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */; };
-		FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */; };
-		FF94FF5B23EC514800740A95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5A23EC514800740A95 /* AppDelegate.swift */; };
-		FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF5C23EC514800740A95 /* SceneDelegate.swift */; };
-		FF94FF6223EC514800740A95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6023EC514800740A95 /* Main.storyboard */; };
-		FF94FF6423EC514A00740A95 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6323EC514A00740A95 /* Assets.xcassets */; };
-		FF94FF6723EC514A00740A95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */; };
-		FF94FF7923EC617300740A95 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF7823EC617300740A95 /* Course.swift */; };
-		FF94FF8123ED08B300740A95 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF8023ED08B300740A95 /* Class.swift */; };
-		FF94FF8323ED1BF600740A95 /* TimetableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */; };
-		FFBD8D6023EEBAC300948ED8 /* CoursesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */; };
-		FFBD8D6223EEBF4000948ED8 /* AssignmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */; };
-		FFBD8D6423EEC4C300948ED8 /* AssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */; };
-		FFBD8D6623EEC9C200948ED8 /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBD8D6523EEC9C200948ED8 /* Assignment.swift */; };
+		FFB83DDF23F1140400458D73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DDE23F1140400458D73 /* AppDelegate.swift */; };
+		FFB83DE123F1140400458D73 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DE023F1140400458D73 /* SceneDelegate.swift */; };
+		FFB83DE323F1140400458D73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DE223F1140400458D73 /* ViewController.swift */; };
+		FFB83DE623F1140400458D73 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFB83DE423F1140400458D73 /* Main.storyboard */; };
+		FFB83DE823F1140500458D73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFB83DE723F1140500458D73 /* Assets.xcassets */; };
+		FFB83DEB23F1140500458D73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */; };
+		FFB83DF323F1144100458D73 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF223F1144100458D73 /* Day.swift */; };
+		FFB83DF623F1146800458D73 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF523F1146800458D73 /* Time.swift */; };
+		FFB83DF823F1148000458D73 /* Semester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF723F1148000458D73 /* Semester.swift */; };
+		FFB83DFA23F1148E00458D73 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF923F1148E00458D73 /* Course.swift */; };
+		FFB83E0023F1177200458D73 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DFF23F1177200458D73 /* Task.swift */; };
+		FFB83E0223F117E600458D73 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0123F117E600458D73 /* Schedule.swift */; };
+		FFB83E0423F1188100458D73 /* Timetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0323F1188100458D73 /* Timetable.swift */; };
+		FFB83E0823F12C6900458D73 /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0723F12C6900458D73 /* Statistics.swift */; };
+		FFB83E0A23F1300F00458D73 /* CategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0923F1300F00458D73 /* CategoryList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableClassTableViewCell.swift; sourceTree = "<group>"; };
-		FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
-		FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentDetailTableViewController.swift; sourceTree = SOURCE_ROOT; };
-		FF94FF5723EC514800740A95 /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF94FF5A23EC514800740A95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FF94FF5C23EC514800740A95 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		FF94FF6123EC514800740A95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		FF94FF6323EC514A00740A95 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FF94FF6623EC514A00740A95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		FF94FF6823EC514A00740A95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FF94FF7823EC617300740A95 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = SOURCE_ROOT; };
-		FF94FF8023ED08B300740A95 /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
-		FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableTableViewController.swift; sourceTree = "<group>"; };
-		FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesViewController.swift; sourceTree = "<group>"; };
-		FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewController.swift; sourceTree = "<group>"; };
-		FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTableViewCell.swift; sourceTree = "<group>"; };
-		FFBD8D6523EEC9C200948ED8 /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
+		FFB83DDB23F1140400458D73 /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFB83DDE23F1140400458D73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FFB83DE023F1140400458D73 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		FFB83DE223F1140400458D73 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FFB83DE523F1140400458D73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FFB83DE723F1140500458D73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FFB83DEA23F1140500458D73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FFB83DEC23F1140500458D73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FFB83DF223F1144100458D73 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		FFB83DF523F1146800458D73 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		FFB83DF723F1148000458D73 /* Semester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semester.swift; sourceTree = "<group>"; };
+		FFB83DF923F1148E00458D73 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		FFB83DFF23F1177200458D73 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		FFB83E0123F117E600458D73 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
+		FFB83E0323F1188100458D73 /* Timetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timetable.swift; sourceTree = "<group>"; };
+		FFB83E0723F12C6900458D73 /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
+		FFB83E0923F1300F00458D73 /* CategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		FF94FF5423EC514800740A95 /* Frameworks */ = {
+		FFB83DD823F1140400458D73 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -55,55 +55,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FF94FF4E23EC514800740A95 = {
+		FFB83DD223F1140400458D73 = {
 			isa = PBXGroup;
 			children = (
-				FF94FF5923EC514800740A95 /* Tempus */,
-				FF94FF5823EC514800740A95 /* Products */,
+				FFB83DDD23F1140400458D73 /* Tempus */,
+				FFB83DDC23F1140400458D73 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		FF94FF5823EC514800740A95 /* Products */ = {
+		FFB83DDC23F1140400458D73 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FF94FF5723EC514800740A95 /* Tempus.app */,
+				FFB83DDB23F1140400458D73 /* Tempus.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		FF94FF5923EC514800740A95 /* Tempus */ = {
+		FFB83DDD23F1140400458D73 /* Tempus */ = {
 			isa = PBXGroup;
 			children = (
-				FF94FF7823EC617300740A95 /* Course.swift */,
-				FF94FF8023ED08B300740A95 /* Class.swift */,
-				FFBD8D6523EEC9C200948ED8 /* Assignment.swift */,
-				FF94FF6023EC514800740A95 /* Main.storyboard */,
-				FF94FF5C23EC514800740A95 /* SceneDelegate.swift */,
-				FFBD8D5F23EEBAC200948ED8 /* CoursesViewController.swift */,
-				FFBD8D6123EEBF4000948ED8 /* AssignmentsTableViewController.swift */,
-				FFBD8D6323EEC4C300948ED8 /* AssignmentTableViewCell.swift */,
-				FF2CE50423EF13BD00A12827 /* AssignmentDetailTableViewController.swift */,
-				FF94FF8223ED1BF600740A95 /* TimetableTableViewController.swift */,
-				FF20725323ED42D500BFC5E8 /* TimetableClassTableViewCell.swift */,
-				FF20725923ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift */,
-				FF94FF5A23EC514800740A95 /* AppDelegate.swift */,
-				FF94FF6323EC514A00740A95 /* Assets.xcassets */,
-				FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */,
-				FF94FF6823EC514A00740A95 /* Info.plist */,
+				FFB83DF423F1144D00458D73 /* Models */,
+				FFB83DDE23F1140400458D73 /* AppDelegate.swift */,
+				FFB83DE023F1140400458D73 /* SceneDelegate.swift */,
+				FFB83DE223F1140400458D73 /* ViewController.swift */,
+				FFB83DE423F1140400458D73 /* Main.storyboard */,
+				FFB83DE723F1140500458D73 /* Assets.xcassets */,
+				FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */,
+				FFB83DEC23F1140500458D73 /* Info.plist */,
 			);
 			path = Tempus;
+			sourceTree = "<group>";
+		};
+		FFB83DF423F1144D00458D73 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FFB83DF223F1144100458D73 /* Day.swift */,
+				FFB83DF523F1146800458D73 /* Time.swift */,
+				FFB83DF723F1148000458D73 /* Semester.swift */,
+				FFB83DF923F1148E00458D73 /* Course.swift */,
+				FFB83E0323F1188100458D73 /* Timetable.swift */,
+				FFB83DFF23F1177200458D73 /* Task.swift */,
+				FFB83E0123F117E600458D73 /* Schedule.swift */,
+				FFB83E0723F12C6900458D73 /* Statistics.swift */,
+				FFB83E0923F1300F00458D73 /* CategoryList.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FF94FF5623EC514800740A95 /* Tempus */ = {
+		FFB83DDA23F1140400458D73 /* Tempus */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF94FF6B23EC514A00740A95 /* Build configuration list for PBXNativeTarget "Tempus" */;
+			buildConfigurationList = FFB83DEF23F1140500458D73 /* Build configuration list for PBXNativeTarget "Tempus" */;
 			buildPhases = (
-				FF94FF5323EC514800740A95 /* Sources */,
-				FF94FF5423EC514800740A95 /* Frameworks */,
-				FF94FF5523EC514800740A95 /* Resources */,
+				FFB83DD723F1140400458D73 /* Sources */,
+				FFB83DD823F1140400458D73 /* Frameworks */,
+				FFB83DD923F1140400458D73 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -111,25 +119,25 @@
 			);
 			name = Tempus;
 			productName = Tempus;
-			productReference = FF94FF5723EC514800740A95 /* Tempus.app */;
+			productReference = FFB83DDB23F1140400458D73 /* Tempus.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FF94FF4F23EC514800740A95 /* Project object */ = {
+		FFB83DD323F1140400458D73 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Sola;
 				TargetAttributes = {
-					FF94FF5623EC514800740A95 = {
+					FFB83DDA23F1140400458D73 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
 				};
 			};
-			buildConfigurationList = FF94FF5223EC514800740A95 /* Build configuration list for PBXProject "Tempus" */;
+			buildConfigurationList = FFB83DD623F1140400458D73 /* Build configuration list for PBXProject "Tempus" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -137,64 +145,64 @@
 				en,
 				Base,
 			);
-			mainGroup = FF94FF4E23EC514800740A95;
-			productRefGroup = FF94FF5823EC514800740A95 /* Products */;
+			mainGroup = FFB83DD223F1140400458D73;
+			productRefGroup = FFB83DDC23F1140400458D73 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FF94FF5623EC514800740A95 /* Tempus */,
+				FFB83DDA23F1140400458D73 /* Tempus */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FF94FF5523EC514800740A95 /* Resources */ = {
+		FFB83DD923F1140400458D73 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF94FF6723EC514A00740A95 /* LaunchScreen.storyboard in Resources */,
-				FF94FF6423EC514A00740A95 /* Assets.xcassets in Resources */,
-				FF94FF6223EC514800740A95 /* Main.storyboard in Resources */,
+				FFB83DEB23F1140500458D73 /* LaunchScreen.storyboard in Resources */,
+				FFB83DE823F1140500458D73 /* Assets.xcassets in Resources */,
+				FFB83DE623F1140400458D73 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		FF94FF5323EC514800740A95 /* Sources */ = {
+		FFB83DD723F1140400458D73 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF20725423ED42D500BFC5E8 /* TimetableClassTableViewCell.swift in Sources */,
-				FFBD8D6023EEBAC300948ED8 /* CoursesViewController.swift in Sources */,
-				FFBD8D6423EEC4C300948ED8 /* AssignmentTableViewCell.swift in Sources */,
-				FFBD8D6623EEC9C200948ED8 /* Assignment.swift in Sources */,
-				FF94FF7923EC617300740A95 /* Course.swift in Sources */,
-				FF94FF8323ED1BF600740A95 /* TimetableTableViewController.swift in Sources */,
-				FFBD8D6223EEBF4000948ED8 /* AssignmentsTableViewController.swift in Sources */,
-				FF94FF5B23EC514800740A95 /* AppDelegate.swift in Sources */,
-				FF20725A23ED6F6700BFC5E8 /* TimetableDetailTableViewController.swift in Sources */,
-				FF94FF8123ED08B300740A95 /* Class.swift in Sources */,
-				FF94FF5D23EC514800740A95 /* SceneDelegate.swift in Sources */,
-				FF2CE50523EF13BD00A12827 /* AssignmentDetailTableViewController.swift in Sources */,
+				FFB83DE323F1140400458D73 /* ViewController.swift in Sources */,
+				FFB83E0223F117E600458D73 /* Schedule.swift in Sources */,
+				FFB83E0823F12C6900458D73 /* Statistics.swift in Sources */,
+				FFB83E0023F1177200458D73 /* Task.swift in Sources */,
+				FFB83DFA23F1148E00458D73 /* Course.swift in Sources */,
+				FFB83E0423F1188100458D73 /* Timetable.swift in Sources */,
+				FFB83DF823F1148000458D73 /* Semester.swift in Sources */,
+				FFB83DDF23F1140400458D73 /* AppDelegate.swift in Sources */,
+				FFB83DF623F1146800458D73 /* Time.swift in Sources */,
+				FFB83DF323F1144100458D73 /* Day.swift in Sources */,
+				FFB83DE123F1140400458D73 /* SceneDelegate.swift in Sources */,
+				FFB83E0A23F1300F00458D73 /* CategoryList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		FF94FF6023EC514800740A95 /* Main.storyboard */ = {
+		FFB83DE423F1140400458D73 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FF94FF6123EC514800740A95 /* Base */,
+				FFB83DE523F1140400458D73 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		FF94FF6523EC514A00740A95 /* LaunchScreen.storyboard */ = {
+		FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				FF94FF6623EC514A00740A95 /* Base */,
+				FFB83DEA23F1140500458D73 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -202,7 +210,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		FF94FF6923EC514A00740A95 /* Debug */ = {
+		FFB83DED23F1140500458D73 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -262,7 +270,7 @@
 			};
 			name = Debug;
 		};
-		FF94FF6A23EC514A00740A95 /* Release */ = {
+		FFB83DEE23F1140500458D73 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -316,7 +324,7 @@
 			};
 			name = Release;
 		};
-		FF94FF6C23EC514A00740A95 /* Debug */ = {
+		FFB83DF023F1140500458D73 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -333,7 +341,7 @@
 			};
 			name = Debug;
 		};
-		FF94FF6D23EC514A00740A95 /* Release */ = {
+		FFB83DF123F1140500458D73 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -353,25 +361,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FF94FF5223EC514800740A95 /* Build configuration list for PBXProject "Tempus" */ = {
+		FFB83DD623F1140400458D73 /* Build configuration list for PBXProject "Tempus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FF94FF6923EC514A00740A95 /* Debug */,
-				FF94FF6A23EC514A00740A95 /* Release */,
+				FFB83DED23F1140500458D73 /* Debug */,
+				FFB83DEE23F1140500458D73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FF94FF6B23EC514A00740A95 /* Build configuration list for PBXNativeTarget "Tempus" */ = {
+		FFB83DEF23F1140500458D73 /* Build configuration list for PBXNativeTarget "Tempus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FF94FF6C23EC514A00740A95 /* Debug */,
-				FF94FF6D23EC514A00740A95 /* Release */,
+				FFB83DF023F1140500458D73 /* Debug */,
+				FFB83DF123F1140500458D73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FF94FF4F23EC514800740A95 /* Project object */;
+	rootObject = FFB83DD323F1140400458D73 /* Project object */;
 }
