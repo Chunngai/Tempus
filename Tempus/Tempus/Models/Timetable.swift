@@ -15,4 +15,10 @@ struct Timetable {
 
 extension Timetable {
     static var timeTableSections: [Int: Time]?
+    
+    struct Time {
+        var start: DateComponents
+        var finish: DateComponents
+    }
+
 }

@@ -14,7 +14,6 @@
 		FFB83DE823F1140500458D73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFB83DE723F1140500458D73 /* Assets.xcassets */; };
 		FFB83DEB23F1140500458D73 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */; };
 		FFB83DF323F1144100458D73 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF223F1144100458D73 /* Day.swift */; };
-		FFB83DF623F1146800458D73 /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF523F1146800458D73 /* Time.swift */; };
 		FFB83DF823F1148000458D73 /* Semester.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF723F1148000458D73 /* Semester.swift */; };
 		FFB83DFA23F1148E00458D73 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DF923F1148E00458D73 /* Course.swift */; };
 		FFB83E0023F1177200458D73 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DFF23F1177200458D73 /* Task.swift */; };
@@ -22,6 +21,10 @@
 		FFB83E0423F1188100458D73 /* Timetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0323F1188100458D73 /* Timetable.swift */; };
 		FFB83E0823F12C6900458D73 /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0723F12C6900458D73 /* Statistics.swift */; };
 		FFB83E0A23F1300F00458D73 /* CategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83E0923F1300F00458D73 /* CategoryList.swift */; };
+		FFDD492223F19DA600C952A0 /* AssignmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD492123F19DA600C952A0 /* AssignmentsTableViewController.swift */; };
+		FFDEB14F23F2607C00BF548D /* AssignmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */; };
+		FFDEB15123F267A700BF548D /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB15023F267A700BF548D /* ViewExtensions.swift */; };
+		FFDEB15323F2BCFA00BF548D /* AssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +37,6 @@
 		FFB83DEA23F1140500458D73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FFB83DEC23F1140500458D73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FFB83DF223F1144100458D73 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
-		FFB83DF523F1146800458D73 /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		FFB83DF723F1148000458D73 /* Semester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semester.swift; sourceTree = "<group>"; };
 		FFB83DF923F1148E00458D73 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		FFB83DFF23F1177200458D73 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -42,6 +44,11 @@
 		FFB83E0323F1188100458D73 /* Timetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timetable.swift; sourceTree = "<group>"; };
 		FFB83E0723F12C6900458D73 /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
 		FFB83E0923F1300F00458D73 /* CategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryList.swift; sourceTree = "<group>"; };
+		FFDD492123F19DA600C952A0 /* AssignmentsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewController.swift; sourceTree = "<group>"; };
+		FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsViewController.swift; sourceTree = "<group>"; };
+		FFDEB15023F267A700BF548D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTableViewCell.swift; sourceTree = "<group>"; };
+		FFDEB15523F2F60900BF548D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +65,7 @@
 		FFB83DD223F1140400458D73 = {
 			isa = PBXGroup;
 			children = (
+				FFDEB15423F2BEF400BF548D /* tmp */,
 				FFB83DDD23F1140400458D73 /* Tempus */,
 				FFB83DDC23F1140400458D73 /* Products */,
 			);
@@ -74,13 +82,14 @@
 		FFB83DDD23F1140400458D73 /* Tempus */ = {
 			isa = PBXGroup;
 			children = (
-				FFB83DF423F1144D00458D73 /* Models */,
-				FFB83DDE23F1140400458D73 /* AppDelegate.swift */,
 				FFB83DE023F1140400458D73 /* SceneDelegate.swift */,
+				FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */,
 				FFB83DE223F1140400458D73 /* ViewController.swift */,
 				FFB83DE423F1140400458D73 /* Main.storyboard */,
+				FFB83DF423F1144D00458D73 /* Models */,
+				FFDD492323F19DAF00C952A0 /* Views */,
+				FFB83DDE23F1140400458D73 /* AppDelegate.swift */,
 				FFB83DE723F1140500458D73 /* Assets.xcassets */,
-				FFB83DE923F1140500458D73 /* LaunchScreen.storyboard */,
 				FFB83DEC23F1140500458D73 /* Info.plist */,
 			);
 			path = Tempus;
@@ -90,7 +99,6 @@
 			isa = PBXGroup;
 			children = (
 				FFB83DF223F1144100458D73 /* Day.swift */,
-				FFB83DF523F1146800458D73 /* Time.swift */,
 				FFB83DF723F1148000458D73 /* Semester.swift */,
 				FFB83DF923F1148E00458D73 /* Course.swift */,
 				FFB83E0323F1188100458D73 /* Timetable.swift */,
@@ -100,6 +108,25 @@
 				FFB83E0923F1300F00458D73 /* CategoryList.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FFDD492323F19DAF00C952A0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */,
+				FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */,
+				FFDEB15023F267A700BF548D /* ViewExtensions.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FFDEB15423F2BEF400BF548D /* tmp */ = {
+			isa = PBXGroup;
+			children = (
+				FFDD492123F19DA600C952A0 /* AssignmentsTableViewController.swift */,
+				FFDEB15523F2F60900BF548D /* MyPlayground.playground */,
+			);
+			path = tmp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,10 +207,13 @@
 				FFB83DFA23F1148E00458D73 /* Course.swift in Sources */,
 				FFB83E0423F1188100458D73 /* Timetable.swift in Sources */,
 				FFB83DF823F1148000458D73 /* Semester.swift in Sources */,
+				FFDEB15323F2BCFA00BF548D /* AssignmentTableViewCell.swift in Sources */,
+				FFDEB14F23F2607C00BF548D /* AssignmentsViewController.swift in Sources */,
+				FFDEB15123F267A700BF548D /* ViewExtensions.swift in Sources */,
 				FFB83DDF23F1140400458D73 /* AppDelegate.swift in Sources */,
-				FFB83DF623F1146800458D73 /* Time.swift in Sources */,
 				FFB83DF323F1144100458D73 /* Day.swift in Sources */,
 				FFB83DE123F1140400458D73 /* SceneDelegate.swift in Sources */,
+				FFDD492223F19DA600C952A0 /* AssignmentsTableViewController.swift in Sources */,
 				FFB83E0A23F1300F00458D73 /* CategoryList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
