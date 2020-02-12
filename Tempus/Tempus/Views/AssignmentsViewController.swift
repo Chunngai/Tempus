@@ -120,11 +120,3 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
      */
     
 }
-
-extension Array where Element == Course {
-    func getAssignment(indexPath: IndexPath) -> Task {
-        let assignmentIndex = self.activeCourseIndices[indexPath.section][indexPath.row]
-        
-        return self[indexPath.section].assignments[assignmentIndex]
-    }
-}

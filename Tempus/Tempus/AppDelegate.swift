@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Creates a tab bar controller as the root controller.
         let tabBarController = UITabBarController()
-        setTabBarControllerBackgroundColor(tabBarController: tabBarController)
+        tabBarController.view.addGradientLayer(colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor], locations: [0.0, 1.0], startPoint: CGPoint(x: 0, y: 1), endPoint: CGPoint(x: 1, y: 0))
         window?.rootViewController = tabBarController
         
         // Creates a view controller for assignments.
@@ -37,23 +37,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func setTabBarControllerBackgroundColor(tabBarController: UITabBarController) {
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.colors = [UIColor.aqua.cgColor, UIColor.sky.cgColor]
-        gradientLayer.locations = [0.0, 1.0]
-        
-        gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-        
-//        if let navigationBarBounds = navigationController?.navigationBar.bounds {
-//            gradientLayer.frame = navigationBarBounds
-//
-//            navigationController?.navigationBar.layer.addSublayer(gradientLayer)
-//        }
-        gradientLayer.frame = tabBarController.view.bounds
-        tabBarController.view.layer.sublayers?.insert(gradientLayer, at: 0)
-    }
+//    func setTabBarControllerBackgroundColor(tabBarController: UITabBarController) {
+//        let gradientLayer = CAGradientLayer()
+//        
+//        gradientLayer.colors = [UIColor.aqua.cgColor, UIColor.sky.cgColor]
+//        gradientLayer.locations = [0.0, 1.0]
+//        
+//        gradientLayer.startPoint = CGPoint(x: 0, y: 1)
+//        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+//        
+////        if let navigationBarBounds = navigationController?.navigationBar.bounds {
+////            gradientLayer.frame = navigationBarBounds
+////
+////            navigationController?.navigationBar.layer.addSublayer(gradientLayer)
+////        }
+//        gradientLayer.frame = tabBarController.view.bounds
+//        tabBarController.view.layer.sublayers?.insert(gradientLayer, at: 0)
+//    }
 
 //    // MARK: UISceneSession Lifecycle
 //

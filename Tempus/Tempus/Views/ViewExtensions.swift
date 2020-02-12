@@ -20,4 +20,36 @@ extension UINavigationBar {
 extension UIColor {
     static var sky = UIColor(red: 0.462, green: 0.838, blue: 1.000, alpha: 1)
     static var aqua = UIColor(red: 0.000, green: 0.590, blue: 1.000, alpha: 1)
+    
+    static var salmon = UIColor(red: 1.000, green: 0.493, blue: 0.474, alpha: 1)
+    static var maraschino = UIColor(red: 1.000, green: 0.149, blue: 0.000, alpha: 1)
+    
+    static var banana = UIColor(red: 1.000, green: 0.988, blue: 0.473, alpha: 1)
+    static var lemon = UIColor(red: 0.999, green: 0.986, blue: 0.000, alpha: 1)
+    
+    static var flora = UIColor(red: 0.450, green: 0.981, blue: 0.474, alpha: 1)
+    static var spring = UIColor(red: 0.000, green: 0.977, blue: 0.000, alpha: 1)
+}
+
+extension Array where Element == Course {
+    func getAssignment(indexPath: IndexPath) -> Task {
+        let assignmentIndex = self.activeCourseIndices[indexPath.section][indexPath.row]
+        
+        return self[indexPath.section].assignments[assignmentIndex]
+    }
+}
+
+extension UIView {
+    func addGradientLayer(colors: [CGColor], locations: [NSNumber], startPoint: CGPoint, endPoint: CGPoint) {
+        let gradientLayer = CAGradientLayer()
+        
+        gradientLayer.colors = colors
+        gradientLayer.locations = locations
+        
+        gradientLayer.startPoint = startPoint
+        gradientLayer.endPoint = endPoint
+        
+        gradientLayer.frame = self.bounds
+        self.layer.insertSublayer(gradientLayer, at: 0)
+    }
 }
