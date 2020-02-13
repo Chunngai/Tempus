@@ -31,13 +31,13 @@ extension UIColor {
     static var spring = UIColor(red: 0.000, green: 0.977, blue: 0.000, alpha: 1)
 }
 
-extension Array where Element == Course {
-    func getAssignment(indexPath: IndexPath) -> Task {
-        let assignmentIndex = self.activeCourseIndices[indexPath.section][indexPath.row]
-        
-        return self[indexPath.section].assignments[assignmentIndex]
-    }
-}
+//extension Array where Element == Course {
+//    func getAssignment(indexPath: IndexPath) -> Task {
+//        let assignmentIndex = self.activeCourseIndices[indexPath.section][indexPath.row]
+//        
+//        return self[indexPath.section].assignments[assignmentIndex]
+//    }
+//}
 
 extension UIView {
     func addGradientLayer(colors: [CGColor], locations: [NSNumber], startPoint: CGPoint, endPoint: CGPoint) {

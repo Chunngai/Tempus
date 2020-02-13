@@ -13,7 +13,7 @@ struct Course {
     var instructor: String
     var lessons: [Lesson]
     var assignments: [Task]
-    
+        
     static func loadCourses() -> [Course]? {
         return nil
     }
@@ -33,29 +33,71 @@ extension Course {
     }
 }
 
-extension Array where Element == Course {
-    var activeCourseIndices: [[Int]] {
-        var activeCourseIndices: [[Int]] = []
+extension Course {
+    var dueDateNotBeforeTodayOrUnfinishedAssignmentNumber: Int {
+        var courseCopy = self
+        courseCopy.sortAssignmentsByDueDateAndTimeAvailable()
         
-        var lastArrayIndex = 0
-        for courseIndex in 0..<self.count {
-            activeCourseIndices.append([])
-            
-            let courseAssignments = self[courseIndex].assignments
-            for assignmentIndex in 0..<courseAssignments.count {
-                let assignment = self[courseIndex].assignments[assignmentIndex]
-                
-                if assignment.dateInterval.end > Date()
-                    || (assignment.dateInterval.end < Date() && assignment.isFinished == false) {
-                    activeCourseIndices[lastArrayIndex].append(assignmentIndex)
-                }
+        var dueDateNotBeforeTodayOrUnfinishedAssignmentNumber = 0
+        for assignment in courseCopy.assignments {
+            if !(assignment.dateInterval.end < Date() && assignment.isFinished) {
+                dueDateNotBeforeTodayOrUnfinishedAssignmentNumber += 1
+            } else {
+                break
             }
-            lastArrayIndex += 1
         }
         
-        return activeCourseIndices
+        return dueDateNotBeforeTodayOrUnfinishedAssignmentNumber
+    }
+    
+    mutating func sortAssignmentsByDueDateAndTimeAvailable() {
+        var dueDateBeforeTodayAndFinishedAssignments: [Task] = []
+        var dueDateNotBeforeTodayOrUnfinishedAssignments: [Task] = []
+
+        var unfinishedAssignmentNumber = 0
+        for assignment in self.assignments {
+            if assignment.dateInterval.end < Date() && assignment.isFinished {
+                dueDateBeforeTodayAndFinishedAssignments.append(assignment)
+            } else {
+                if assignment.isFinished {
+                    dueDateNotBeforeTodayOrUnfinishedAssignments.append(assignment)
+                } else {
+                    dueDateNotBeforeTodayOrUnfinishedAssignments.insert(assignment, at: 0)
+                    unfinishedAssignmentNumber += 1
+                }
+            }
+        }
+        
+        dueDateNotBeforeTodayOrUnfinishedAssignments[0..<unfinishedAssignmentNumber].sort { $0.timeAvailable.minutes < $1.timeAvailable.minutes }
+        
+        let assignments = dueDateNotBeforeTodayOrUnfinishedAssignments + dueDateBeforeTodayAndFinishedAssignments
+        self.assignments = assignments
     }
 }
+
+//extension Array where Element == Course {
+//    var activeCourseIndices: [[Int]] {
+//        var activeCourseIndices: [[Int]] = []
+//
+//        var lastArrayIndex = 0
+//        for courseIndex in 0..<self.count {
+//            activeCourseIndices.append([])
+//
+//            let courseAssignments = self[courseIndex].assignments
+//            for assignmentIndex in 0..<courseAssignments.count {
+//                let assignment = self[courseIndex].assignments[assignmentIndex]
+//
+//                if assignment.dateInterval.end > Date()
+//                    || (assignment.dateInterval.end < Date() && assignment.isFinished == false) {
+//                    activeCourseIndices[lastArrayIndex].append(assignmentIndex)
+//                }
+//            }
+//            lastArrayIndex += 1
+//        }
+//        
+//        return activeCourseIndices
+//    }
+//}
 
 let date = Date() - 60*60*30
 extension Course {
@@ -72,19 +114,37 @@ extension Course {
             Lesson(day: .fri, time: Date(), location: "python location", comment: "python comment", isFinishedThisWeek: true)
         ], assignments: [])
         
-        let cpp1 = Task(content: "chapter 3 exercises 1, 2g wge gye heth qt bj bj bj j j v hc gh v hvj vj hv hv hh h j bj j bj h jv j bjb j g4w g5 g3w5 g35 g45 g5h4 g5 g5w 5w w 5w", dateInterval: DateInterval(start: date, duration: 60*60*60 + 230), isOverDue: true, isFinished: false, category: ["Course": "C++"])
+        let cpp1 = Task(content: "chapter 1 exercises 1, use as many ways as possible. refer to the related sections in the textbook and related resources on the website.", dateInterval: DateInterval(start: date - 60 * 60 * 24 * 6, duration: 60*60*24 * 3), isFinished: false, category: ["Course": "C++"])
         cpp.assignments.append(cpp1)
         
-        let cpp2 = Task(content: "chapter 10 exercise all", dateInterval: DateInterval(start: date, end: date + 1), isOverDue: false, isFinished: true, category: ["Course": "C++"])
+        let cpp2 = Task(content: "chapter 2 exercises 1, use as many ways as possible. refer to the related sections in the textbook and related resources on the website.", dateInterval: DateInterval(start: date, duration: 60*60*10), isFinished: false, category: ["Course": "C++"])
         cpp.assignments.append(cpp2)
         
-        let java1 = Task(content: "ch 3: 1, 2", dateInterval: DateInterval(start: date, duration: 60*60 * 50), isOverDue: false, isFinished: false, category: ["Course": "Java"])
+        let cpp3 = Task(content: "chapter 3 exercises 1, use as many ways as possible. refer to the related sections in the textbook and related resources on the website.", dateInterval: DateInterval(start: Date(), duration: 60*60*3), isFinished: true, category: ["Course": "C++"])
+        cpp.assignments.append(cpp3)
+        
+        let cpp4 = Task(content: "chapter 4 exercises 1, use as many ways as possible. refer to the related sections in the textbook and related resources on the website.", dateInterval: DateInterval(start: date, duration: 60*60*60 * 2), isFinished: false, category: ["Course": "C++"])
+        cpp.assignments.append(cpp4)
+        
+        let cpp5 = Task(content: "chapter 5 exercises 1, use as many ways as possible. refer to the related sections in the textbook and related resources on the website.", dateInterval: DateInterval(start: date, duration: 60*60*60 * 3), isFinished: false, category: ["Course": "C++"])
+        cpp.assignments.append(cpp5)
+        
+        let cpp6 = Task(content: "chapter 6 exercise all", dateInterval: DateInterval(start: date, end: date + 1), isFinished: true, category: ["Course": "C++"])
+        cpp.assignments.append(cpp6)
+        
+        let cpp7 = Task(content: "chapter 7 exercise all", dateInterval: DateInterval(start: date, end: date + 61), isFinished: true, category: ["Course": "C++"])
+        cpp.assignments.append(cpp7)
+        
+        let cpp8 = Task(content: "chapter 8 exercise all", dateInterval: DateInterval(start: date, end: date + 60), isFinished: true, category: ["Course": "C++"])
+        cpp.assignments.append(cpp8)
+        
+        let java1 = Task(content: "ch 3: 1, 2", dateInterval: DateInterval(start: date, duration: 60*60 * 50), isFinished: false, category: ["Course": "Java"])
         java.assignments.append(java1)
         
-        let python1 = Task(content: "machine learning linear regression derivation", dateInterval: DateInterval(start: date, duration: 60*60*200), isOverDue: false, isFinished: true, category: ["Course": "Python"])
+        let python1 = Task(content: "machine learning linear regression derivation", dateInterval: DateInterval(start: date, duration: 60*60*200), isFinished: true, category: ["Course": "Python"])
         python.assignments.append(python1)
         
-        let python2 = Task(content: "deep learning convolutional network derivation", dateInterval: DateInterval(start: date, duration: 60 * 60 * 24 * 33), isOverDue: true, isFinished: false, category: ["Course": "Python"])
+        let python2 = Task(content: "deep learning convolutional network derivation", dateInterval: DateInterval(start: Date(), duration: 60 * 60 * 24 * 33), isFinished: false, category: ["Course": "Python"])
         python.assignments.append(python2)
         
         return [cpp, java, python]

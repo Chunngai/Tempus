@@ -8,20 +8,32 @@
 
 import Foundation
 
-struct Task {
+struct Task: Equatable {
     var content: String
     var dateInterval: DateInterval
-    var remainingTime: DateComponents {
+    var timeAvailable: DateComponents {
         return dateInterval.MMddhhmmGregorianDayComponents(start: Date(), end: dateInterval.end)
     }
-    var isOverDue: Bool
+    var isOverDue: Bool {
+        return timeAvailable.minutes <= 0
+    }
     var isFinished: Bool
     var repetition: Repetition?
     var category: [String: String]
+    
+    static func == (lhs: Task, rhs: Task) -> Bool {
+        return (
+            lhs.content == rhs.content &&
+            lhs.dateInterval == rhs.dateInterval &&
+            lhs.isFinished == rhs.isFinished &&
+            lhs.repetition == rhs.repetition &&
+            lhs.category == rhs.category
+        )
+    }
 }
 
 extension Task {
-    enum Repetition {
+    enum Repetition: Equatable {
         case day(Int)
         case week(Int)
         case month(Int)
@@ -33,9 +45,16 @@ extension Task {
 }
 
 extension Date {
-    var shortDateTimeString: String {
+    var shortDateTimeStringWithoutWeekday: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd HH:mm"
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    var shortDateTimeStringWithWeekday: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd (E) HH:mm"
         
         return dateFormatter.string(from: self)
     }
@@ -76,7 +95,7 @@ extension DateComponents {
         return shortString
     }
     
-    var hours: Int {
-        return (self.month! * 30 * 24 + self.day! * 24 + self.hour!)
+    var minutes: Int {
+        return (self.month! * 30 * 24 * 60 + self.day! * 24 * 60 + self.hour! * 60 + self.minute!)
     }
 }
