@@ -8,6 +8,9 @@
 
 import UIKit
 
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,37 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .white
         
         // Creates a tab bar controller as the root controller.
-        let tabBarController = UITabBarController()
-        tabBarController.view.addGradientLayer(colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor], locations: [0.0, 1.0], startPoint: CGPoint(x: 0, y: 1), endPoint: CGPoint(x: 1, y: 0))
+        let tabBarController = TabBarViewController()
         window?.rootViewController = tabBarController
-        
-        // Creates a view controller for assignments.
-        let assignmentsViewController = AssignmentsViewController()
-        
-        // Creates a navigation controller for the assignment view controller.
-        let assignmentNavigationController = UINavigationController(rootViewController: assignmentsViewController)
-        tabBarController.addChild(assignmentNavigationController)
         
         return true
     }
-    
-//    func setTabBarControllerBackgroundColor(tabBarController: UITabBarController) {
-//        let gradientLayer = CAGradientLayer()
-//        
-//        gradientLayer.colors = [UIColor.aqua.cgColor, UIColor.sky.cgColor]
-//        gradientLayer.locations = [0.0, 1.0]
-//        
-//        gradientLayer.startPoint = CGPoint(x: 0, y: 1)
-//        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-//        
-////        if let navigationBarBounds = navigationController?.navigationBar.bounds {
-////            gradientLayer.frame = navigationBarBounds
-////
-////            navigationController?.navigationBar.layer.addSublayer(gradientLayer)
-////        }
-//        gradientLayer.frame = tabBarController.view.bounds
-//        tabBarController.view.layer.sublayers?.insert(gradientLayer, at: 0)
-//    }
 
 //    // MARK: UISceneSession Lifecycle
 //

@@ -11,11 +11,11 @@ import Foundation
 struct Task: Equatable {
     var content: String
     var dateInterval: DateInterval
-    var timeAvailable: DateComponents {
+    var availableTime: DateComponents {
         return dateInterval.MMddhhmmGregorianDayComponents(start: Date(), end: dateInterval.end)
     }
     var isOverDue: Bool {
-        return timeAvailable.minutes <= 0
+        return availableTime.minutes <= 0
     }
     var isFinished: Bool
     var repetition: Repetition?

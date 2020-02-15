@@ -10,55 +10,23 @@ import UIKit
 
 class AssignmentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AssignmentTableViewCellDelegate {
     
-    var tableView: UITableView?
-    let assignmentCellReuseIdentifier = "AssignmentCell"
-    let assignmentHeaderViewReuseIdentifier = "AssignmentSection"
-    
-    var navigationBar: UINavigationBar?
-    var navigationBarWithoutLargeTitleFrameHeight: CGFloat?
-    
-    var advancementArcLayer: CAShapeLayer?
-    
-    var dueDateNotBeforeTodayAndFinishedAssignmentNumber: Int {
-        var dueDateNotBeforeTodayAndFinishedAssignmentNumber = 0
-        
-        for course in courses! {
-            dueDateNotBeforeTodayAndFinishedAssignmentNumber += course.dueDateNotBeforeTodayAndFinishedAssignmentNumber
-        }
-        
-        return dueDateNotBeforeTodayAndFinishedAssignmentNumber
-    }
-    var dueDateNotBeforeTodayOrUnfinishedAssignmentNumber : Int {
-        var dueDateNotBeforeTodayOrUnfinishedAssignmentNumber = 0
-    
-        for course in courses! {
-            dueDateNotBeforeTodayOrUnfinishedAssignmentNumber += course.dueDateNotBeforeTodayOrUnfinishedAssignmentNumber
-        }
-        
-        return dueDateNotBeforeTodayOrUnfinishedAssignmentNumber
-    }
-    var availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber: Int {
-        var availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber = 0
-        
-        for course in courses! {
-            availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber += course.availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber
-        }
-        
-        return availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber
-    }
-    
-    var dueDateNotBeforeTodayAndFinishedAssignmentRatio: CGFloat {
-        return CGFloat(dueDateNotBeforeTodayAndFinishedAssignmentNumber) / CGFloat(dueDateNotBeforeTodayOrUnfinishedAssignmentNumber)
-    }
-    
     var courses: [Course]? {
         didSet {
-            if availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber > 0 {
-            navigationController?.tabBarItem.badgeValue = String(availableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber)
+            if courses!.totalAvailableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber > 0 {
+                navigationController?.tabBarItem.badgeValue = String(courses!.totalAvailableTimeLessThanThreeDaysAndNotFinishedAssignmentNumber)
             } else {
                 navigationController?.tabBarItem.badgeValue = nil
             }
         }
+    }
+    
+    var tableView: UITableView!
+    let assignmentCellReuseIdentifier = "AssignmentCell"
+    let assignmentHeaderViewReuseIdentifier = "AssignmentSection"
+    
+    var advancementArcLayer: CAShapeLayer?
+    var completionRatio: CGFloat {
+        return CGFloat(courses!.totalDueDateNotBeforeTodayAndFinishedAssignmentNumber) / CGFloat(courses!.totalDueDateNotBeforeTodayOrUnfinishedAssignmentNumber)
     }
         
     override func viewDidLoad() {
@@ -70,36 +38,26 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
     }
         
     func updateView() {
-        navigationBar = navigationController!.navigationBar
-        
-        // Customizes the navigation bar
-        navigationBar!.prefersLargeTitles = true
-        navigationBar!.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        navigationBarWithoutLargeTitleFrameHeight = navigationBar!.frame.maxY
-        
-        navigationBar!.setToTransparent()
-        
-        // Sets titles
+        // Sets the title of the navigation item.
         navigationItem.title = "Assignments"
         
-        navigationController?.tabBarItem.title = "Assignments"
-        
-        // Creates an advancement icon
+        // Creates an advancement icon.
         advancementArcLayer = CAShapeLayer()
-        drawAdvancementArc(ratio: dueDateNotBeforeTodayAndFinishedAssignmentRatio)
+        drawAdvancementArc(ratio: completionRatio)
         
-        // Creates a segmented controller
+        // Creates a segmented controller.
         let segmentedControl = UISegmentedControl(items: ["Course", "Due Date"])
         view.addSubview(segmentedControl)
         
+        // TODO: f
         let segmentedControllerWidth: CGFloat = 200
         let segmentedControllerHeight: CGFloat = 25
         let segmentedControllerX = view.bounds.width / 2 - segmentedControllerWidth / 2
-        let segmentedControllerY = navigationBar!.bounds.midY + navigationBar!.bounds.height
+        let segmentedControllerY = navigationController!.navigationBar.bounds.midY + navigationController!.navigationBar.bounds.height
+        
         segmentedControl.frame = CGRect(x: segmentedControllerX, y: segmentedControllerY,
                                         width: segmentedControllerWidth, height: segmentedControllerHeight)
-        
+
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.aqua], for: .selected)
         segmentedControl.selectedSegmentTintColor = .white
@@ -109,27 +67,31 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
         
         segmentedControl.addTarget(self, action: #selector(segmentDidChanged(_:)), for: .valueChanged)
                 
-        // Creates a table view
+        // Creates a table view.
+        // TODO: f
         let tableViewX: CGFloat = 0
-        let tableViewY = navigationBar!.bounds.maxY + navigationBar!.bounds.height
+        let tableViewY = navigationController!.navigationBar.bounds.maxY + navigationController!.navigationBar.bounds.height
         let tableViewWidth = view.bounds.width
         let tableViewHeight = view.bounds.height - tableViewY
+        
         tableView = UITableView(frame: CGRect(x: tableViewX, y: tableViewY, width: tableViewWidth, height: tableViewHeight), style: .grouped)
         view.addSubview(tableView!)
         
         tableView?.dataSource = self
         tableView?.delegate = self
         
-        tableView?.separatorStyle = .none
+        tableView?.register(AssignmentsTableViewCell.classForCoder(), forCellReuseIdentifier: assignmentCellReuseIdentifier)
+        tableView?.register(AssignmentsTableViewHeaderView.classForCoder(), forHeaderFooterViewReuseIdentifier: assignmentHeaderViewReuseIdentifier)
         
-        tableView?.register(AssignmentTableViewCell.classForCoder(), forCellReuseIdentifier: assignmentCellReuseIdentifier)
-        tableView?.register(AssignmentTableViewHeaderView.classForCoder(), forHeaderFooterViewReuseIdentifier: assignmentHeaderViewReuseIdentifier)
+        tableView?.separatorStyle = .none
     }
     
     func drawAdvancementArc(ratio: CGFloat) {
+        // TODO: f
         let advancementArcRadius: CGFloat = 16
         let advancementArcCenterX: CGFloat = view.bounds.width - 50
-        let advancementArcCenterY: CGFloat = navigationBarWithoutLargeTitleFrameHeight! + advancementArcRadius
+        let advancementArcCenterY: CGFloat = navigationController!.navigationBar.bounds.maxY + advancementArcRadius
+        
         let advancementArcPath = UIBezierPath(arcCenter: CGPoint(x: advancementArcCenterX, y: advancementArcCenterY), radius: advancementArcRadius, startAngle: .pi * 1.5, endAngle:  .pi * 2 * ratio + .pi * 1.5
             , clockwise: true)
         
@@ -157,8 +119,7 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: assignmentCellReuseIdentifier, for: indexPath) as! AssignmentTableViewCell
-        let cell = AssignmentTableViewCell()
+        let cell = AssignmentsTableViewCell()
                         
         let assignment = courses![indexPath.section].assignments[indexPath.row]
         cell.updateValues(assignment: assignment, tableViewBackgroundColor: tableView.backgroundColor, delegate: self)
@@ -167,17 +128,13 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: assignmentHeaderViewReuseIdentifier) as! AssignmentTableViewHeaderView
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: assignmentHeaderViewReuseIdentifier) as! AssignmentsTableViewHeaderView
         
         let course = courses![section]
         headerView.updateValues(course: course)
         
         return headerView
     }
-    
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return courses![section].name
-//    }
         
     // MARK: - Table view delegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -189,7 +146,7 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! AssignmentTableViewCell
+        let cell = tableView.cellForRow(at: indexPath) as! AssignmentsTableViewCell
         cell.viewTapped()
     }
     
@@ -223,12 +180,11 @@ class AssignmentsViewController: UIViewController, UITableViewDataSource, UITabl
             tableView?.deleteRows(at: [indexPathForSelectedRow], with: .automatic)
         }
                 
-        if let headerView = tableView!.headerView(forSection: section) as? AssignmentTableViewHeaderView {
+        if let headerView = tableView!.headerView(forSection: section) as? AssignmentsTableViewHeaderView {
             headerView.updateValues(course: courses![section])
         }
         
-        
-        drawAdvancementArc(ratio: dueDateNotBeforeTodayAndFinishedAssignmentRatio)
+        drawAdvancementArc(ratio: completionRatio)
     }
     
     /*

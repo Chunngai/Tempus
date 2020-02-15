@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF22D2C823F79A01002C3FB3 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF22D2C723F79A01002C3FB3 /* TabBarViewController.swift */; };
+		FF22D2CA23F79B1A002C3FB3 /* AssignmentsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF22D2C923F79B1A002C3FB3 /* AssignmentsNavigationViewController.swift */; };
+		FF38AD9723F68504006D07A6 /* AssignmentsTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF38AD9623F68504006D07A6 /* AssignmentsTableViewHeaderView.swift */; };
 		FFB83DDF23F1140400458D73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DDE23F1140400458D73 /* AppDelegate.swift */; };
 		FFB83DE123F1140400458D73 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DE023F1140400458D73 /* SceneDelegate.swift */; };
 		FFB83DE323F1140400458D73 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB83DE223F1140400458D73 /* ViewController.swift */; };
@@ -24,10 +27,13 @@
 		FFDD492223F19DA600C952A0 /* AssignmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD492123F19DA600C952A0 /* AssignmentsTableViewController.swift */; };
 		FFDEB14F23F2607C00BF548D /* AssignmentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */; };
 		FFDEB15123F267A700BF548D /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB15023F267A700BF548D /* ViewExtensions.swift */; };
-		FFDEB15323F2BCFA00BF548D /* AssignmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */; };
+		FFDEB15323F2BCFA00BF548D /* AssignmentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDEB15223F2BCFA00BF548D /* AssignmentsTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FF22D2C723F79A01002C3FB3 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TabBarViewController.swift; path = Tempus/TabBarViewController.swift; sourceTree = SOURCE_ROOT; };
+		FF22D2C923F79B1A002C3FB3 /* AssignmentsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AssignmentsNavigationViewController.swift; path = Tempus/AssignmentsNavigationViewController.swift; sourceTree = SOURCE_ROOT; };
+		FF38AD9623F68504006D07A6 /* AssignmentsTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewHeaderView.swift; sourceTree = "<group>"; };
 		FFB83DDB23F1140400458D73 /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFB83DDE23F1140400458D73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFB83DE023F1140400458D73 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,7 +53,7 @@
 		FFDD492123F19DA600C952A0 /* AssignmentsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewController.swift; sourceTree = "<group>"; };
 		FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsViewController.swift; sourceTree = "<group>"; };
 		FFDEB15023F267A700BF548D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
-		FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentTableViewCell.swift; sourceTree = "<group>"; };
+		FFDEB15223F2BCFA00BF548D /* AssignmentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentsTableViewCell.swift; sourceTree = "<group>"; };
 		FFDEB15523F2F60900BF548D /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
@@ -62,6 +68,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF38AD9823F68523006D07A6 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FF22D2C923F79B1A002C3FB3 /* AssignmentsNavigationViewController.swift */,
+				FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */,
+				FF22D2C723F79A01002C3FB3 /* TabBarViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		FFB83DD223F1140400458D73 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +104,7 @@
 				FFB83DE423F1140400458D73 /* Main.storyboard */,
 				FFB83DF423F1144D00458D73 /* Models */,
 				FFDD492323F19DAF00C952A0 /* Views */,
+				FF38AD9823F68523006D07A6 /* Controllers */,
 				FFB83DDE23F1140400458D73 /* AppDelegate.swift */,
 				FFB83DE723F1140500458D73 /* Assets.xcassets */,
 				FFB83DEC23F1140500458D73 /* Info.plist */,
@@ -113,8 +130,8 @@
 		FFDD492323F19DAF00C952A0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FFDEB14E23F2607C00BF548D /* AssignmentsViewController.swift */,
-				FFDEB15223F2BCFA00BF548D /* AssignmentTableViewCell.swift */,
+				FF38AD9623F68504006D07A6 /* AssignmentsTableViewHeaderView.swift */,
+				FFDEB15223F2BCFA00BF548D /* AssignmentsTableViewCell.swift */,
 				FFDEB15023F267A700BF548D /* ViewExtensions.swift */,
 			);
 			path = Views;
@@ -201,13 +218,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFB83DE323F1140400458D73 /* ViewController.swift in Sources */,
+				FF22D2CA23F79B1A002C3FB3 /* AssignmentsNavigationViewController.swift in Sources */,
 				FFB83E0223F117E600458D73 /* Schedule.swift in Sources */,
 				FFB83E0823F12C6900458D73 /* Statistics.swift in Sources */,
+				FF38AD9723F68504006D07A6 /* AssignmentsTableViewHeaderView.swift in Sources */,
 				FFB83E0023F1177200458D73 /* Task.swift in Sources */,
 				FFB83DFA23F1148E00458D73 /* Course.swift in Sources */,
 				FFB83E0423F1188100458D73 /* Timetable.swift in Sources */,
 				FFB83DF823F1148000458D73 /* Semester.swift in Sources */,
-				FFDEB15323F2BCFA00BF548D /* AssignmentTableViewCell.swift in Sources */,
+				FFDEB15323F2BCFA00BF548D /* AssignmentsTableViewCell.swift in Sources */,
+				FF22D2C823F79A01002C3FB3 /* TabBarViewController.swift in Sources */,
 				FFDEB14F23F2607C00BF548D /* AssignmentsViewController.swift in Sources */,
 				FFDEB15123F267A700BF548D /* ViewExtensions.swift in Sources */,
 				FFB83DDF23F1140400458D73 /* AppDelegate.swift in Sources */,
