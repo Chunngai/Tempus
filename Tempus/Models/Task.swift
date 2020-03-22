@@ -8,22 +8,22 @@
 
 import Foundation
 
-struct Task: Equatable, Comparable {
+struct Task: Equatable, Comparable, Codable {
     // Vars.
-    var content: String
+    var content: String!
     
-    var dateInterval: DateInterval
+    var dateInterval: DateInterval!
     var totalTime: DateComponents {
         return DateComponents.MdhmGregorianDayComponents(start: dateInterval.start, end: dateInterval.end)
     }
     var availableTime: DateComponents {
-        return DateComponents.MdhmGregorianDayComponents(start: Date(), end: dateInterval.end)
+        return DateComponents.MdhmGregorianDayComponents(start: Date().GTM8(), end: dateInterval.end)
     }
     var isOverDue: Bool {
         return availableTime.minutes <= 0
     }
 
-    var isFinished: Bool
+    var isFinished: Bool!
     
     // Methods.
     static func == (lhs: Task, rhs: Task) -> Bool {
@@ -53,7 +53,7 @@ struct Task: Equatable, Comparable {
 extension Date {
     init(hour: Int, minute: Int) {
         let now = Date()
-        
+
         var dateComponents = DateComponents()
         dateComponents.year = Calendar.current.component(.year, from: now)
         dateComponents.month = Calendar.current.component(.month, from: now)
@@ -61,8 +61,12 @@ extension Date {
         dateComponents.hour = hour
         dateComponents.minute = minute
         dateComponents.second = 0
-        
-        self = Calendar.current.date(from: dateComponents)!
+
+        self = Calendar.current.date(from: dateComponents)!  // should be GMT0
+    }
+    
+    func GTM8() -> Date {
+        return Date(timeInterval: 8 * 3600, since: self)
     }
 }
 

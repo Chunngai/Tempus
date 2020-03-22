@@ -8,10 +8,12 @@
 
 import Foundation
 
-struct Schedule {
+struct Schedule: Codable {
     // Vars.
     var date: Date
     var tasks: [Task]
+    
+    static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
     static var sampleSchedule: Schedule {
         return Schedule(date: Date(), tasks: [
@@ -46,7 +48,21 @@ struct Schedule {
     }
     
     // Methods.
-    static func loadSchedule() -> Schedule? {
-        return nil
+    static func loadSchedule(date: Date) -> Schedule? {
+//        print(date.formattedDate(), date.formattedTime(), 0)
+        let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(date.formattedDate())").appendingPathExtension("plist")
+        
+        guard let codedSchedule = try? Data(contentsOf: archiveURL) else { return nil }
+        let propertyListDecoder = PropertyListDecoder()
+        return try? propertyListDecoder.decode(Schedule.self, from: codedSchedule)
+    }
+    
+    static func saveSchedule(_ schedule: Schedule) {
+//        print(schedule.date.formattedDate(), schedule.date.formattedTime(), 1)
+        let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(schedule.date.formattedDate())").appendingPathExtension("plist")
+        
+        let propertyListEncoder = PropertyListEncoder()
+        let codedSchedule = try? propertyListEncoder.encode(schedule)
+        try? codedSchedule?.write(to: archiveURL, options: .noFileProtection)
     }
 }

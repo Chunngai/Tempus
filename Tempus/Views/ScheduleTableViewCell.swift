@@ -72,7 +72,7 @@ class ScheduleTableViewCell: UITableViewCell {
         contentLabel = UILabel()
         view.addSubview(contentLabel)
         
-        contentLabel.numberOfLines = 6
+        contentLabel.numberOfLines = 0
         contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         contentLabel.snp.makeConstraints { (make) in
@@ -104,7 +104,7 @@ class ScheduleTableViewCell: UITableViewCell {
             textAttrs[.strikethroughColor] = UIColor.lightGray
             
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
+            contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
             
             gradientLayerColors = [UIColor.aqua.withAlphaComponent(0.2).cgColor, UIColor.sky.withAlphaComponent(0.2).cgColor]
         } else {
@@ -114,7 +114,7 @@ class ScheduleTableViewCell: UITableViewCell {
             textAttrs[.foregroundColor] = UIColor.lightText
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
             textAttrs[.foregroundColor] = UIColor.white
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
+            contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
             
             gradientLayerColors = [UIColor.aqua.cgColor, UIColor.sky.cgColor]
         }

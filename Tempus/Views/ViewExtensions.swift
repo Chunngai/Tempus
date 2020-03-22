@@ -41,6 +41,7 @@ extension Date {
     func formattedTime() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return dateFormatter.string(from: self)
     }
@@ -48,7 +49,17 @@ extension Date {
     func formattedDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return dateFormatter.string(from: self)
+    }
+}
+
+extension TimeInterval {
+    func formattedDuration() -> String {
+        let hours = Int(self) / 3600
+        let minutes = Int(self) % 3600 / 60
+        
+        return "\(hours)h \(minutes)m"
     }
 }

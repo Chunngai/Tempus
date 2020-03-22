@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ScheduleDetailNavigationViewController: UINavigationController {
+class ScheduleEditNavigationViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

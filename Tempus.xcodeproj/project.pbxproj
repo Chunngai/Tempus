@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		FF2A5FEC2425149E00D0AF07 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2A5FE82425147600D0AF07 /* SnapKit.framework */; };
 		FF2A5FED2425149E00D0AF07 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF2A5FE82425147600D0AF07 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FF3BB36724265B1C0063D851 /* ScheduleDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36624265B1C0063D851 /* ScheduleDetailTableViewController.swift */; };
-		FF3BB36B2426741F0063D851 /* ScheduleDetailNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36A2426741F0063D851 /* ScheduleDetailNavigationViewController.swift */; };
+		FF3BB36724265B1C0063D851 /* ScheduleEditTimeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36624265B1C0063D851 /* ScheduleEditTimeTableViewController.swift */; };
+		FF3BB36B2426741F0063D851 /* ScheduleEditNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */; };
 		FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */; };
+		FF51E001242718DC0072F810 /* ScheduleEditContentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF51E000242718DC0072F810 /* ScheduleEditContentTableViewController.swift */; };
 		FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BB2421127000313C7D /* AppDelegate.swift */; };
 		FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BD2421127000313C7D /* SceneDelegate.swift */; };
 		FFBF90C02421127000313C7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BF2421127000313C7D /* ViewController.swift */; };
@@ -59,9 +60,10 @@
 
 /* Begin PBXFileReference section */
 		FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../Downloads/SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
-		FF3BB36624265B1C0063D851 /* ScheduleDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailTableViewController.swift; sourceTree = "<group>"; };
-		FF3BB36A2426741F0063D851 /* ScheduleDetailNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailNavigationViewController.swift; sourceTree = "<group>"; };
+		FF3BB36624265B1C0063D851 /* ScheduleEditTimeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditTimeTableViewController.swift; sourceTree = "<group>"; };
+		FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditNavigationViewController.swift; sourceTree = "<group>"; };
 		FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		FF51E000242718DC0072F810 /* ScheduleEditContentTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditContentTableViewController.swift; sourceTree = "<group>"; };
 		FFBF90B82421127000313C7D /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFBF90BB2421127000313C7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFBF90BD2421127000313C7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -155,8 +157,9 @@
 				FFBF90D02421151200313C7D /* TabBarViewController.swift */,
 				FFBF90D32421173600313C7D /* ScheduleNavigationViewController.swift */,
 				FFBF90D5242117FC00313C7D /* ScheduleViewController.swift */,
-				FF3BB36624265B1C0063D851 /* ScheduleDetailTableViewController.swift */,
-				FF3BB36A2426741F0063D851 /* ScheduleDetailNavigationViewController.swift */,
+				FF3BB36624265B1C0063D851 /* ScheduleEditTimeTableViewController.swift */,
+				FF51E000242718DC0072F810 /* ScheduleEditContentTableViewController.swift */,
+				FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -277,10 +280,11 @@
 				FFBF90DB24211C4C00313C7D /* Task.swift in Sources */,
 				FFBF90D12421151200313C7D /* TabBarViewController.swift in Sources */,
 				FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */,
+				FF51E001242718DC0072F810 /* ScheduleEditContentTableViewController.swift in Sources */,
 				FFBF90D82421183A00313C7D /* ViewExtensions.swift in Sources */,
-				FF3BB36724265B1C0063D851 /* ScheduleDetailTableViewController.swift in Sources */,
+				FF3BB36724265B1C0063D851 /* ScheduleEditTimeTableViewController.swift in Sources */,
 				FFBF90DE2421226700313C7D /* Schedule.swift in Sources */,
-				FF3BB36B2426741F0063D851 /* ScheduleDetailNavigationViewController.swift in Sources */,
+				FF3BB36B2426741F0063D851 /* ScheduleEditNavigationViewController.swift in Sources */,
 				FFBF90C02421127000313C7D /* ViewController.swift in Sources */,
 				FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */,
 				FFBF90D6242117FC00313C7D /* ScheduleViewController.swift in Sources */,

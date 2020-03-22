@@ -1,5 +1,5 @@
 //
-//  ScheduleDetailTableViewController.swift
+//  ScheduleEditContentTableViewController.swift
 //  Tempus
 //
 //  Created by Sola on 2020/3/21.
@@ -7,26 +7,15 @@
 //
 
 import UIKit
-import SnapKit
 
-class ScheduleDetailTableViewController: UITableViewController, UITextViewDelegate {
+class ScheduleEditContentTableViewController: UITableViewController, UITextViewDelegate {
 
     // Data.
-    var task: Task?
+    var task: Task!
+    
+    var scheduleViewController: ScheduleViewController!
     
     // Views.
-    var timeButtonStackView: UIStackView!
-    var startButton: UIButton!
-    var durationButton: UIButton!
-    var endButton: UIButton!
-    var timeButtons: [UIButton]!
-    
-//    var timePickerStackView: UIStackView!
-    var startPicker: UIDatePicker!
-    var durationPicker: UIDatePicker!
-    var endPicker: UIDatePicker!
-    var timePickers: [UIDatePicker]!
-        
     var contentLabel: UILabel!
     var contentTextView: UITextView!
     
@@ -38,7 +27,9 @@ class ScheduleDetailTableViewController: UITableViewController, UITextViewDelega
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-            
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(kbFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+
         updateViews()
     }
     
@@ -48,104 +39,35 @@ class ScheduleDetailTableViewController: UITableViewController, UITextViewDelega
         tableView.separatorStyle = .none
         
         // Title of navigation item.
-        navigationItem.title = "Detail"
-        
-        // Time button stack view.
-        startButton = UIButton()
-        startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
-        startButton.setTitle("Start", for: .normal)
-        startButton.setTitleColor(.white, for: .normal)
-        startButton.contentHorizontalAlignment = .center
-        
-        durationButton = UIButton()
-        durationButton.addTarget(self, action: #selector(durationButtonTapped), for: .touchUpInside)
-        durationButton.setTitle("Duration", for: .normal)
-        durationButton.setTitleColor(.lightText, for: .normal)
-        durationButton.contentHorizontalAlignment = .center
-                
-        endButton = UIButton()
-        endButton.addTarget(self, action: #selector(endButtonTapped), for: .touchUpInside)
-        endButton.setTitle("End", for: .normal)
-        endButton.setTitleColor(.lightText, for: .normal)
-        endButton.contentHorizontalAlignment = .center
-        
-        timeButtons = [startButton, durationButton, endButton]
-        
-        timeButtonStackView = UIStackView(arrangedSubviews: [startButton, durationButton, endButton])
-        view.addSubview(timeButtonStackView)
-        
-        timeButtonStackView.axis = .horizontal
-        timeButtonStackView.alignment = .fill
-        timeButtonStackView.distribution = .fillEqually
-        
-        timeButtonStackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(view.frame.height / 8)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
-        
-        // Time Picker view.
-        startPicker = UIDatePicker()
-        view.addSubview(startPicker)
-        
-        startPicker.datePickerMode = .time
-        
-        startPicker.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(timeButtonStackView).offset(60)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
-        
-        durationPicker = UIDatePicker()
-        view.addSubview(durationPicker)
-        
-        durationPicker.datePickerMode = .countDownTimer
-        durationPicker.isHidden = true
-        
-        durationPicker.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(timeButtonStackView).offset(60)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
-        
-        endPicker = UIDatePicker()
-        view.addSubview(endPicker)
-        
-        endPicker.datePickerMode = .time
-        endPicker.isHidden = true
-        
-        endPicker.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(timeButtonStackView).offset(60)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
-        
-        timePickers = [startPicker, durationPicker, endPicker]
+        navigationItem.title = "Content"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Time", style: .plain, target: self, action: #selector(timeButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
         
         // Content.
         contentLabel = UILabel()
         view.addSubview(contentLabel)
-        
+
         contentLabel.textColor = .white
         contentLabel.text = "Content"
         contentLabel.textAlignment = .center
-        
+
         contentLabel.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(timeButtonStackView).offset(300)
+            make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 5)
             make.width.equalTo(UIScreen.main.bounds.width * 0.94)
         }
-        
+
         contentTextView = UITextView()
         view.addSubview(contentTextView)
-        
+
         contentTextView.delegate = self
-        
+
         contentTextView.backgroundColor = UIColor.sky.withAlphaComponent(0)
         contentTextView.text = "Input task content"
         contentTextView.textColor = .lightText
         contentTextView.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
-                
+        contentTextView.inputAccessoryView = addDoneButton()
+
         contentTextView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.07)
             make.top.equalTo(contentLabel.snp.bottom).offset(20)
@@ -154,37 +76,50 @@ class ScheduleDetailTableViewController: UITableViewController, UITextViewDelega
         }
     }
     
-    @objc func startButtonTapped() {
-        timePickers[0].isHidden.toggle()
-        updateTimeViews(buttonIdx: 0)
-    }
-    
-    @objc func durationButtonTapped() {
-        timePickers[1].isHidden.toggle()
-        updateTimeViews(buttonIdx: 1)
-    }
-    
-    @objc func endButtonTapped() {
-        timePickers[2].isHidden.toggle()
-        updateTimeViews(buttonIdx: 2)
-    }
-    
-    func updateTimeViews(buttonIdx: Int) {
-        for i in 0..<3 {
-            if i != buttonIdx {
-                timePickers[i].isHidden = true
-                timeButtons[i].setTitleColor(.lightText, for: .normal)
-            }
-        }
+//    @objc func kbFrameChanged(_ notification: Notification) {
+//        let info = notification.userInfo
+//
+//        let kbRect = (info?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+//        let offsetY = kbRect.origin.y - UIScreen.main.bounds.height
+//        UIView.animate(withDuration: 0.3) {
+//            self.view.transform = CGAffineTransform(translationX: 0, y: offsetY)
+//        }
+//    }
+            
+    func addDoneButton() -> UIToolbar{
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
         
-        timeButtons[buttonIdx].setTitleColor(timePickers[buttonIdx].isHidden ? .lightText : .white, for: .normal)
+        toolBar.tintColor = .sky
+//        toolBar.barTintColor = UIColor.sky.withAlphaComponent(0.1)
+        
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(finishEditing))
+
+        toolBar.items = [spaceButton, barButton]
+        toolBar.sizeToFit()
+
+        return toolBar
+    }
+
+    
+    @objc func timeButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func saveButtonTapped() {
+        self.task.content = contentTextView.text
+        self.task.isFinished = false
+        
+        dismiss(animated: true) {
+            self.scheduleViewController.finishedEditing(task: self.task)
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         textView.text = ""
         textView.textColor = .white
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text!.isEmpty {
             contentTextView.text = "Input task content"
@@ -192,8 +127,12 @@ class ScheduleDetailTableViewController: UITableViewController, UITextViewDelega
         }
     }
 
-    // MARK: - Table view data source
+    @objc func finishEditing() {
+        view.endEditing(false)
+    }
 
+//    // MARK: - Table view data source
+//
 //    override func numberOfSections(in tableView: UITableView) -> Int {
 //        // #warning Incomplete implementation, return the number of sections
 //        return 0
@@ -259,4 +198,8 @@ class ScheduleDetailTableViewController: UITableViewController, UITextViewDelega
     }
     */
 
+}
+
+protocol ScheduleEditDelegate {
+    func finishedEditing(task: Task)
 }

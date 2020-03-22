@@ -8,13 +8,16 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ScheduleEditDelegate {
 
     // Data source.
     var schedule: Schedule? {
         didSet {
             self.schedule?.tasks.sort()
             drawAdvancementArc()
+            
+            // Saves to disk.
+            Schedule.saveSchedule(self.schedule!)
         }
     }
     var finishedTaskNumber: Int {
@@ -26,6 +29,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     // Views.
     var scheduleTableView: UITableView?
     
+    var dateButton: UIButton!
+    
     var advancementArcLayer: CAShapeLayer?
     
     override func viewDidLoad() {
@@ -35,20 +40,29 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
         updateViews()
 
-        schedule = Schedule.loadSchedule() ?? Schedule.sampleSchedule
+        schedule = Schedule.loadSchedule(date: Date().GTM8()) ?? Schedule(date: Date().GTM8(), tasks: [Task]())
     }
     
     func updateViews() {
         // Sets the title of the navigation item.
-        navigationItem.title = "Schedule \(Date().formattedDate())"
+        navigationItem.title = "Schedule \(Date().GTM8().formattedDate())"
+        
+        // Button to change the date.
+        dateButton = UIButton(frame: CGRect(x: 160, y: navigationController!.navigationBar.bounds.maxY + 50, width: 130, height: 30))
+        view.addSubview(dateButton)
+        
+        dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
+        
+        dateButton.backgroundColor = .aqua
+        dateButton.setTitle("", for: .normal)
         
         // Add button.
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentDetailTable))
         addBarButton.tintColor = .white
         navigationItem.rightBarButtonItem = addBarButton
         
-        let view_ = UIView()
-        view.addSubview(view_)
+//        let view_ = UIView()
+//        view.addSubview(view_)
         
         // Adds a table view.
         scheduleTableView = UITableView(frame:
@@ -77,8 +91,20 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         view.layer.addSublayer(advancementArcLayer!)
     }
     
+    @objc func dateButtonTapped() {
+        print(1)
+    }
+    
     @objc func presentDetailTable() {
-        navigationController?.present(ScheduleDetailNavigationViewController(rootViewController: ScheduleDetailTableViewController()), animated: true)
+        let scheduleEditTimeTableViewController = ScheduleEditTimeTableViewController()
+        
+        scheduleEditTimeTableViewController.scheduleViewController = self
+        scheduleEditTimeTableViewController.task = Task()
+        scheduleEditTimeTableViewController.initStart = schedule?.tasks.last?.dateInterval.end
+        scheduleEditTimeTableViewController.initDuration = schedule?.tasks.last?.dateInterval.duration
+        scheduleEditTimeTableViewController.initEnd = schedule?.tasks.last?.dateInterval.end
+                
+        navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditTimeTableViewController), animated: true)
     }
     
     func drawAdvancementArc() {
@@ -98,6 +124,11 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         advancementArcLayer?.strokeColor = UIColor.white.cgColor
         advancementArcLayer?.lineWidth = 2
         advancementArcLayer?.setNeedsDisplay()
+    }
+    
+    func finishedEditing(task: Task) {
+        schedule?.tasks.append(task)
+        scheduleTableView?.reloadData()
     }
 
     // MARK: - Table view data source
