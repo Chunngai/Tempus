@@ -15,9 +15,14 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
     
     var scheduleViewController: ScheduleViewController!
     
+    var idx: Int!
+    
     // Views.
     var contentLabel: UILabel!
     var contentTextView: UITextView!
+    
+    var deleteButton: UIButton!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +33,6 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(kbFrameChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-
         updateViews()
     }
     
@@ -63,10 +66,14 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
         contentTextView.delegate = self
 
         contentTextView.backgroundColor = UIColor.sky.withAlphaComponent(0)
-        contentTextView.text = "Input task content"
         contentTextView.textColor = .lightText
         contentTextView.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
         contentTextView.inputAccessoryView = addDoneButton()
+        if let content = task.content {
+            contentTextView.text = content
+        } else {
+            contentTextView.text = "Input task content"
+        }
 
         contentTextView.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.07)
@@ -74,6 +81,23 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
             make.width.equalTo(UIScreen.main.bounds.width * 0.86)
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
+        
+        // Delete Button.
+        deleteButton = UIButton()
+        if idx != -1 {
+            view.addSubview(deleteButton)
+            
+            deleteButton.snp.makeConstraints { (make) in
+                make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+                make.top.equalTo(contentTextView).offset(300)
+                make.width.equalTo(UIScreen.main.bounds.width * 0.40)
+            }
+        }
+        
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        
+        deleteButton.setTitle("Delete", for: .normal)
+        deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
     }
     
 //    @objc func kbFrameChanged(_ notification: Notification) {
@@ -85,7 +109,13 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
 //            self.view.transform = CGAffineTransform(translationX: 0, y: offsetY)
 //        }
 //    }
-            
+       
+    @objc func deleteButtonTapped() {
+        dismiss(animated: true) {
+            self.scheduleViewController.editTask(task: self.task, index: -2)
+        }
+    }
+    
     func addDoneButton() -> UIToolbar{
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
         
@@ -111,7 +141,7 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
         self.task.isFinished = false
         
         dismiss(animated: true) {
-            self.scheduleViewController.finishedEditing(task: self.task)
+            self.scheduleViewController.editTask(task: self.task, index: self.idx)
         }
     }
     
@@ -200,6 +230,6 @@ class ScheduleEditContentTableViewController: UITableViewController, UITextViewD
 
 }
 
-protocol ScheduleEditDelegate {
-    func finishedEditing(task: Task)
+protocol TaskEditingDelegate {
+    func editTask(task: Task, index: Int)
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ScheduleEditDelegate {
+class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TaskEditingDelegate {
 
     // Data source.
     var schedule: Schedule? {
@@ -40,24 +40,24 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
         updateViews()
 
-        schedule = Schedule.loadSchedule(date: Date().GTM8()) ?? Schedule(date: Date().GTM8(), tasks: [Task]())
+        schedule = Schedule.loadSchedule(date: Date().GTM8())
     }
     
     func updateViews() {
         // Sets the title of the navigation item.
-        navigationItem.title = "Schedule \(Date().GTM8().formattedDate())"
+        navigationItem.title = "Schedule"
         
-        // Button to change the date.
-        dateButton = UIButton(frame: CGRect(x: 160, y: navigationController!.navigationBar.bounds.maxY + 50, width: 130, height: 30))
+        // Button to display and change the date.
+        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 60, height: 30))
         view.addSubview(dateButton)
         
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         
-        dateButton.backgroundColor = .aqua
-        dateButton.setTitle("", for: .normal)
+//        dateButton.backgroundColor = .aqua
+        dateButton.setTitle(Date().GTM8().formattedDate(), for: .normal)
         
         // Add button.
-        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentDetailTable))
+        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addBarButton.tintColor = .white
         navigationItem.rightBarButtonItem = addBarButton
         
@@ -80,7 +80,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         scheduleTableView?.register(ScheduleTableViewCell.classForCoder(), forCellReuseIdentifier: "ScheduleTableViewCell")
         
-        scheduleTableView?.backgroundColor = .white
+        scheduleTableView?.backgroundColor = UIColor.sky.withAlphaComponent(0)
         scheduleTableView?.separatorStyle = .none
         
         scheduleTableView?.estimatedRowHeight = 120
@@ -92,10 +92,24 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func dateButtonTapped() {
-        print(1)
+        Schedule.saveSchedule(self.schedule!)
+        
+        let today = Date().GTM8()
+        let tomorrow = Date(timeInterval: 24 * 3600, since: today)
+        if schedule!.date.formattedDate() == today.formattedDate() {
+            schedule = Schedule.loadSchedule(date: tomorrow)
+            
+            dateButton.setTitle(tomorrow.formattedDate(), for: .normal)
+        } else {
+            schedule = Schedule.loadSchedule(date: today)
+            
+            dateButton.setTitle(today.formattedDate(), for: .normal)
+        }
+        
+        scheduleTableView?.reloadData()
     }
     
-    @objc func presentDetailTable() {
+    @objc func presentAddingView() {
         let scheduleEditTimeTableViewController = ScheduleEditTimeTableViewController()
         
         scheduleEditTimeTableViewController.scheduleViewController = self
@@ -103,6 +117,20 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         scheduleEditTimeTableViewController.initStart = schedule?.tasks.last?.dateInterval.end
         scheduleEditTimeTableViewController.initDuration = schedule?.tasks.last?.dateInterval.duration
         scheduleEditTimeTableViewController.initEnd = schedule?.tasks.last?.dateInterval.end
+        scheduleEditTimeTableViewController.idx = -1
+                
+        navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditTimeTableViewController), animated: true)
+    }
+    
+    func presentEditingView(task: Task) {
+        let scheduleEditTimeTableViewController = ScheduleEditTimeTableViewController()
+        
+        scheduleEditTimeTableViewController.scheduleViewController = self
+        scheduleEditTimeTableViewController.task = task
+        scheduleEditTimeTableViewController.initStart = task.dateInterval.start
+        scheduleEditTimeTableViewController.initDuration = task.dateInterval.duration
+        scheduleEditTimeTableViewController.initEnd = task.dateInterval.end
+        scheduleEditTimeTableViewController.idx = schedule!.tasks.firstIndex(of: task)!
                 
         navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditTimeTableViewController), animated: true)
     }
@@ -126,8 +154,17 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         advancementArcLayer?.setNeedsDisplay()
     }
     
-    func finishedEditing(task: Task) {
-        schedule?.tasks.append(task)
+    func editTask(task: Task, index: Int) {
+        if index == -1 {
+            schedule?.tasks.append(task)
+        } else if index == -2 {
+            if let idx = schedule?.tasks.firstIndex(of: task) {
+                schedule?.tasks.remove(at: idx)
+            }
+        } else {
+            schedule?.tasks[index] = task
+        }
+        
         scheduleTableView?.reloadData()
     }
 
@@ -144,7 +181,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ScheduleTableViewCell()
         
-        cell.updateValues(task: schedule!.tasks[indexPath.row])
+        cell.updateValues(task: schedule!.tasks[indexPath.row], delegate: self)
 
         return cell
     }
@@ -161,7 +198,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         schedule!.tasks[indexPath.row].isFinished.toggle()
         
         let cell = tableView.cellForRow(at: indexPath) as! ScheduleTableViewCell
-        cell.updateValues(task: toggledTask)
+        cell.updateValues(task: toggledTask, delegate: self)
         
         let idx = schedule?.tasks.firstIndex(of: toggledTask)
         let newIndexPath = IndexPath(row: idx!, section: 0)

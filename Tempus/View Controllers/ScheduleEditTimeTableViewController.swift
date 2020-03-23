@@ -20,6 +20,8 @@ class ScheduleEditTimeTableViewController: UITableViewController {
     var initEnd: Date!
     var initDuration: TimeInterval!
     
+    var idx: Int!
+    
     // Views.
     var timeButtonStackView: UIStackView!
     var startButton: UIButton!
@@ -32,6 +34,7 @@ class ScheduleEditTimeTableViewController: UITableViewController {
     var durationPicker: UIDatePicker!
     var endPicker: UIDatePicker!
     var timePickers: [UIDatePicker]!
+    
         
 //    var contentLabel: UILabel!
 //    var contentTextView: UITextView!
@@ -70,6 +73,7 @@ class ScheduleEditTimeTableViewController: UITableViewController {
         let scheduleEditContentTableViewController = ScheduleEditContentTableViewController()
         scheduleEditContentTableViewController.task = task
         scheduleEditContentTableViewController.scheduleViewController = self.scheduleViewController
+        scheduleEditContentTableViewController.idx = idx
         navigationController?.pushViewController(scheduleEditContentTableViewController, animated: true)
     }
     
@@ -189,6 +193,9 @@ class ScheduleEditTimeTableViewController: UITableViewController {
         
         timePickers = [startPicker, durationPicker, endPicker]
         
+        
+        
+        
         // Content.
 //        contentLabel = UILabel()
 //        view.addSubview(contentLabel)
@@ -222,6 +229,7 @@ class ScheduleEditTimeTableViewController: UITableViewController {
 //        }
     }
     
+        
 //    func addDoneButton() -> UIToolbar{
 //        let toolBar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
 //        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -235,6 +243,9 @@ class ScheduleEditTimeTableViewController: UITableViewController {
     
     @objc func startPickerValueChanged() {
         startButton.setTitle(startPicker.date.GTM8().formattedTime(), for: .normal)
+        
+        endPicker.setDate(Date(timeInterval: durationPicker.countDownDuration, since: startPicker.date), animated: true)
+        endButton.setTitle(endPicker.date.GTM8().formattedTime(), for: .normal)
     }
 
     @objc func durationPickerValueChanged() {

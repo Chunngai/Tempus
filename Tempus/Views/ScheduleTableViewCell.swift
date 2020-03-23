@@ -14,6 +14,8 @@ class ScheduleTableViewCell: UITableViewCell {
     // Data source.
     var task: Task?
     
+    var scheduleViewController: ScheduleViewController!
+    
     // Views.
     var view: UIView!
     var timeLabel: UILabel!
@@ -44,12 +46,14 @@ class ScheduleTableViewCell: UITableViewCell {
     
     func updateInitialViews() {
         self.selectionStyle = .none
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor.sky.withAlphaComponent(0)
         
         // Creates a view.
         view = UIView()
         contentView.addSubview(view)
-
+        
+        view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed)))
+        
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         
@@ -86,8 +90,14 @@ class ScheduleTableViewCell: UITableViewCell {
 
     }
     
-    func updateValues(task: Task) {
+    @objc func viewLongPressed() {
+        scheduleViewController.presentEditingView(task: task!)
+    }
+    
+    func updateValues(task: Task, delegate: ScheduleViewController) {
         self.task = task
+        
+        self.scheduleViewController = delegate
         
         // Updates texts of labels.
         let timeLabelText = "\(task.dateInterval.start.formattedTime()) - \(task.dateInterval.end.formattedTime())"
@@ -97,7 +107,6 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // Updates status
         var textAttrs: [NSAttributedString.Key: Any] = [:]
-        var gradientLayerColors: [CGColor] = []
         if task.isFinished {
             textAttrs[.foregroundColor] = UIColor.lightGray
             textAttrs[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
@@ -105,8 +114,6 @@ class ScheduleTableViewCell: UITableViewCell {
             
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
             contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
-            
-            gradientLayerColors = [UIColor.aqua.withAlphaComponent(0.2).cgColor, UIColor.sky.withAlphaComponent(0.2).cgColor]
         } else {
             textAttrs[.strikethroughStyle] = nil
             textAttrs[.strikethroughColor] = nil
@@ -115,16 +122,18 @@ class ScheduleTableViewCell: UITableViewCell {
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
             textAttrs[.foregroundColor] = UIColor.white
             contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
-            
-            gradientLayerColors = [UIColor.aqua.cgColor, UIColor.sky.cgColor]
         }
         
         // Creates a gradient layer.
         view.addGradientLayer(gradientLayer: gradientLayer,
-            colors: gradientLayerColors,
+            colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
             locations: [0.0, 1.0],
             startPoint: CGPoint(x: 0, y: 1),
             endPoint: CGPoint(x: 1, y: 1),
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     }
 }
+
+//protocol TaskEditingDelegate {
+//    func longTappedCell(for task: Task)
+//}

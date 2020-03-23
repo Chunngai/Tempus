@@ -17,10 +17,12 @@ class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        tabBar.barTintColor = .white
+                
+        // Color of the bar.
+//        tabBar.barTintColor = UIColor.sky.withAlphaComponent(0)
         
-        // Do any additional setup after loading the view.
+        // Makes the bar transparent.
+        tabBar.alpha = 0
         
         // Creates a gradient layer.
         self.view.addGradientLayer(gradientLayer: gradientLayer,
@@ -31,20 +33,7 @@ class TabBarViewController: UITabBarController {
                                    frame: self.view.bounds)
         
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
-        scheduleViewController = ScheduleViewController()
         scheduleNavigationViewController = ScheduleNavigationViewController(rootViewController: scheduleViewController)
         self.addChild(scheduleNavigationViewController!)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
