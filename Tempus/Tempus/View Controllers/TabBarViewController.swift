@@ -15,14 +15,16 @@ class TabBarViewController: UITabBarController {
     var scheduleNavigationViewController: ScheduleNavigationViewController?
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
     
+    var toDoNavigationViewController: ToDoNavigationViewController?
+    var toDoViewController = ToDoViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
         // Color of the bar.
-//        tabBar.barTintColor = UIColor.sky.withAlphaComponent(0)
-        
-        // Makes the bar transparent.
-        tabBar.alpha = 0
+        tabBar.barTintColor = UIColor.aqua.withAlphaComponent(0)
+        tabBar.alpha = 0.5
+        tabBar.tintColor = .white
         
         // Creates a gradient layer.
         self.view.addGradientLayer(gradientLayer: gradientLayer,
@@ -35,5 +37,8 @@ class TabBarViewController: UITabBarController {
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
         scheduleNavigationViewController = ScheduleNavigationViewController(rootViewController: scheduleViewController)
         self.addChild(scheduleNavigationViewController!)
+        
+        toDoNavigationViewController = ToDoNavigationViewController(rootViewController: toDoViewController)
+        self.addChild(toDoNavigationViewController!)
     }
 }

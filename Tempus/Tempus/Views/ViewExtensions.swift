@@ -60,6 +60,14 @@ extension TimeInterval {
         let hours = Int(self) / 3600
         let minutes = Int(self) % 3600 / 60
         
-        return "\(hours)h \(minutes)m"
+        var formattedString = ""
+        if hours != 0 {
+            formattedString += "\(hours)h"
+        }
+        if minutes != 0 {
+            formattedString += " \(minutes)m"
+        }
+        
+        return formattedString
     }
 }

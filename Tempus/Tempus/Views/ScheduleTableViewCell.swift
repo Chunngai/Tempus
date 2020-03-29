@@ -19,7 +19,10 @@ class ScheduleTableViewCell: UITableViewCell {
     // Views.
     var view: UIView!
     var timeLabel: UILabel!
+    var durationLabel: UILabel!
     var contentLabel: UILabel!
+    
+    var statusButton: UIButton!
     
     var gradientLayer: CAGradientLayer!
     
@@ -52,8 +55,6 @@ class ScheduleTableViewCell: UITableViewCell {
         view = UIView()
         contentView.addSubview(view)
         
-        view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed)))
-        
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         
@@ -63,13 +64,35 @@ class ScheduleTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
+        // Double taps to edit.
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
+        view.addGestureRecognizer(tapGestureRecognizer)
+        
+        tapGestureRecognizer.numberOfTapsRequired = 2
+        
+        // Long press to finish.
+//        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
+//        view.addGestureRecognizer(longPressedGestureRecognizer)
+        
         // Creates a time label.
         timeLabel = UILabel()
         view.addSubview(timeLabel)
                 
         timeLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalToSuperview().offset(15)
+            make.width.equalTo(200)
+        }
+        
+        durationLabel = UILabel()
+        view.addSubview(durationLabel)
+        
+        durationLabel.textAlignment = .right
+        
+        durationLabel.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.top.equalTo(timeLabel.snp.top)
+            make.width.equalTo(200)
         }
         
         // Creates a content label.
@@ -80,9 +103,26 @@ class ScheduleTableViewCell: UITableViewCell {
         contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         contentLabel.snp.makeConstraints { (make) in
-            make.left.right.equalTo(timeLabel)
+            make.left.right.equalTo(UIScreen.main.bounds.width * 0.03)
             make.top.equalTo(timeLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(15)
+        }
+        
+        // Taps to toggle finish status.
+        statusButton = UIButton()
+        view.addSubview(statusButton)
+        
+        statusButton.addTarget(self, action: #selector(statusButtonTapped), for: .touchUpInside)
+        
+//        statusButton.alpha = 0
+//        statusButton.backgroundColor = .aqua
+//        statusButton.setTitle("a", for: .normal)
+        
+        statusButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().offset(0)
+            make.top.equalToSuperview().offset(0)
+            make.bottom.equalToSuperview().offset(0)
+            make.width.equalTo(contentView.frame.width / 2)
         }
         
         // Gradient layer as bg color.
@@ -90,8 +130,12 @@ class ScheduleTableViewCell: UITableViewCell {
 
     }
     
-    @objc func viewLongPressed() {
+    @objc func viewDoubleTapped() {
         scheduleViewController.presentEditingView(task: task!)
+    }
+    
+    @objc func statusButtonTapped() {
+        scheduleViewController.toggleFinishStatus(task: task!)
     }
     
     func updateValues(task: Task, delegate: ScheduleViewController) {
@@ -101,6 +145,7 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // Updates texts of labels.
         let timeLabelText = "\(task.dateInterval.start.formattedTime()) - \(task.dateInterval.end.formattedTime())"
+        let durationLabelText = "\(task.dateInterval.duration.formattedDuration())"
         
         let contentLabelText = task.content
 //        contentLabel.sizeToFit()
@@ -108,11 +153,12 @@ class ScheduleTableViewCell: UITableViewCell {
         // Updates status
         var textAttrs: [NSAttributedString.Key: Any] = [:]
         if task.isFinished {
-            textAttrs[.foregroundColor] = UIColor.lightGray
+            textAttrs[.foregroundColor] = UIColor.lightText
             textAttrs[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
-            textAttrs[.strikethroughColor] = UIColor.lightGray
+            textAttrs[.strikethroughColor] = UIColor.lightText
             
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
+            durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
             contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
         } else {
             textAttrs[.strikethroughStyle] = nil
@@ -120,6 +166,7 @@ class ScheduleTableViewCell: UITableViewCell {
 
             textAttrs[.foregroundColor] = UIColor.lightText
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
+            durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
             textAttrs[.foregroundColor] = UIColor.white
             contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
         }
@@ -133,7 +180,3 @@ class ScheduleTableViewCell: UITableViewCell {
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     }
 }
-
-//protocol TaskEditingDelegate {
-//    func longTappedCell(for task: Task)
-//}
