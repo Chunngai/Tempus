@@ -56,8 +56,8 @@ class ToDoTableViewCell: UITableViewCell {
         
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(20)
-            make.bottom.equalToSuperview().inset(15)
+            make.top.equalToSuperview().offset(10)
+            make.bottom.equalToSuperview().inset(5)
         }
         
         // Double taps to edit.

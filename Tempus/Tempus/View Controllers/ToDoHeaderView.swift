@@ -36,14 +36,19 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         view = UIView()
         contentView.addSubview(view)
         
-        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 30)
+//        view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 30)
         view.backgroundColor = UIColor.aqua.withAlphaComponent(0)
+        
+        view.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().offset(0)
+//            make.height.equalTo(30)
+            make.top.equalToSuperview()
+        }
         
         // Section name label.
         sectionNameLabel = UILabel()
         view.addSubview(sectionNameLabel)
         
-        sectionNameLabel.frame = CGRect()
         sectionNameLabel.textColor = .lightText
         sectionNameLabel.textAlignment = .right
 //        sectionNameLabel.font = UIFont.systemFont(ofSize: 13)

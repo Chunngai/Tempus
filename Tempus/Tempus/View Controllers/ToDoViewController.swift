@@ -76,14 +76,56 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let toDoEditViewController = ToDoEditViewController()
         toDoEditViewController.task = Task()
         toDoEditViewController.toDoViewController = self
+        toDoEditViewController.originalIndices = nil
+        toDoEditViewController.isEmergent = false
+        toDoEditViewController.isImportant = false
+        
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+    }
+    
+    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool)? {
+        switch clsIndex {
+        case 0: return (true, true)
+        case 1: return (true, false)
+        case 2: return (false, true)
+        case 3: return (false, false)
+        default: return nil
+        }
     }
     
     func presentEditingView(task: Task) {
         let toDoEditViewController = ToDoEditViewController()
         toDoEditViewController.task = task
         toDoEditViewController.toDoViewController = self
+        var originalIndices: (clsIndex: Int, taskIndex: Int)?
+        for clsIndex in 0..<toDo.count {
+            for taskIndex in 0..<toDo[clsIndex].tasks.count {
+                if toDo[clsIndex].tasks[taskIndex] == task {
+                    originalIndices = (clsIndex: clsIndex, taskIndex: taskIndex)
+                }
+            }
+        }
+        toDoEditViewController.originalIndices = originalIndices
+        (toDoEditViewController.isEmergent, toDoEditViewController.isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
+        
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+    }
+    
+    func editTask(task: Task, originalIndices: (clsIndex: Int, taskIndex: Int)!, currentIndex: Int?) {
+        if originalIndices == nil {
+            toDo?[currentIndex!].tasks.append(task)
+        } else if originalIndices != nil && currentIndex == nil {
+            toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
+        } else {
+            if originalIndices!.clsIndex == currentIndex {
+                toDo?[originalIndices!.clsIndex].tasks[originalIndices!.taskIndex] = task
+            } else {
+                toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
+                toDo?[currentIndex!].tasks.append(task)
+            }
+        }
+        
+        toDoTableView?.reloadData()
     }
     
     // MARK: - Table view data source
@@ -109,9 +151,13 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = ToDoHeaderView()
         
+//        if toDo![section].tasks.count > 0 {
         headerView.updateValues(sectionName: toDo[section].cls)
-        
+    
         return headerView
+//        } else {
+//            return nil
+//        }
     }
 
     /*

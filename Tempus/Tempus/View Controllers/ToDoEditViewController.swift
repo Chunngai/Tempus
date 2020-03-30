@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ToDoEditViewController: UIViewController, UITextViewDelegate {
 
@@ -14,6 +15,12 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var task: Task!
     
     var toDoViewController: ToDoViewController!
+    
+    var isEmergent: Bool!
+    var isImportant: Bool!
+    
+    var originalIndices: (clsIndex: Int, taskIndex: Int)!
+    var currentIndex: Int!
     
     // Views.
     var gradientLayer = CAGradientLayer()
@@ -24,6 +31,8 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var emergentButton: UIButton!
     var importantButton: UIButton!
     var buttonStackView: UIStackView!
+    
+    var deleteButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +66,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         contentLabel.textAlignment = .center
 
         contentLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 8)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
+//            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
         }
 
         // Content text view.
@@ -82,13 +91,90 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         contentTextView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
             make.top.equalTo(contentLabel.snp.bottom).offset(20)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.90)
+            make.width.equalTo(UIScreen.main.bounds.width * 0.80)
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
+        
+        // Emergent and important buttons and stack view.
+        emergentButton = UIButton()
+        
+        emergentButton.addTarget(self, action: #selector(emergentButtonTapped), for: .touchUpInside)
+        
+        emergentButton.setTitle("Emergent", for: .normal)
+//        emergentButton.setTitleColor(.lightText, for: .normal)
+        emergentButton.contentHorizontalAlignment = .center
+        if isEmergent {
+            emergentButton.setTitleColor(.white, for: .normal)
+        } else {
+            emergentButton.setTitleColor(.lightText, for: .normal)
+        }
+                
+        importantButton = UIButton()
+        
+        importantButton.addTarget(self, action: #selector(importantButtonTapped), for: .touchUpInside)
+        
+        importantButton.setTitle("Important", for: .normal)
+//        importantButton.setTitleColor(.lightText, for: .normal)
+        importantButton.contentHorizontalAlignment = .center
+        if isImportant {
+            importantButton.setTitleColor(.white, for: .normal)
+        } else {
+            importantButton.setTitleColor(.lightText, for: .normal)
+        }
+        
+                
+        buttonStackView = UIStackView(arrangedSubviews: [emergentButton, importantButton])
+        view.addSubview(buttonStackView)
+        
+        buttonStackView.axis = .vertical
+        buttonStackView.distribution = .fillEqually
+        buttonStackView.alignment = .center
+        buttonStackView.spacing = 20
+        
+        buttonStackView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.top.equalTo(contentTextView).offset(200)
+        }
+        
+        // Delete Button.
+        deleteButton = UIButton()
+        if originalIndices != nil {
+            view.addSubview(deleteButton)
+            
+            deleteButton.snp.makeConstraints { (make) in
+                make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+                make.top.equalTo(buttonStackView).offset(320)
+            }
+        }
+        
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        
+        deleteButton.setTitle("Delete", for: .normal)
+        deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
     }
     
     func updateValues(toDoViewController: ToDoViewController) {
         self.toDoViewController = toDoViewController
+    }
+    
+    @objc func emergentButtonTapped() {
+        isEmergent.toggle()
+        
+        if isEmergent {
+            emergentButton.setTitleColor(.white, for: .normal)
+        } else {
+            emergentButton.setTitleColor(.lightText, for: .normal)
+        }
+    }
+    
+    @objc func importantButtonTapped() {
+        isImportant.toggle()
+        
+        if isImportant {
+            importantButton.setTitleColor(.white, for: .normal)
+        } else {
+            importantButton.setTitleColor(.lightText, for: .normal)
+        }
     }
     
     @objc func cancelButtonTapped() {
@@ -96,7 +182,21 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func saveButtonTapped() {
+        self.task.content = contentTextView.text
         
+        self.toDoViewController.editTask(task: self.task, originalIndices: originalIndices, currentIndex: getClsIndex())
+
+        toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func getClsIndex() -> Int {
+        switch (isEmergent, isImportant) {
+        case (true, true): return 0
+        case (true, false): return 1
+        case (false, true): return 2
+        case (false, false): return 3
+        default: return -1
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -119,18 +219,24 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     func addDoneButton() -> UIToolbar{
-           let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
-           
-           toolBar.tintColor = .sky
-           
-           let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-           let barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(finishEditing))
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
 
-           toolBar.items = [spaceButton, barButton]
-           toolBar.sizeToFit()
+        toolBar.tintColor = .sky
 
-           return toolBar
-       }
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(finishEditing))
+
+        toolBar.items = [spaceButton, barButton]
+        toolBar.sizeToFit()
+
+        return toolBar
+    }
+    
+    @objc func deleteButtonTapped() {
+        self.toDoViewController.editTask(task: self.task, originalIndices: originalIndices!, currentIndex: nil)
+//
+        toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
