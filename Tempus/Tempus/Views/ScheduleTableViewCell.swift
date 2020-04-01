@@ -60,7 +60,7 @@ class ScheduleTableViewCell: UITableViewCell {
         
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(0)
+            make.top.equalToSuperview()
             make.bottom.equalToSuperview().inset(15)
         }
         

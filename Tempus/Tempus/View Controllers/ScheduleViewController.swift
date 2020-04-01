@@ -264,6 +264,10 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     // MARK: - Table view delegate
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
 //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return 120
 //    }

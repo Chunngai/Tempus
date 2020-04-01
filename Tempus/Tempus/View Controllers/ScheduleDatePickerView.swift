@@ -39,10 +39,10 @@ class ScheduleDatePickerView: UIView {
             colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
             locations: [0.0, 1.0],
             startPoint: CGPoint(x: 0, y: 1),
-            endPoint: CGPoint(x: 1, y: 0.5),
+            endPoint: CGPoint(x: 1, y: 0),
             frame: self.bounds)
         
-        self.layer.cornerRadius = 16
+        self.layer.cornerRadius = 20
         self.layer.masksToBounds = true
         
         // Date picker.
@@ -55,7 +55,7 @@ class ScheduleDatePickerView: UIView {
         datePicker.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(30)
             make.right.equalToSuperview().offset(-30)
-            make.top.equalToSuperview().offset(UIScreen.main.bounds.height * 0.3 * 0.2)
+            make.top.equalToSuperview().offset(UIScreen.main.bounds.height * 0.4 * 0.1)
         }
     }
 }

@@ -25,13 +25,14 @@ class TabBarViewController: UITabBarController {
         tabBar.barTintColor = UIColor.aqua.withAlphaComponent(0)
         tabBar.alpha = 0.5
         tabBar.tintColor = .white
+        tabBar.unselectedItemTintColor = .lightText
         
         // Creates a gradient layer.
         self.view.addGradientLayer(gradientLayer: gradientLayer,
                                    colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
                                    locations: [0.0, 1.0],
                                    startPoint: CGPoint(x: 0, y: 1),
-                                   endPoint: CGPoint(x: 1, y: 0.5),
+                                   endPoint: CGPoint(x: 1, y: 0),
                                    frame: self.view.bounds)
         
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
