@@ -27,6 +27,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         toDo =
             ToDo.loadToDo() ??
             [
+                ToDo(cls: "Repeated", tasks: []),
                 ToDo(cls: "Emergent & Important", tasks: [Task(content: "aaaaaaaaaaaaaaaa", dateInterval: nil, isFinished: false)]),
                 ToDo(cls: "Emergent & Not Important", tasks: [Task(content: "bbb", dateInterval: nil, isFinished: false)]),
                 ToDo(cls: "Not Emergent & Important", tasks: [Task(content: "ccc", dateInterval: nil, isFinished: false)]),
@@ -74,29 +75,33 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.task = Task()
-        toDoEditViewController.toDoViewController = self
-        toDoEditViewController.originalIndices = nil
-        toDoEditViewController.isEmergent = false
-        toDoEditViewController.isImportant = false
+        toDoEditViewController.updateValues(task: Task(), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
         
+//        toDoEditViewController.task = Task()
+//        toDoEditViewController.toDoViewController = self
+//        toDoEditViewController.originalIndices = nil
+//        toDoEditViewController.isRepeated = false
+//        toDoEditViewController.isEmergent = false
+//        toDoEditViewController.isImportant = false
+                
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
-    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool)? {
+    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool, Bool)? {
         switch clsIndex {
-        case 0: return (true, true)
-        case 1: return (true, false)
-        case 2: return (false, true)
-        case 3: return (false, false)
+        case 0: return (true, false, false)
+        case 1: return (false, true, true)
+        case 2: return (false, true, false)
+        case 3: return (false, false, true)
+        case 4: return (false, false, false)
         default: return nil
         }
     }
     
     func presentEditingView(task: Task) {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.task = task
-        toDoEditViewController.toDoViewController = self
+//        toDoEditViewController.task = task
+//        toDoEditViewController.toDoViewController = self
         var originalIndices: (clsIndex: Int, taskIndex: Int)?
         for clsIndex in 0..<toDo.count {
             for taskIndex in 0..<toDo[clsIndex].tasks.count {
@@ -105,8 +110,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-        toDoEditViewController.originalIndices = originalIndices
-        (toDoEditViewController.isEmergent, toDoEditViewController.isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
+//        toDoEditViewController.originalIndices = originalIndices
+        let (isRepeated, isEmergent, isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
+        
+        toDoEditViewController.updateValues(task: task, toDoViewController: self, originalIndices: originalIndices, isRepeated: isRepeated, isEmergent: isEmergent, isImportant: isImportant)
         
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
@@ -131,7 +138,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

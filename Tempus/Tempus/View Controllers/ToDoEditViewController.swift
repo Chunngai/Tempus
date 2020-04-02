@@ -16,9 +16,6 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     
     var toDoViewController: ToDoViewController!
     
-    var isEmergent: Bool!
-    var isImportant: Bool!
-    
     var originalIndices: (clsIndex: Int, taskIndex: Int)!
     var currentIndex: Int!
     
@@ -28,9 +25,38 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var contentLabel: UILabel!
     var contentTextView: UITextView!
     
-    var emergentButton: UIButton!
-    var importantButton: UIButton!
-    var buttonStackView: UIStackView!
+    var repeatedButton = UIButton()
+    var emergentButton = UIButton()
+    var importantButton = UIButton()
+    lazy var buttonStackView = UIStackView(arrangedSubviews: [repeatedButton, emergentButton, importantButton])
+    
+    var isRepeated: Bool! {
+        didSet {
+            if self.isRepeated {
+                repeatedButton.setTitleColor(.white, for: .normal)
+            } else {
+                repeatedButton.setTitleColor(.lightText, for: .normal)
+            }
+        }
+    }
+    var isEmergent: Bool! {
+        didSet {
+            if self.isEmergent {
+                emergentButton.setTitleColor(.white, for: .normal)
+            } else {
+                emergentButton.setTitleColor(.lightText, for: .normal)
+            }
+        }
+    }
+    var isImportant: Bool! {
+        didSet {
+            if self.isImportant {
+                importantButton.setTitleColor(.white, for: .normal)
+            } else {
+                importantButton.setTitleColor(.lightText, for: .normal)
+            }
+        }
+    }
     
     var deleteButton: UIButton!
     
@@ -95,35 +121,45 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
         
-        // Emergent and important buttons and stack view.
-        emergentButton = UIButton()
+        // Repetition, emergent and important buttons and stack view.
+//        repeatedButton = UIButton()
+        
+        repeatedButton.addTarget(self, action: #selector(repeatedButtonTapped), for: .touchUpInside)
+        
+        repeatedButton.setTitle("Repeated", for: .normal)
+        repeatedButton.contentHorizontalAlignment = .center
+//        if isRepeated {
+//            repeatedButton.setTitleColor(.white, for: .normal)
+//        } else {
+//            repeatedButton.setTitleColor(.lightText, for: .normal)
+//        }
+        
+//        emergentButton = UIButton()
         
         emergentButton.addTarget(self, action: #selector(emergentButtonTapped), for: .touchUpInside)
         
         emergentButton.setTitle("Emergent", for: .normal)
-//        emergentButton.setTitleColor(.lightText, for: .normal)
         emergentButton.contentHorizontalAlignment = .center
-        if isEmergent {
-            emergentButton.setTitleColor(.white, for: .normal)
-        } else {
-            emergentButton.setTitleColor(.lightText, for: .normal)
-        }
+//        if isEmergent {
+//            emergentButton.setTitleColor(.white, for: .normal)
+//        } else {
+//            emergentButton.setTitleColor(.lightText, for: .normal)
+//        }
                 
-        importantButton = UIButton()
+//        importantButton = UIButton()
         
         importantButton.addTarget(self, action: #selector(importantButtonTapped), for: .touchUpInside)
         
         importantButton.setTitle("Important", for: .normal)
-//        importantButton.setTitleColor(.lightText, for: .normal)
         importantButton.contentHorizontalAlignment = .center
-        if isImportant {
-            importantButton.setTitleColor(.white, for: .normal)
-        } else {
-            importantButton.setTitleColor(.lightText, for: .normal)
-        }
+//        if isImportant {
+//            importantButton.setTitleColor(.white, for: .normal)
+//        } else {
+//            importantButton.setTitleColor(.lightText, for: .normal)
+//        }
         
                 
-        buttonStackView = UIStackView(arrangedSubviews: [emergentButton, importantButton])
+//        buttonStackView = UIStackView(arrangedSubviews: [repeatedButton, emergentButton, importantButton])
         view.addSubview(buttonStackView)
         
         buttonStackView.axis = .vertical
@@ -153,17 +189,38 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
     }
     
-    func updateValues(toDoViewController: ToDoViewController) {
+
+    func updateValues(task: Task, toDoViewController: ToDoViewController, originalIndices: (clsIndex: Int, taskIndex: Int)?, isRepeated: Bool, isEmergent: Bool, isImportant: Bool) {
+        self.task = task
         self.toDoViewController = toDoViewController
+        self.originalIndices = originalIndices
+        self.isRepeated = isRepeated
+        self.isEmergent = isEmergent
+        self.isImportant = isImportant
+    }
+    
+    @objc func repeatedButtonTapped() {
+        isRepeated.toggle()
+        
+        if isRepeated {
+//            repeatedButton.setTitleColor(.white, for: .normal)
+            
+            isImportant = false
+            isEmergent = false
+        } else {
+//            repeatedButton.setTitleColor(.lightText, for: .normal)
+        }
     }
     
     @objc func emergentButtonTapped() {
         isEmergent.toggle()
         
         if isEmergent {
-            emergentButton.setTitleColor(.white, for: .normal)
+//            emergentButton.setTitleColor(.white, for: .normal)
+            
+            isRepeated = false
         } else {
-            emergentButton.setTitleColor(.lightText, for: .normal)
+//            emergentButton.setTitleColor(.lightText, for: .normal)
         }
     }
     
@@ -171,9 +228,11 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         isImportant.toggle()
         
         if isImportant {
-            importantButton.setTitleColor(.white, for: .normal)
+//            importantButton.setTitleColor(.white, for: .normal)
+            
+            isRepeated = false
         } else {
-            importantButton.setTitleColor(.lightText, for: .normal)
+//            importantButton.setTitleColor(.lightText, for: .normal)
         }
     }
     
@@ -190,11 +249,12 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     func getClsIndex() -> Int {
-        switch (isEmergent, isImportant) {
-        case (true, true): return 0
-        case (true, false): return 1
-        case (false, true): return 2
-        case (false, false): return 3
+        switch (isRepeated, isEmergent, isImportant) {
+        case (true, false, false): return 0
+        case (false, true, true): return 1
+        case (false, true, false): return 2
+        case (false, false, true): return 3
+        case (false, false, false): return 4
         default: return -1
         }
     }
