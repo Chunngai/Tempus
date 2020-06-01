@@ -15,6 +15,7 @@ class ToDoEditNavigationViewController: UINavigationController {
 
         // Do any additional setup after loading the view.
         navigationBar.setToTransparent()
+        navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     
 

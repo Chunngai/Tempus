@@ -65,14 +65,12 @@ class ScheduleTableViewCell: UITableViewCell {
         }
         
         // Double taps to edit.
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
-        view.addGestureRecognizer(tapGestureRecognizer)
-        
-        tapGestureRecognizer.numberOfTapsRequired = 2
-        
-        // Long press to finish.
-//        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
-//        view.addGestureRecognizer(longPressedGestureRecognizer)
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
+//        view.addGestureRecognizer(tapGestureRecognizer)
+//
+//        tapGestureRecognizer.numberOfTapsRequired = 2
+        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
+        view.addGestureRecognizer(longPressedGestureRecognizer)
         
         // Creates a time label.
         timeLabel = UILabel()
@@ -118,11 +116,12 @@ class ScheduleTableViewCell: UITableViewCell {
 //        statusButton.backgroundColor = .aqua
 //        statusButton.setTitle("a", for: .normal)
         
+        //TODO: use delegate instead?
         statusButton.snp.makeConstraints { (make) in
             make.right.equalToSuperview().offset(0)
             make.top.equalToSuperview().offset(0)
             make.bottom.equalToSuperview().offset(0)
-            make.width.equalTo(contentView.frame.width / 2)
+            make.width.equalTo(contentView.frame.width)
         }
         
         // Gradient layer as bg color.
@@ -130,7 +129,7 @@ class ScheduleTableViewCell: UITableViewCell {
 
     }
     
-    @objc func viewDoubleTapped() {
+    @objc func viewLongPressed() {
         scheduleViewController.presentEditingView(task: task!)
     }
     

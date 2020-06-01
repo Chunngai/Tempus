@@ -14,5 +14,6 @@ class ScheduleEditNavigationViewController: UINavigationController {
         super.viewDidLoad()
         
         navigationBar.setToTransparent()
+        navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
 }

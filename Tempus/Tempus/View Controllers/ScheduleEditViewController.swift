@@ -73,6 +73,9 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         contentLabel.textColor = .white
         contentLabel.text = "Content"
         contentLabel.textAlignment = .center
+        
+        // TODO: rm the content label?
+        contentLabel.isHidden = true
 
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
@@ -111,6 +114,9 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         timeLabel.textColor = .white
         timeLabel.text = "Time"
         timeLabel.textAlignment = .center
+        
+        // rm the time label?
+        timeLabel.isHidden = true
 
         timeLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
@@ -124,7 +130,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         startButton.setTitleColor(.white, for: .normal)
-        startButton.contentHorizontalAlignment = .center
+        startButton.contentHorizontalAlignment = .left
         if let initStart = initStart {
             startButton.setTitle(initStart.formattedTime(), for: .normal)
         } else {
@@ -136,7 +142,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         durationButton.addTarget(self, action: #selector(durationButtonTapped), for: .touchUpInside)
         
         durationButton.setTitleColor(.lightText, for: .normal)
-        durationButton.contentHorizontalAlignment = .center
+        durationButton.contentHorizontalAlignment = .left
         if let initDuration = initDuration {
             durationButton.setTitle(String(initDuration.formattedDuration()), for: .normal)
         } else {
@@ -148,7 +154,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         endButton.addTarget(self, action: #selector(endButtonTapped), for: .touchUpInside)
         
         endButton.setTitleColor(.lightText, for: .normal)
-        endButton.contentHorizontalAlignment = .center
+        endButton.contentHorizontalAlignment = .left
         if let initEnd = initEnd {
             endButton.setTitle(initEnd.formattedTime(), for: .normal)
         } else {
@@ -161,22 +167,25 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         timeButtonStackView = UIStackView(arrangedSubviews: timeButtons)
         view.addSubview(timeButtonStackView)
         
-        timeButtonStackView.axis = .horizontal
+        timeButtonStackView.axis = .vertical
         timeButtonStackView.alignment = .fill
         timeButtonStackView.distribution = .fillEqually
         
         timeButtonStackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.12)
             make.top.equalTo(timeLabel).offset(30)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
+            make.width.equalTo(UIScreen.main.bounds.width * 0.30)
+            make.height.equalTo(UIScreen.main.bounds.height * 0.28)
         }
         
         // Time Picker views.
-        startPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.20, y: UIScreen.main.bounds.height * 0.50, width: UIScreen.main.bounds.width * 0.60, height: 200))
+        // TODO: modify the y pos
+        startPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(startPicker)
         
         startPicker.addTarget(self, action: #selector(startPickerValueChanged), for: .valueChanged)
         
+        startPicker.setValue(UIColor.white, forKeyPath: "textColor")
         startPicker.datePickerMode = .time
         if let initStart = initStart {
             startPicker.setDate(Date(timeInterval: -8 * 3600, since: initStart), animated: true)
@@ -184,11 +193,12 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
             startPicker.setDate(Date(hour: 8, minute: 30), animated: true)
         }
         
-        durationPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.25, y: UIScreen.main.bounds.height * 0.50, width: UIScreen.main.bounds.width * 0.50, height: 200))
+        durationPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(durationPicker)
         
         durationPicker.addTarget(self, action: #selector(durationPickerValueChanged), for: .valueChanged)
         
+        durationPicker.setValue(UIColor.white, forKeyPath: "textColor")
         durationPicker.datePickerMode = .countDownTimer
         durationPicker.isHidden = true
         durationPicker.minuteInterval = 5
@@ -198,11 +208,12 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
             durationPicker.setValue(2400, forKeyPath: "countDownDuration")
         }
         
-        endPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.20, y: UIScreen.main.bounds.height * 0.50, width: UIScreen.main.bounds.width * 0.60, height: 200))
+        endPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(endPicker)
         
         endPicker.addTarget(self, action: #selector(endPickerValueChanged), for: .valueChanged)
         
+        endPicker.setValue(UIColor.white, forKeyPath: "textColor")
         endPicker.datePickerMode = .time
         endPicker.isHidden = true
         if let initEnd = initEnd {
@@ -314,6 +325,9 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         if startPicker.date < endPicker.date {
             durationPicker.setValue(DateInterval(start: startPicker.date, end: endPicker.date).duration, forKeyPath: "countDownDuration")
             durationButton.setTitle(durationPicker.countDownDuration.formattedDuration(), for: .normal)
+        } else {
+            startPicker.setDate(endPicker.date - durationPicker.countDownDuration, animated: true)
+            startButton.setTitle(startPicker.date.GTM8().formattedTime(), for: .normal)
         }
     }
     
