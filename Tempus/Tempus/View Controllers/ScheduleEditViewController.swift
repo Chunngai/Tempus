@@ -239,10 +239,35 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
+        
+        // Disables editing if the task is set before the current day.
+        if let scheduleViewControllerDate = scheduleViewController.schedule?.date.GTM8(),
+            scheduleViewControllerDate < Date().GTM8() {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+            
+            contentTextView.isEditable = false
+            
+            startButton.isEnabled = false
+            durationButton.setTitleColor(.white, for: .normal)
+            durationButton.isEnabled = false
+            endButton.setTitleColor(.white, for: .normal)
+            endButton.isEnabled = false
+            
+            startPicker.isEnabled = false;
+            durationPicker.isEnabled = false
+            endPicker.isEnabled = false
+            
+            deleteButton.isEnabled = false
+        }
     }
     
     @objc func cancelButtonTapped() {
 //        scheduleViewController.navigationController?.popViewController(animated: true)
+        scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func doneButtonTapped() {
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
     

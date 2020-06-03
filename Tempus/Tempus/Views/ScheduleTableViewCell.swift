@@ -64,11 +64,6 @@ class ScheduleTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
-        // Double taps to edit.
-//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
-//        view.addGestureRecognizer(tapGestureRecognizer)
-//
-//        tapGestureRecognizer.numberOfTapsRequired = 2
         let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
         view.addGestureRecognizer(longPressedGestureRecognizer)
         
@@ -101,7 +96,7 @@ class ScheduleTableViewCell: UITableViewCell {
         contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         
         contentLabel.snp.makeConstraints { (make) in
-            make.left.right.equalTo(UIScreen.main.bounds.width * 0.03)
+            make.left.right.equalTo(view).inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalTo(timeLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(15)
         }
@@ -134,6 +129,11 @@ class ScheduleTableViewCell: UITableViewCell {
     }
     
     @objc func statusButtonTapped() {
+        if let scheduleViewControllerDate = scheduleViewController.schedule?.date.GTM8(),
+        scheduleViewControllerDate < Date().GTM8() {
+            return
+        }
+        
         scheduleViewController.toggleFinishStatus(task: task!)
     }
     

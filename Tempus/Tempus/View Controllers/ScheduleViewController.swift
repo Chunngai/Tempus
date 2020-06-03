@@ -70,7 +70,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
 //        dateButton.backgroundColor = .aqua
         dateButton.setTitle(Date().GTM8().formattedDate(), for: .normal)
-        
+
         // Adds button.
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addBarButton.tintColor = .white
@@ -126,14 +126,22 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         datePickerViewDisplayed.toggle()
         
         if !datePickerViewDisplayed {
-            let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
-            
-            let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
 //            if scheduleToDisplay.date != Date().GTM8() {
             Schedule.saveSchedule(self.schedule!)
-            
+                        
+            let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
+            let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
             self.schedule = scheduleToDisplay
             dateButton.setTitle(scheduleToDisplay.date.formattedDate(), for: .normal)
+            
+            if let scheduleViewControllerDate = self.schedule?.date.GTM8(),
+                scheduleViewControllerDate < Date().GTM8() {
+                navigationItem.rightBarButtonItem = nil
+            } else {
+                let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
+                addBarButton.tintColor = .white
+                navigationItem.rightBarButtonItem = addBarButton
+            }
             
             scheduleTableView?.reloadData()
 //            }
