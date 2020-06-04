@@ -47,17 +47,14 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         addButton.tintColor = .white
         navigationItem.rightBarButtonItem = addButton
         
-        view.addSubview(UIView())
+//        view.addSubview(UIView())
         
         // Adds a table view.
         toDoTableView = UITableView(frame:
             CGRect(x: 0,
-                   y: navigationController!.navigationBar.frame.maxY,
-//                    + navigationController!.navigationBar.frame.height,
+                   y: navigationController!.navigationBar.frame.height,
                    width: view.frame.width,
-                   height: view.frame.height
-                    - (navigationController!.navigationBar.frame.maxY
-                        + navigationController!.navigationBar.frame.height)), style: .grouped)
+                   height: view.frame.height - navigationController!.navigationBar.frame.height - tabBarController!.tabBar.frame.height), style: .grouped)
         view.addSubview(toDoTableView!)
         
         toDoTableView?.dataSource = self

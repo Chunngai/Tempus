@@ -257,7 +257,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
             durationPicker.isEnabled = false
             endPicker.isEnabled = false
             
-            deleteButton.isEnabled = false
+            deleteButton.isHidden = true
         }
     }
     

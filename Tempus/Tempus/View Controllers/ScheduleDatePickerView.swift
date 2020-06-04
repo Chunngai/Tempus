@@ -11,6 +11,8 @@ import SnapKit
 
 class ScheduleDatePickerView: UIView {
 
+    var scheduleViewController: ScheduleViewController?
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -49,6 +51,8 @@ class ScheduleDatePickerView: UIView {
         datePicker = UIDatePicker()
         self.addSubview(datePicker)
         
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
         
@@ -56,6 +60,12 @@ class ScheduleDatePickerView: UIView {
             make.left.equalToSuperview().offset(30)
             make.right.equalToSuperview().offset(-30)
             make.top.equalToSuperview().offset(UIScreen.main.bounds.height * 0.4 * 0.1)
+        }
+    }
+    
+    @objc func datePickerValueChanged() {
+        if let scheduleViewController = scheduleViewController {
+            scheduleViewController.changeSchedule()
         }
     }
 }

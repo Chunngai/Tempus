@@ -52,4 +52,11 @@ extension Date {
     func GTM8() -> Date {
         return Date(timeInterval: 8 * 3600, since: self)
     }
+    
+    var shortWeekdaySymbol: String {
+        let calendar = Calendar(identifier: .gregorian)
+        
+        let weekday = calendar.component (.weekday, from: self)
+        return calendar.shortWeekdaySymbols[weekday - 1]
+    }
 }

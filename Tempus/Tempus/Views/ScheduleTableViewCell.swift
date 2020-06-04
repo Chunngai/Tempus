@@ -125,6 +125,11 @@ class ScheduleTableViewCell: UITableViewCell {
     }
     
     @objc func viewLongPressed() {
+        if let scheduleEditNavigationViewController = scheduleViewController.presentedViewController,
+            scheduleEditNavigationViewController is ScheduleEditNavigationViewController {
+            return
+        }
+        
         scheduleViewController.presentEditingView(task: task!)
     }
     

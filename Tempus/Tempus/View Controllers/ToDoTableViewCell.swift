@@ -60,11 +60,9 @@ class ToDoTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(5)
         }
         
-        // Double taps to edit.
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
-        view.addGestureRecognizer(tapGestureRecognizer)
-        
-        tapGestureRecognizer.numberOfTapsRequired = 2
+        // Long to edit.        
+        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
+        view.addGestureRecognizer(longPressedGestureRecognizer)
         
         // Creates a content label.
         contentLabel = UILabel()
@@ -99,7 +97,12 @@ class ToDoTableViewCell: UITableViewCell {
             frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     }
     
-    @objc func viewDoubleTapped() {
+    @objc func viewLongPressed() {
+        if let toDoEditNavigationViewController = toDoViewController.presentedViewController,
+            toDoEditNavigationViewController is ToDoEditNavigationViewController {
+            return
+        }
+        
         toDoViewController.presentEditingView(task: task!)
     }
 }

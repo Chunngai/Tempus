@@ -74,13 +74,13 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.title = "Schedule"
         
         // Button to display and change the date.
-        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 60, height: 30))
+        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 100, height: 30))
         view.addSubview(dateButton)
         
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         
 //        dateButton.backgroundColor = .aqua
-        dateButton.setTitle(Date().GTM8().formattedDate(), for: .normal)
+        dateButton.setTitle("\(Date().GTM8().formattedDate()) \(Date().GTM8().shortWeekdaySymbol)", for: .normal)
 
         // Adds button.
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
@@ -120,6 +120,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         datePickerView = ScheduleDatePickerView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.5))
         view.addSubview(datePickerView)
         
+        datePickerView.scheduleViewController = self
         datePickerViewDisplayed = false
     }
     
@@ -136,26 +137,26 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         datePickerViewDisplayed.toggle()
         
-        if !datePickerViewDisplayed {
-//            if scheduleToDisplay.date != Date().GTM8() {
-            Schedule.saveSchedule(self.schedule!)
-                        
-            let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
-            let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
-            self.schedule = scheduleToDisplay
-            dateButton.setTitle(scheduleToDisplay.date.formattedDate(), for: .normal)
-            
-            if isScheduleBeforeToday! {
-                navigationItem.rightBarButtonItem = nil
-            } else {
-                let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
-                addBarButton.tintColor = .white
-                navigationItem.rightBarButtonItem = addBarButton
-            }
-            
-            scheduleTableView?.reloadData()
+//        if !datePickerViewDisplayed {
+////            if scheduleToDisplay.date != Date().GTM8() {
+//            Schedule.saveSchedule(self.schedule!)
+//                        
+//            let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
+//            let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
+//            self.schedule = scheduleToDisplay
+//            dateButton.setTitle(scheduleToDisplay.date.formattedDate(), for: .normal)
+//            
+//            if isScheduleBeforeToday! {
+//                navigationItem.rightBarButtonItem = nil
+//            } else {
+//                let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
+//                addBarButton.tintColor = .white
+//                navigationItem.rightBarButtonItem = addBarButton
 //            }
-        }
+//            
+//            scheduleTableView?.reloadData()
+////            }
+//        }
                 
 //        Schedule.saveSchedule(self.schedule!)
 //
@@ -172,6 +173,26 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
 //        }
 //
 //        scheduleTableView?.reloadData()
+    }
+    
+    func changeSchedule() {
+        Schedule.saveSchedule(self.schedule!)
+                    
+        let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
+        dateButton.setTitle("\(dateOfScheduleToDisplay.formattedDate()) \(dateOfScheduleToDisplay.shortWeekdaySymbol)", for: .normal)
+        
+        let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
+        self.schedule = scheduleToDisplay
+
+        if isScheduleBeforeToday! {
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
+            addBarButton.tintColor = .white
+            navigationItem.rightBarButtonItem = addBarButton
+        }
+        
+        scheduleTableView?.reloadData()
     }
     
     @objc func presentAddingView() {
