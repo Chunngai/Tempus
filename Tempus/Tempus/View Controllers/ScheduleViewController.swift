@@ -18,13 +18,24 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             
             // Saves to disk.
             Schedule.saveSchedule(self.schedule!)
+            
+            if let scheduleDate = self.schedule?.date.formattedDate(),
+                scheduleDate < Date().GTM8().formattedDate() {
+                isScheduleBeforeToday = true
+            } else {
+                isScheduleBeforeToday = false
+            }
         }
     }
+    
+    var isScheduleBeforeToday: Bool?
+    
     var finishedTaskNumber: Int {
         schedule!.tasks.filter({ (task) -> Bool in
             task.isFinished
             }).count
     }
+    
     var latestTask: Task? {
         if schedule!.tasks.count == 0 {
             return nil
@@ -134,8 +145,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             self.schedule = scheduleToDisplay
             dateButton.setTitle(scheduleToDisplay.date.formattedDate(), for: .normal)
             
-            if let scheduleViewControllerDate = self.schedule?.date.GTM8(),
-                scheduleViewControllerDate < Date().GTM8() {
+            if isScheduleBeforeToday! {
                 navigationItem.rightBarButtonItem = nil
             } else {
                 let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))

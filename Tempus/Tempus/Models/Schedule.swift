@@ -10,7 +10,7 @@ import Foundation
 
 struct Schedule: Codable {
     // Vars.
-    var date: Date
+    var date: Date  // GTM 8
     var tasks: [Task]
     
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

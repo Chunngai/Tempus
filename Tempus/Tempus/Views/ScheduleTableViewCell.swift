@@ -129,8 +129,7 @@ class ScheduleTableViewCell: UITableViewCell {
     }
     
     @objc func statusButtonTapped() {
-        if let scheduleViewControllerDate = scheduleViewController.schedule?.date.GTM8(),
-        scheduleViewControllerDate < Date().GTM8() {
+        if scheduleViewController.isScheduleBeforeToday! {
             return
         }
         

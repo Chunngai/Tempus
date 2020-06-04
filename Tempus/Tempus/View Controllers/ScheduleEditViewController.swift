@@ -241,8 +241,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
         
         // Disables editing if the task is set before the current day.
-        if let scheduleViewControllerDate = scheduleViewController.schedule?.date.GTM8(),
-            scheduleViewControllerDate < Date().GTM8() {
+        if scheduleViewController.isScheduleBeforeToday! {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
             
