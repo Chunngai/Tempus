@@ -17,6 +17,8 @@ class ScheduleNavigationViewController: UINavigationController {
         navigationBar.prefersLargeTitles = true
         navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
+        navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         navigationBar.setToTransparent()
         
         // Customizes the tab bar.

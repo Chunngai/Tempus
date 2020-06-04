@@ -71,17 +71,21 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func updateViews() {
         // Sets the title of the navigation item.
-        navigationItem.title = "Schedule"
+        navigationItem.title = "\(Date().GTM8().formattedDate()) \(Date().GTM8().shortWeekdaySymbol)"
         
         // Button to display and change the date.
-        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 100, height: 30))
-        view.addSubview(dateButton)
+//        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 100, height: 30))
+//        view.addSubview(dateButton)
         
-        dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
+//        dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
         
 //        dateButton.backgroundColor = .aqua
-        dateButton.setTitle("\(Date().GTM8().formattedDate()) \(Date().GTM8().shortWeekdaySymbol)", for: .normal)
+//        dateButton.setTitle("\(Date().GTM8().formattedDate()) \(Date().GTM8().shortWeekdaySymbol)", for: .normal)
 
+        let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateButtonTapped))
+        dateBarButton.tintColor = .white
+        navigationItem.leftBarButtonItem = dateBarButton
+        
         // Adds button.
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addBarButton.tintColor = .white
@@ -92,13 +96,19 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Adds a table view.
         scheduleTableView = UITableView(frame:
-            CGRect(x: 0,
-                   y: navigationController!.navigationBar.frame.maxY
-                    + navigationController!.navigationBar.frame.height,
-                   width: view.frame.width,
-                   height: view.frame.height
-                    - (navigationController!.navigationBar.frame.maxY
-                        + navigationController!.navigationBar.frame.height)), style: .grouped)
+            CGRect(
+//                x: 0,
+//                   y: navigationController!.navigationBar.frame.maxY
+//                    + navigationController!.navigationBar.frame.height,
+//                   width: view.frame.width,
+//                   height: view.frame.height
+//                    - (navigationController!.navigationBar.frame.maxY
+//                        + navigationController!.navigationBar.frame.height)
+            x: 0,
+            y: navigationController!.navigationBar.frame.height,
+            width: view.frame.width,
+            height: view.frame.height - navigationController!.navigationBar.frame.height - tabBarController!.tabBar.frame.height
+            ), style: .grouped)
         view.addSubview(scheduleTableView!)
 
         scheduleTableView?.dataSource = self
@@ -114,7 +124,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Draws advancement arc.
         advancementArcLayer = CAShapeLayer()
-        view.layer.addSublayer(advancementArcLayer!)
+//        view.layer.addSublayer(advancementArcLayer!)
         
         // Adds date picker.
         datePickerView = ScheduleDatePickerView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.5))
@@ -179,7 +189,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         Schedule.saveSchedule(self.schedule!)
                     
         let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
-        dateButton.setTitle("\(dateOfScheduleToDisplay.formattedDate()) \(dateOfScheduleToDisplay.shortWeekdaySymbol)", for: .normal)
+        navigationItem.title = "\(dateOfScheduleToDisplay.formattedDate()) \(dateOfScheduleToDisplay.shortWeekdaySymbol)"
         
         let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!
         self.schedule = scheduleToDisplay
