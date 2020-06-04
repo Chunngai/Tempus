@@ -20,7 +20,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             Schedule.saveSchedule(self.schedule!)
             
             if let scheduleDate = self.schedule?.date.formattedDate(),
-                scheduleDate < Date().GTM8().formattedDate() {
+                scheduleDate < Date().GMT8().formattedDate() {
                 isScheduleBeforeToday = true
             } else {
                 isScheduleBeforeToday = false
@@ -66,14 +66,13 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
         updateViews()
 
-        schedule = Schedule.loadSchedule(date: Date().GTM8())
+        schedule = Schedule.loadSchedule(date: Date().GMT8())
     }
     
     func updateViews() {
         // Sets the title of the navigation item.
-        navigationItem.title = "\(Date().GTM8().formattedDate()) \(Date().GTM8().shortWeekdaySymbol)"
-        
-        // Button to display and change the date.
+        navigationItem.title = "\(Date().GMT8().formattedDate()) \(Date().GMT8().shortWeekdaySymbol)"
+        // Button to diGMT8y and change the date.
 //        dateButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width * 0.03, y: navigationController!.navigationBar.bounds.maxY + 40, width: 100, height: 30))
 //        view.addSubview(dateButton)
         
@@ -188,7 +187,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func changeSchedule() {
         Schedule.saveSchedule(self.schedule!)
                     
-        let dateOfScheduleToDisplay = datePickerView.datePicker.date.GTM8()
+        let dateOfScheduleToDisplay = datePickerView.datePicker.date.GMT8()
         navigationItem.title = "\(dateOfScheduleToDisplay.formattedDate()) \(dateOfScheduleToDisplay.shortWeekdaySymbol)"
         
         let scheduleToDisplay = Schedule.loadSchedule(date: dateOfScheduleToDisplay)!

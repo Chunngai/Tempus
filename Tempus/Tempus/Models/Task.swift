@@ -45,18 +45,18 @@ extension Date {
         dateComponents.hour = hour
         dateComponents.minute = minute
         dateComponents.second = 0
-
+	
         self = Calendar.current.date(from: dateComponents)!  // should be GMT0
     }
     
-    func GTM8() -> Date {
+    func GMT8() -> Date {
         return Date(timeInterval: 8 * 3600, since: self)
     }
     
     var shortWeekdaySymbol: String {
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar(identifier: .gregorian)  // the zone is the same as the mobile system
         
-        let weekday = calendar.component (.weekday, from: self)
+        let weekday = calendar.component (.weekday, from: Date(timeInterval: -8 * 3600, since: self))
         return calendar.shortWeekdaySymbols[weekday - 1]
     }
 }
