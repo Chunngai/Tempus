@@ -19,7 +19,7 @@ class ScheduleNavigationViewController: UINavigationController {
         
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        navigationBar.setToTransparent()
+        navigationBar.setTransparent()
         
         // Customizes the tab bar.
         tabBarItem.title = "Schedule"

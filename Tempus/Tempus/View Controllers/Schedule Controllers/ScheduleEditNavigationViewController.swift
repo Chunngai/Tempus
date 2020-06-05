@@ -13,7 +13,8 @@ class ScheduleEditNavigationViewController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationBar.setToTransparent()
+        // Customizes the navigation bar.
+        navigationBar.setTransparent()
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
 }

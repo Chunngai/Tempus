@@ -252,7 +252,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             
             let indexPath = IndexPath(row: index, section: 0)
             let cell = scheduleTableView!.cellForRow(at: indexPath) as! ScheduleTableViewCell
-            cell.updateValues(task: toggledTask, delegate: self)
+            cell.updateValues(task: toggledTask, scheduleViewController: self)
             
             let idx = schedule?.tasks.firstIndex(of: toggledTask)
             let newIndexPath = IndexPath(row: idx!, section: 0)
@@ -306,7 +306,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ScheduleTableViewCell()
         
-        cell.updateValues(task: schedule!.tasks[indexPath.row], delegate: self)
+        cell.updateValues(task: schedule!.tasks[indexPath.row], scheduleViewController: self)
         
         return cell
     }

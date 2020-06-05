@@ -10,21 +10,17 @@ import UIKit
 import SnapKit
 
 class ScheduleTableViewCell: UITableViewCell {
-    
-    // Data source.
+        
     var task: Task?
-    
     var scheduleViewController: ScheduleViewController!
     
     // Views.
-    var view: UIView!
-    var timeLabel: UILabel!
-    var durationLabel: UILabel!
-    var contentLabel: UILabel!
-    
-    var statusButton: UIButton!
-    
-    var gradientLayer: CAGradientLayer!
+    var view = UIView()
+    var timeLabel = UILabel()
+    var durationLabel = UILabel()
+    var contentLabel = UILabel()
+        
+    var gradientLayer = CAGradientLayer()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,11 +47,10 @@ class ScheduleTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)
         
-        // Creates a view.
-        view = UIView()
+        // A view for placing contents.
         contentView.addSubview(view)
         
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
         
         view.snp.makeConstraints { (make) in
@@ -64,11 +59,7 @@ class ScheduleTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
-        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
-        view.addGestureRecognizer(longPressedGestureRecognizer)
-        
-        // Creates a time label.
-        timeLabel = UILabel()
+        // Time label.
         view.addSubview(timeLabel)
                 
         timeLabel.snp.makeConstraints { (make) in
@@ -77,7 +68,7 @@ class ScheduleTableViewCell: UITableViewCell {
             make.width.equalTo(200)
         }
         
-        durationLabel = UILabel()
+        // Duration label.
         view.addSubview(durationLabel)
         
         durationLabel.textAlignment = .right
@@ -88,8 +79,7 @@ class ScheduleTableViewCell: UITableViewCell {
             make.width.equalTo(200)
         }
         
-        // Creates a content label.
-        contentLabel = UILabel()
+        // Content label.
         view.addSubview(contentLabel)
         
         contentLabel.numberOfLines = 0
@@ -101,27 +91,21 @@ class ScheduleTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
-        // Taps to toggle finish status.
-        statusButton = UIButton()
-        view.addSubview(statusButton)
+        // Gradient layer.
+        view.addGradientLayer(gradientLayer: gradientLayer,
+                              colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
+                              locations: [0.0, 1.0],
+                              startPoint: CGPoint(x: 0, y: 1),
+                              endPoint: CGPoint(x: 1, y: 1),
+                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         
-        statusButton.addTarget(self, action: #selector(statusButtonTapped), for: .touchUpInside)
+        // Long press to edit.
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
+        view.addGestureRecognizer(longPressGestureRecognizer)
         
-//        statusButton.alpha = 0
-//        statusButton.backgroundColor = .aqua
-//        statusButton.setTitle("a", for: .normal)
-        
-        //TODO: use delegate instead?
-        statusButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().offset(0)
-            make.top.equalToSuperview().offset(0)
-            make.bottom.equalToSuperview().offset(0)
-            make.width.equalTo(contentView.frame.width)
-        }
-        
-        // Gradient layer as bg color.
-        gradientLayer = CAGradientLayer()
-
+        // Tap to toggle finish status.
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc func viewLongPressed() {
@@ -133,7 +117,7 @@ class ScheduleTableViewCell: UITableViewCell {
         scheduleViewController.presentEditingView(task: task!)
     }
     
-    @objc func statusButtonTapped() {
+    @objc func viewTapped() {
         if scheduleViewController.isScheduleBeforeToday! {
             return
         }
@@ -141,17 +125,15 @@ class ScheduleTableViewCell: UITableViewCell {
         scheduleViewController.toggleFinishStatus(task: task!)
     }
     
-    func updateValues(task: Task, delegate: ScheduleViewController) {
+    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {
         self.task = task
+        self.scheduleViewController = scheduleViewController
         
-        self.scheduleViewController = delegate
-        
-        // Updates texts of labels.
+        // Updates the text content.
         let timeLabelText = "\(task.dateInterval.start.formattedTime()) - \(task.dateInterval.end.formattedTime())"
         let durationLabelText = "\(task.dateInterval.duration.formattedDuration())"
         
         let contentLabelText = task.content
-//        contentLabel.sizeToFit()
         
         // Updates status
         var textAttrs: [NSAttributedString.Key: Any] = [:]
@@ -173,13 +155,5 @@ class ScheduleTableViewCell: UITableViewCell {
             textAttrs[.foregroundColor] = UIColor.white
             contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
         }
-        
-        // Creates a gradient layer.
-        view.addGradientLayer(gradientLayer: gradientLayer,
-            colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-            locations: [0.0, 1.0],
-            startPoint: CGPoint(x: 0, y: 1),
-            endPoint: CGPoint(x: 1, y: 1),
-            frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     }
 }

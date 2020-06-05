@@ -10,17 +10,15 @@ import UIKit
 import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
-
-    // Data source.
-    var task: Task?
     
+    var task: Task?
     var toDoViewController: ToDoViewController!
         
     // Views.
-    var view: UIView!
-    var contentLabel: UILabel!
+    var view = UIView()
+    var contentLabel = UILabel()
     
-    var gradientLayer: CAGradientLayer!
+    var gradientLayer = CAGradientLayer()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -47,11 +45,10 @@ class ToDoTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)
         
-        // Creates a view.
-        view = UIView()
+        // A view for placing contents.
         contentView.addSubview(view)
         
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
         
         view.snp.makeConstraints { (make) in
@@ -60,12 +57,7 @@ class ToDoTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(5)
         }
         
-        // Long to edit.        
-        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
-        view.addGestureRecognizer(longPressedGestureRecognizer)
-        
-        // Creates a content label.
-        contentLabel = UILabel()
+        // Content label.
         view.addSubview(contentLabel)
         
         contentLabel.numberOfLines = 0
@@ -78,23 +70,25 @@ class ToDoTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
-        // Gradient layer as bg color.
-        gradientLayer = CAGradientLayer()
+        // Gradient layer.
+        view.addGradientLayer(gradientLayer: gradientLayer,
+                              colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
+                              locations: [0.0, 1.0],
+                              startPoint: CGPoint(x: 0, y: 1),
+                              endPoint: CGPoint(x: 1, y: 1),
+                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+
+        // Long press to edit.
+        let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
+        view.addGestureRecognizer(longPressedGestureRecognizer)
     }
     
     func updateValues(task: Task, toDoViewController: ToDoViewController) {
         self.task = task
-        
         self.toDoViewController = toDoViewController
         
+        // Updates the text content.
         contentLabel.text = task.content
-        
-        view.addGradientLayer(gradientLayer: gradientLayer,
-            colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-            locations: [0.0, 1.0],
-            startPoint: CGPoint(x: 0, y: 1),
-            endPoint: CGPoint(x: 1, y: 1),
-            frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
     }
     
     @objc func viewLongPressed() {

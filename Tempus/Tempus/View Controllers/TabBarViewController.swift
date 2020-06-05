@@ -39,6 +39,7 @@ class TabBarViewController: UITabBarController {
         scheduleNavigationViewController = ScheduleNavigationViewController(rootViewController: scheduleViewController)
         self.addChild(scheduleNavigationViewController!)
         
+        // Creates a navigation controller for todos, whose root controller is a todo view controller.
         toDoNavigationViewController = ToDoNavigationViewController(rootViewController: toDoViewController)
         self.addChild(toDoNavigationViewController!)
     }

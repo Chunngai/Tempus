@@ -22,7 +22,7 @@ class ScheduleDatePickerView: UIView {
     */
     
     var gradientLayer = CAGradientLayer()
-    var datePicker: UIDatePicker!
+    var datePicker = UIDatePicker()
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -35,8 +35,7 @@ class ScheduleDatePickerView: UIView {
     }
     
     func updateViews() {
-//        self.backgroundColor = UIColor.sky.withAlphaComponent(0.5)
-        
+        // Gradient layer.
         self.addGradientLayer(gradientLayer: gradientLayer,
             colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
             locations: [0.0, 1.0],
@@ -48,14 +47,14 @@ class ScheduleDatePickerView: UIView {
         self.layer.masksToBounds = true
         
         // Date picker.
-        datePicker = UIDatePicker()
         self.addSubview(datePicker)
-        
+
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         
-        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
         datePicker.datePickerMode = .date
-        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
+        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date().GMT8())
+        
+        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
         
         datePicker.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(30)

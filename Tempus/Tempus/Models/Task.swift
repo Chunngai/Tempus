@@ -9,12 +9,10 @@
 import Foundation
 
 struct Task: Equatable, Comparable, Codable {
-    // Vars.
     var content: String!
     var dateInterval: DateInterval!
     var isFinished: Bool!
     
-    // Methods.
     static func == (lhs: Task, rhs: Task) -> Bool {
         return (
             lhs.content == rhs.content
@@ -46,7 +44,7 @@ extension Date {
         dateComponents.minute = minute
         dateComponents.second = 0
 	
-        self = Calendar.current.date(from: dateComponents)!  // should be GMT0
+        self = Calendar.current.date(from: dateComponents)!  // Timezone of the date generated is according to the system.
     }
     
     func GMT8() -> Date {
@@ -54,9 +52,10 @@ extension Date {
     }
     
     var shortWeekdaySymbol: String {
-        let calendar = Calendar(identifier: .gregorian)  // the zone is the same as the mobile system
+        let calendar = Calendar(identifier: .gregorian)  // Timezone of the date generated is according to the system.
+        let gmtDate = Date(timeInterval: -8 * 3600, since: self)
         
-        let weekday = calendar.component (.weekday, from: Date(timeInterval: -8 * 3600, since: self))
+        let weekday = calendar.component(.weekday, from: gmtDate)
         return calendar.shortWeekdaySymbols[weekday - 1]
     }
 }
