@@ -76,12 +76,14 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         while true {
             if schedule!.date < Date().GMT8()
                 && Calendar(identifier: .gregorian).dateComponents([.day], from: schedule!.date, to: Date().GMT8()).day! > 0  {
-                isScheduleBeforeToday = true
-            } else {
                 isScheduleBeforeToday = false
+            } else {
+                isScheduleBeforeToday = true
             }
             
-            changeSchedule()
+            DispatchQueue.main.async {
+                self.changeSchedule()
+            }
             
             Thread.sleep(forTimeInterval: 5 * 60)
         }
