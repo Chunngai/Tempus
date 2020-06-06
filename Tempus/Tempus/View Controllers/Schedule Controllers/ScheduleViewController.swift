@@ -67,6 +67,39 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         updateViews()
 
         schedule = Schedule.loadSchedule(date: Date().GMT8())
+        
+        Thread.detachNewThreadSelector(#selector(checkGithubCommit), toTarget: self, with: nil)
+    }
+    
+    @objc func checkGithubCommit() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        let dateStr = dateFormatter.string(from: Date().GMT8())
+        
+        var htmlText = ""
+//        let pattern = "rect.+data-date=\"2020-06-05\""
+        let pattern = "rect.+data-date=\"2020-\(dateStr)\""
+        let regex = try? NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
+        
+        // Makes a request.
+        let url = URL(string: "https://github.com/Chunngai")!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let string = String(data: data, encoding: .utf8) {
+                htmlText = string
+                
+                // Gets the value of data-count.
+                let res = regex?.rangeOfFirstMatch(in: htmlText, options: [.reportProgress], range: NSRange(location: 0, length: htmlText.count))
+                
+                if let res = res, htmlText.count >= (res.location + res.length) {  
+                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: res.location)
+                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: res.location + res.length)
+                    let rect = htmlText[startIndex..<endIndex]
+                    print(rect)
+                }
+            }
+        }
+        task.resume()
     }
     
     func updateViews() {
