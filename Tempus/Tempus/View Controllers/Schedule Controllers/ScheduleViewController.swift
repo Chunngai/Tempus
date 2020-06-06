@@ -68,7 +68,23 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
 
         schedule = Schedule.loadSchedule(date: Date().GMT8())
         
+        Thread.detachNewThreadSelector(#selector(checkEditability), toTarget: self, with: nil)
         Thread.detachNewThreadSelector(#selector(checkGithubCommit), toTarget: self, with: nil)
+    }
+    
+    @objc func checkEditability() {
+        while true {
+            if schedule!.date < Date().GMT8()
+                && Calendar(identifier: .gregorian).dateComponents([.day], from: schedule!.date, to: Date().GMT8()).day! > 0  {
+                isScheduleBeforeToday = true
+            } else {
+                isScheduleBeforeToday = false
+            }
+            
+            changeSchedule()
+            
+            Thread.sleep(forTimeInterval: 5 * 60)
+        }
     }
     
     @objc func checkGithubCommit() {
