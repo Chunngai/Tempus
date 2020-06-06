@@ -11,7 +11,7 @@ import SnapKit
 
 class ScheduleTableViewCell: UITableViewCell {
         
-    var task: Task?
+    var task: Task!
     var scheduleViewController: ScheduleViewController!
     
     // Views.
@@ -114,18 +114,18 @@ class ScheduleTableViewCell: UITableViewCell {
             return
         }
         
-        scheduleViewController.presentEditingView(task: task!)
+        scheduleViewController.presentEditingView(task: task)
     }
     
     @objc func viewTapped() {
-        if scheduleViewController.isScheduleBeforeToday! {
+        if !scheduleViewController.editable {
             return
         }
         
-        scheduleViewController.toggleFinishStatus(task: task!)
+        scheduleViewController.toggleFinishStatus(task: task)
     }
     
-    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {
+    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {        
         self.task = task
         self.scheduleViewController = scheduleViewController
         
@@ -133,7 +133,7 @@ class ScheduleTableViewCell: UITableViewCell {
         let timeLabelText = "\(task.dateInterval.start.formattedTime()) - \(task.dateInterval.end.formattedTime())"
         let durationLabelText = "\(task.dateInterval.duration.formattedDuration())"
         
-        let contentLabelText = task.content
+        let contentLabelText = task.content!
         
         // Updates status
         var textAttrs: [NSAttributedString.Key: Any] = [:]
@@ -144,7 +144,7 @@ class ScheduleTableViewCell: UITableViewCell {
             
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
             durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
+            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
         } else {
             textAttrs[.strikethroughStyle] = nil
             textAttrs[.strikethroughColor] = nil
@@ -153,7 +153,7 @@ class ScheduleTableViewCell: UITableViewCell {
             timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
             durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
             textAttrs[.foregroundColor] = UIColor.white
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText!, attributes: textAttrs)
+            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
         }
     }
 }

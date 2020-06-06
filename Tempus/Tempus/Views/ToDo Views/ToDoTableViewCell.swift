@@ -11,7 +11,7 @@ import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
     
-    var task: Task?
+    var task: Task!
     var toDoViewController: ToDoViewController!
         
     // Views.
@@ -97,6 +97,6 @@ class ToDoTableViewCell: UITableViewCell {
             return
         }
         
-        toDoViewController.presentEditingView(task: task!)
+        toDoViewController.presentEditingView(task: task)
     }
 }

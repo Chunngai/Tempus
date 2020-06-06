@@ -11,7 +11,7 @@ import SnapKit
 
 class ScheduleDatePickerView: UIView {
 
-    var scheduleViewController: ScheduleViewController?
+    var scheduleViewController: ScheduleViewController!
     
     /*
     // Only override draw() if you perform custom drawing.
@@ -63,9 +63,11 @@ class ScheduleDatePickerView: UIView {
         }
     }
     
+    func updateValues(scheduleViewController: ScheduleViewController) {        
+        self.scheduleViewController = scheduleViewController
+    }
+    
     @objc func datePickerValueChanged() {
-        if let scheduleViewController = scheduleViewController {
-            scheduleViewController.changeSchedule()
-        }
+        scheduleViewController.changeSchedule()
     }
 }

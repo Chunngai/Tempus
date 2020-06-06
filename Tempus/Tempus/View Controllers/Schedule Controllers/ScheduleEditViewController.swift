@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
+class ScheduleEditViewController: UIViewController, UITextViewDelegate {
 
     // Data.
     var task: Task!
@@ -241,7 +241,7 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
         
         // Disables editing if the task is set before the current day.
-        if scheduleViewController.isScheduleBeforeToday! {
+        if !scheduleViewController.editable {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
             
@@ -259,6 +259,15 @@ class ScheduleEditViewController_: UIViewController, UITextViewDelegate {
             
             deleteButton.isHidden = true
         }
+    }
+    
+    func updateValues(scheduleViewController: ScheduleViewController, task: Task, initStart: Date?, initDuration: TimeInterval?, initEnd: Date?, indexCountedFromOne: Int?) {
+        self.scheduleViewController = scheduleViewController
+        self.task = task
+        self.initStart = initStart
+        self.initDuration = initDuration
+        self.initEnd = initEnd
+        self.indexCountedFromOne = indexCountedFromOne
     }
     
     @objc func cancelButtonTapped() {

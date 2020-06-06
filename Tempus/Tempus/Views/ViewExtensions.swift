@@ -46,9 +46,9 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func formattedDate() -> String {
+    func formattedDate(separator: String="/") -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd"
+        dateFormatter.dateFormat = "MM\(separator)dd"
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return dateFormatter.string(from: self)
