@@ -11,6 +11,7 @@ import Foundation
 struct Schedule: Codable {
     var date: Date  // GMT 8.
     var tasks: [Task]
+    var committed: Bool?
     
     // Loading and saving data.
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -19,7 +20,7 @@ struct Schedule: Codable {
         let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(date.archiveURLDateComponent())").appendingPathExtension("plist")
 
         guard let codedSchedule = try? Data(contentsOf: archiveURL) else {
-            return Schedule(date: date, tasks: [Task]())
+            return Schedule(date: date, tasks: [Task](), committed: nil)
         }
         
         let propertyListDecoder = PropertyListDecoder()

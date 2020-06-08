@@ -187,11 +187,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         startPicker.setValue(UIColor.white, forKeyPath: "textColor")
         startPicker.datePickerMode = .time
-        if let initStart = initStart {
-            startPicker.setDate(Date(timeInterval: -8 * 3600, since: initStart), animated: true)
-        } else {
-            startPicker.setDate(Date(hour: 8, minute: 30), animated: true)
-        }
+        startPicker.setDate(Date(timeInterval: -8 * 3600, since: initStart), animated: true)
         
         durationPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(durationPicker)
@@ -202,11 +198,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         durationPicker.datePickerMode = .countDownTimer
         durationPicker.isHidden = true
         durationPicker.minuteInterval = 5
-        if let initDuration = initDuration {
-            durationPicker.setValue(initDuration, forKeyPath: "countDownDuration")
-        } else {
-            durationPicker.setValue(2400, forKeyPath: "countDownDuration")
-        }
+        durationPicker.setValue(initDuration, forKeyPath: "countDownDuration")
         
         endPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(endPicker)
@@ -216,11 +208,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         endPicker.setValue(UIColor.white, forKeyPath: "textColor")
         endPicker.datePickerMode = .time
         endPicker.isHidden = true
-        if let initEnd = initEnd {
-            endPicker.setDate(Date(timeInterval: -8 * 3600, since: initEnd), animated: true)
-        } else {
-            endPicker.setDate(Date(hour: 9, minute: 10), animated: true)
-        }
+        endPicker.setDate(Date(timeInterval: -8 * 3600, since: initEnd), animated: true)
         
         timePickers = [startPicker, durationPicker, endPicker]
         
@@ -261,7 +249,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func updateValues(scheduleViewController: ScheduleViewController, task: Task, initStart: Date?, initDuration: TimeInterval?, initEnd: Date?, indexCountedFromOne: Int?) {
+    func updateValues(scheduleViewController: ScheduleViewController, task: Task, initStart: Date, initDuration: TimeInterval, initEnd: Date, indexCountedFromOne: Int?) {
         self.scheduleViewController = scheduleViewController
         self.task = task
         self.initStart = initStart
@@ -282,7 +270,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     @objc func saveButtonTapped() {
         task.dateInterval = DateInterval(start: startPicker.date.GMT8(), end: endPicker.date.GMT8())
         self.task.content = contentTextView.text
-        self.task.isFinished = false
+        self.task.isFinished = task.isFinished ?? false
         
         self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: self.indexCountedFromOne)
         

@@ -56,41 +56,47 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     var datePickerView: ScheduleDatePickerView!
     var datePickerViewDisplayed = false
     
+    let committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+    
     var advancementArcLayer = CAShapeLayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        updateViews()
-
         schedule = Schedule.loadSchedule(date: Date().GMT8())
         guard schedule != nil else {
             return
         }
+        
+        updateViews()
         
         Thread.detachNewThreadSelector(#selector(checkEditability), toTarget: self, with: nil)
         Thread.detachNewThreadSelector(#selector(checkGithubCommit), toTarget: self, with: nil)
     }
     
     @objc func checkGithubCommit() {
-        var htmlText = ""
-        let pattern = "rect.+data-date=\"2020-\(Date().GMT8().formattedDate(separator: "-"))\""
-        let regex = try? NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
-        
         // Makes a request.
         let url = URL(string: "https://github.com/Chunngai")!
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let data = data, let string = String(data: data, encoding: .utf8) {
-                htmlText = string
+                let htmlText = string
                 
                 // Gets the value of data-count.
-                let res = regex?.rangeOfFirstMatch(in: htmlText, options: [.reportProgress], range: NSRange(location: 0, length: htmlText.count))
+                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().GMT8().formattedLongDate(separator: "-"))\""
+                let regex = try? NSRegularExpression(pattern: pattern, options: [])
+                let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
                 
-                if let res = res, htmlText.count >= (res.location + res.length) {  
-                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: res.location)
-                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: res.location + res.length)
-                    let rect = htmlText[startIndex..<endIndex]
-                    print(rect)
+                if let res = res {
+                    let dataCountRange = res.range(at: 1)
+                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
+                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
+                    let dataCount = Int(htmlText[startIndex..<endIndex])!
+
+                    if dataCount > 0 {
+                        self.committedBarButton.title = "🟢"
+                    } else if dataCount == 0 {
+                        self.committedBarButton.title = "🔴"
+                    }
                 }
             }
         }
@@ -114,7 +120,14 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         // Bar buttons.
         let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped))
         dateBarButton.tintColor = .white
-        navigationItem.leftBarButtonItem = dateBarButton
+
+        let committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        if let committed = schedule.committed {
+            committedBarButton.title = committed ? "🟢" : "🔴"
+        }
+        committedBarButton.tintColor = .white
+        
+        navigationItem.leftBarButtonItems = [dateBarButton, committedBarButton]
         
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addBarButton.tintColor = .white
@@ -195,17 +208,28 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func presentAddingView() {
-        var initStart: Date?
-        var initDuration: TimeInterval?
-        var initEnd: Date?
+        var initStart: Date
+        var initDuration: TimeInterval
+        var initEnd: Date
         if let latestTask = latestTask {
             initStart = latestTask.dateInterval.end
             initDuration = latestTask.dateInterval.duration
-            initEnd = Date(timeInterval: initDuration!, since: initStart!)
+            initEnd = Date(timeInterval: initDuration, since: initStart)
         } else {
-            initStart = nil
-            initDuration = nil
-            initEnd = nil
+            if Date().GMT8() < schedule.date {  // More likely to plan for the next day.
+                initStart = Date(hour: 8, minute: 30).GMT8()
+                initDuration = 2400
+                initEnd = Date(hour: 9, minute: 10).GMT8()
+            } else {  // More likely to plan for the current day.
+                let calendar = Calendar(identifier: .gregorian)
+                let currentHourAndMinute = calendar.dateComponents([.hour, .minute], from: Date())
+                let currentHour = currentHourAndMinute.hour!
+                let currentMinute = currentHourAndMinute.minute!
+        
+                initStart = Date(hour: currentHour, minute: currentMinute).GMT8()
+                initDuration = 2400
+                initEnd = Date(timeInterval: initDuration, since: initStart)
+            }
         }
                 
         let scheduleEditViewController = ScheduleEditViewController()

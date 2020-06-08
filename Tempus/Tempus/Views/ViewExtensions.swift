@@ -53,6 +53,14 @@ extension Date {
         
         return dateFormatter.string(from: self)
     }
+    
+    func formattedLongDate(separator: String="/") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy\(separator)MM\(separator)dd"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return dateFormatter.string(from: self)
+    }
 }
 
 extension TimeInterval {
