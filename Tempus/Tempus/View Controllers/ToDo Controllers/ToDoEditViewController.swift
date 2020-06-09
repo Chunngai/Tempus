@@ -25,6 +25,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var contentLabel: UILabel!
     var contentTextView: UITextView!
     
+    var fromButton = UIButton()
+    var fromDatePicker: UIDatePicker!
+    var remainingTimeButton = UIButton()
+    var toButton = UIButton()
+    var toDatePicker: UIDatePicker!
+    var dateButtonStackView: UIStackView!
+    var dateButtons: [UIView]!
+    
     var repeatedButton = UIButton()
     var emergentButton = UIButton()
     var importantButton = UIButton()
@@ -121,65 +129,98 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
         
-        // Repetition, emergent and important buttons and stack view.
-//        repeatedButton = UIButton()
+        // Date Pickers.
+        fromButton.addTarget(self, action: #selector(fromButtonTapped), for: .touchUpInside)
         
+        fromButton.setTitleColor(.white, for: .normal)
+        fromButton.contentHorizontalAlignment = .center
+        fromButton.setTitle("\(task.dateInterval.start.formattedDate())", for: .normal)
+        
+        remainingTimeButton.setTitleColor(.lightText, for: .normal)
+        remainingTimeButton.contentHorizontalAlignment = .center
+        remainingTimeButton.setTitle("\(DateInterval(start: task.dateInterval.start, end: task.dateInterval.end).formatted())", for: .normal)
+                       
+        toButton.addTarget(self, action: #selector(toButtonTapped), for: .touchUpInside)
+        
+        toButton.setTitleColor(.lightText, for: .normal)
+        toButton.contentHorizontalAlignment = .center
+        toButton.setTitle("\(task.dateInterval.end.formattedDate())", for: .normal)
+        
+        // Time button stack view.
+        dateButtons = [fromButton, remainingTimeButton, toButton]
+        
+        dateButtonStackView = UIStackView(arrangedSubviews: dateButtons)
+        view.addSubview(dateButtonStackView)
+        
+        dateButtonStackView.axis = .horizontal
+        dateButtonStackView.alignment = .center
+        dateButtonStackView.distribution = .equalCentering
+        dateButtonStackView.spacing = 20
+        
+        dateButtonStackView.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
+            make.top.equalTo(contentTextView).offset(80)
+//            make.width.equalTo(UIScreen.main.bounds.width * 0.30)
+            make.height.equalTo(UIScreen.main.bounds.height * 0.28)
+        }
+        
+        // Time Picker views.
+        fromDatePicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.15, y: 360, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28))
+        view.addSubview(fromDatePicker)
+        
+        fromDatePicker.addTarget(self, action: #selector(fromPickerValueChanged), for: .valueChanged)
+        
+        fromDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        fromDatePicker.datePickerMode = .dateAndTime
+        fromDatePicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: task.dateInterval.start), animated: true)
+        
+        toDatePicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.15, y: 360, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28))
+        view.addSubview(toDatePicker)
+        
+        toDatePicker.addTarget(self, action: #selector(toPickerValueChanged), for: .valueChanged)
+        
+        toDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        toDatePicker.datePickerMode = .dateAndTime
+        toDatePicker.isHidden = true
+        toDatePicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: task.dateInterval.end), animated: true)
+            
+        // Repated, emergent, important buttons.
         repeatedButton.addTarget(self, action: #selector(repeatedButtonTapped), for: .touchUpInside)
         
         repeatedButton.setTitle("Repeated", for: .normal)
         repeatedButton.contentHorizontalAlignment = .center
-//        if isRepeated {
-//            repeatedButton.setTitleColor(.white, for: .normal)
-//        } else {
-//            repeatedButton.setTitleColor(.lightText, for: .normal)
-//        }
-        
-//        emergentButton = UIButton()
         
         emergentButton.addTarget(self, action: #selector(emergentButtonTapped), for: .touchUpInside)
         
         emergentButton.setTitle("Emergent", for: .normal)
         emergentButton.contentHorizontalAlignment = .center
-//        if isEmergent {
-//            emergentButton.setTitleColor(.white, for: .normal)
-//        } else {
-//            emergentButton.setTitleColor(.lightText, for: .normal)
-//        }
-                
-//        importantButton = UIButton()
         
         importantButton.addTarget(self, action: #selector(importantButtonTapped), for: .touchUpInside)
         
         importantButton.setTitle("Important", for: .normal)
         importantButton.contentHorizontalAlignment = .center
-//        if isImportant {
-//            importantButton.setTitleColor(.white, for: .normal)
-//        } else {
-//            importantButton.setTitleColor(.lightText, for: .normal)
-//        }
-        
-                
-//        buttonStackView = UIStackView(arrangedSubviews: [repeatedButton, emergentButton, importantButton])
+
         view.addSubview(buttonStackView)
         
-        buttonStackView.axis = .vertical
+        buttonStackView.axis = .horizontal
         buttonStackView.distribution = .fillEqually
         buttonStackView.alignment = .center
         buttonStackView.spacing = 20
         
         buttonStackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(contentTextView).offset(200)
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
+            make.top.equalTo(fromDatePicker.snp.bottom).offset(20)
         }
         
         // Delete Button.
         deleteButton = UIButton()
+
         if originalIndices != nil {
             view.addSubview(deleteButton)
             
             deleteButton.snp.makeConstraints { (make) in
                 make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
-                make.top.equalTo(buttonStackView).offset(320)
+                make.top.equalTo(buttonStackView.snp.bottom).offset(20)
             }
         }
         
@@ -192,6 +233,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
 
     func updateValues(task: Task, toDoViewController: ToDoViewController, originalIndices: (clsIndex: Int, taskIndex: Int)?, isRepeated: Bool, isEmergent: Bool, isImportant: Bool) {
         self.task = task
+        if task.dateInterval == nil {
+            self.task.dateInterval = DateInterval(start: Date().dateOfCurrentTimeZone(), duration: 3600)
+        }
+        
         self.toDoViewController = toDoViewController
         self.originalIndices = originalIndices
         self.isRepeated = isRepeated
@@ -199,16 +244,56 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         self.isImportant = isImportant
     }
     
+    @objc func fromButtonTapped() {
+        fromDatePicker.isHidden.toggle()
+        if fromDatePicker.isHidden {
+            fromButton.setTitleColor(.lightText, for: .normal)
+        } else {
+            fromButton.setTitleColor(.white, for: .normal)
+        }
+        toDatePicker.isHidden = true
+        toButton.setTitleColor(.lightText, for: .normal)
+    }
+    
+    @objc func toButtonTapped() {
+        toDatePicker.isHidden.toggle()
+        fromDatePicker.isHidden = true
+        if toDatePicker.isHidden {
+            toButton.setTitleColor(.lightText, for: .normal)
+        } else {
+            toButton.setTitleColor(.white, for: .normal)
+        }
+        fromDatePicker.isHidden = true
+        fromButton.setTitleColor(.lightText, for: .normal)
+    }
+    
+    @objc func fromPickerValueChanged() {
+        if fromDatePicker.date <= toDatePicker.date {
+            fromButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        } else {
+            fromDatePicker.setDate(toDatePicker.date, animated: true)
+            fromButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        }
+        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
+    }
+    
+    @objc func toPickerValueChanged() {
+        if fromDatePicker.date <= toDatePicker.date {
+            toButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        } else {
+            toDatePicker.setDate(fromDatePicker.date, animated: true)
+            toButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        }
+        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
+    }
+    
     @objc func repeatedButtonTapped() {
         isRepeated.toggle()
         
         if isRepeated {
-//            repeatedButton.setTitleColor(.white, for: .normal)
-            
             isImportant = false
             isEmergent = false
         } else {
-//            repeatedButton.setTitleColor(.lightText, for: .normal)
         }
     }
     
@@ -216,11 +301,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         isEmergent.toggle()
         
         if isEmergent {
-//            emergentButton.setTitleColor(.white, for: .normal)
             
             isRepeated = false
         } else {
-//            emergentButton.setTitleColor(.lightText, for: .normal)
         }
     }
     
@@ -228,11 +311,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         isImportant.toggle()
         
         if isImportant {
-//            importantButton.setTitleColor(.white, for: .normal)
             
             isRepeated = false
         } else {
-//            importantButton.setTitleColor(.lightText, for: .normal)
         }
     }
     

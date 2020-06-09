@@ -63,6 +63,28 @@ extension Date {
     }
 }
 
+extension DateInterval {
+    func formatted() -> String {
+        func concat(component: Int?, identifier: String) -> String {
+            if let component = component, component != 0 {
+                return "\(component)\(identifier) "
+            }
+            return ""
+        }
+        
+        let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start)
+        let to = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end)
+        
+        let components = Calendar(identifier: .gregorian).dateComponents([.month, .day, .hour, .minute],
+                                                                         from: from, to: to)
+
+        return concat(component: components.month, identifier: "M")
+            + concat(component: components.day, identifier: "d")
+            + concat(component: components.hour, identifier: "h")
+            + concat(component: components.minute, identifier: "m")
+    }
+}
+
 extension TimeInterval {
     func formattedDuration() -> String {
         let hours = Int(self) / 3600

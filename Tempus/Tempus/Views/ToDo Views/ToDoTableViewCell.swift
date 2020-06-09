@@ -16,6 +16,8 @@ class ToDoTableViewCell: UITableViewCell {
         
     // Views.
     var view = UIView()
+    var dateLabel = UILabel()
+    var remainingTimeLabel = UILabel()
     var contentLabel = UILabel()
     
     var gradientLayer = CAGradientLayer()
@@ -53,8 +55,31 @@ class ToDoTableViewCell: UITableViewCell {
         
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(10)
-            make.bottom.equalToSuperview().inset(5)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview().inset(15)
+        }
+        
+        // Date label.
+        view.addSubview(dateLabel)
+                
+        dateLabel.textColor = .lightText
+        
+        dateLabel.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.top.equalToSuperview().offset(15)
+            make.width.equalTo(200)
+        }
+        
+        // Remaining time label.
+        view.addSubview(remainingTimeLabel)
+        
+        remainingTimeLabel.textAlignment = .right
+        remainingTimeLabel.textColor = .lightText
+        
+        remainingTimeLabel.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+            make.top.equalTo(dateLabel.snp.top)
+            make.width.equalTo(200)
         }
         
         // Content label.
@@ -66,7 +91,7 @@ class ToDoTableViewCell: UITableViewCell {
         
         contentLabel.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().inset(15)
+            make.top.equalTo(dateLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(15)
         }
         
@@ -86,8 +111,10 @@ class ToDoTableViewCell: UITableViewCell {
     func updateValues(task: Task, toDoViewController: ToDoViewController) {
         self.task = task
         self.toDoViewController = toDoViewController
-        
-        // Updates the text content.
+
+        // Updates the views.
+        dateLabel.text = "date label"
+        remainingTimeLabel.text = "remaining time"
         contentLabel.text = task.content
     }
     

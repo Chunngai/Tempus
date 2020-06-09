@@ -23,7 +23,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         toDo =
             ToDo.loadToDo() ??
             [
@@ -46,9 +45,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addButton.tintColor = .white
         navigationItem.rightBarButtonItem = addButton
-        
-//        view.addSubview(UIView())
-        
+                
         // Adds a table view.
         toDoTableView = UITableView(frame:
             CGRect(x: 0,
@@ -72,15 +69,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.updateValues(task: Task(), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
-        
-//        toDoEditViewController.task = Task()
-//        toDoEditViewController.toDoViewController = self
-//        toDoEditViewController.originalIndices = nil
-//        toDoEditViewController.isRepeated = false
-//        toDoEditViewController.isEmergent = false
-//        toDoEditViewController.isImportant = false
-                
+        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: DateInterval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
@@ -97,8 +86,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func presentEditingView(task: Task) {
         let toDoEditViewController = ToDoEditViewController()
-//        toDoEditViewController.task = task
-//        toDoEditViewController.toDoViewController = self
+        
         var originalIndices: (clsIndex: Int, taskIndex: Int)?
         for clsIndex in 0..<toDo.count {
             for taskIndex in 0..<toDo[clsIndex].tasks.count {
@@ -107,11 +95,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-//        toDoEditViewController.originalIndices = originalIndices
         let (isRepeated, isEmergent, isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
         
         toDoEditViewController.updateValues(task: task, toDoViewController: self, originalIndices: originalIndices, isRepeated: isRepeated, isEmergent: isEmergent, isImportant: isImportant)
-        
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
@@ -155,13 +141,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = ToDoHeaderView()
         
-//        if toDo![section].tasks.count > 0 {
         headerView.updateValues(sectionName: toDo[section].cls)
     
         return headerView
-//        } else {
-//            return nil
-//        }
     }
 
     /*

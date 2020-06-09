@@ -108,34 +108,16 @@ class ScheduleTableViewCell: UITableViewCell {
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc func viewLongPressed() {
-        if let scheduleEditNavigationViewController = scheduleViewController.presentedViewController,
-            scheduleEditNavigationViewController is ScheduleEditNavigationViewController {
-            return
-        }
-        
-        scheduleViewController.presentEditingView(task: task)
-    }
-    
-    @objc func viewTapped() {
-        if !scheduleViewController.editable {
-            return
-        }
-        
-        scheduleViewController.toggleFinishStatus(task: task)
-    }
-    
-    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {        
+    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {
         self.task = task
         self.scheduleViewController = scheduleViewController
         
-        // Updates the text content.
+        // Updates the views.
         let timeLabelText = "\(task.dateInterval.start.formattedTime()) - \(task.dateInterval.end.formattedTime())"
         let durationLabelText = "\(task.dateInterval.duration.formattedDuration())"
         
         let contentLabelText = task.content!
         
-        // Updates status
         var textAttrs: [NSAttributedString.Key: Any] = [:]
         if task.isFinished {
             textAttrs[.foregroundColor] = UIColor.lightText
@@ -155,5 +137,22 @@ class ScheduleTableViewCell: UITableViewCell {
             textAttrs[.foregroundColor] = UIColor.white
             contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
         }
+    }
+    
+    @objc func viewLongPressed() {
+        if let scheduleEditNavigationViewController = scheduleViewController.presentedViewController,
+            scheduleEditNavigationViewController is ScheduleEditNavigationViewController {
+            return
+        }
+        
+        scheduleViewController.presentEditingView(task: task)
+    }
+    
+    @objc func viewTapped() {
+        if !scheduleViewController.editable {
+            return
+        }
+        
+        scheduleViewController.toggleFinishStatus(task: task)
     }
 }

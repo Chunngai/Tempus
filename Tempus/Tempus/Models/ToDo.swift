@@ -31,4 +31,3 @@ struct ToDo: Codable {
         try? codedToDo?.write(to: archiveURL, options: .noFileProtection)
     }
 }
-       

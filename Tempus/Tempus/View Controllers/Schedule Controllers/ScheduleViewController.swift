@@ -75,7 +75,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         
         updateViews()
-        
+
         Thread.detachNewThreadSelector(#selector(checkEditability), toTarget: self, with: nil)
         Thread.detachNewThreadSelector(#selector(checkGithubCommit), toTarget: self, with: nil)
     }
