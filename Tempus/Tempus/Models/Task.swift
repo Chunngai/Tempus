@@ -47,15 +47,21 @@ extension Date {
         self = Calendar.current.date(from: dateComponents)!  // Timezone of the date generated is according to the system.
     }
     
-    func GMT8() -> Date {
-        return Date(timeInterval: 8 * 3600, since: self)
+    func dateOfCurrentTimeZone() -> Date {
+        return Date(timeInterval: TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
     }
     
     var shortWeekdaySymbol: String {
         let calendar = Calendar(identifier: .gregorian)  // Timezone of the date generated is according to the system.
-        let gmtDate = Date(timeInterval: -8 * 3600, since: self)
+        let gmtDate = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
         
         let weekday = calendar.component(.weekday, from: gmtDate)
         return calendar.shortWeekdaySymbols[weekday - 1]
+    }
+}
+
+extension TimeInterval {
+    static var secondsOfCurrentTimeZoneFromGMT: Double {
+        return Double(TimeZone.current.secondsFromGMT())
     }
 }

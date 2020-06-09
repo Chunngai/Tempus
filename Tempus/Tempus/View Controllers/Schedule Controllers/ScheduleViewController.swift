@@ -17,12 +17,18 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             
             // Saves to disk.
             Schedule.saveSchedule(self.schedule)
+            
+            if let committed = self.schedule.committed {
+                self.committedBarButton.title = committed ? "🟢" : "🔴"
+            } else {
+                self.committedBarButton.title = ""
+            }
         }
     }
     
     var editable: Bool {
-        if schedule.date < Date().GMT8()
-            && Calendar(identifier: .gregorian).dateComponents([.day], from: schedule.date, to: Date().GMT8()).day! > 0 {
+        if schedule.date < Date().dateOfCurrentTimeZone()
+            && Calendar(identifier: .gregorian).dateComponents([.day], from: schedule.date, to: Date().dateOfCurrentTimeZone()).day! > 0 {
             return false
         } else {
             return true
@@ -63,7 +69,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        schedule = Schedule.loadSchedule(date: Date().GMT8())
+        schedule = Schedule.loadSchedule(date: Date().dateOfCurrentTimeZone())
         guard schedule != nil else {
             return
         }
@@ -75,32 +81,33 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func checkGithubCommit() {
-        // Makes a request.
-        let url = URL(string: "https://github.com/Chunngai")!
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data, let string = String(data: data, encoding: .utf8) {
-                let htmlText = string
-                
-                // Gets the value of data-count.
-                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().GMT8().formattedLongDate(separator: "-"))\""
-                let regex = try? NSRegularExpression(pattern: pattern, options: [])
-                let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
-                
-                if let res = res {
-                    let dataCountRange = res.range(at: 1)
-                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
-                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
-                    let dataCount = Int(htmlText[startIndex..<endIndex])!
-
-                    if dataCount > 0 {
-                        self.committedBarButton.title = "🟢"
-                    } else if dataCount == 0 {
-                        self.committedBarButton.title = "🔴"
+        while true {
+            // Makes a request.
+            let url = URL(string: "https://github.com/Chunngai")!
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if let data = data, let string = String(data: data, encoding: .utf8) {
+                    let htmlText = string
+                    
+                    // Gets the value of data-count.
+                    let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
+                    let regex = try? NSRegularExpression(pattern: pattern, options: [])
+                    let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
+                    
+                    if let res = res {
+                        let dataCountRange = res.range(at: 1)
+                        let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
+                        let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
+                        let dataCount = Int(htmlText[startIndex..<endIndex])!
+                        if dataCount > 0 {
+                            self.schedule.committed = true
+                        }
                     }
                 }
             }
+            task.resume()
+            
+            Thread.sleep(forTimeInterval: 5 * 60)
         }
-        task.resume()
     }
     
     @objc func checkEditability() {
@@ -115,16 +122,12 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func updateViews() {
         // Sets the title of the navigation item.
-        navigationItem.title = "\(Date().GMT8().formattedDate()) \(Date().GMT8().shortWeekdaySymbol)"
+        navigationItem.title = "\(Date().dateOfCurrentTimeZone().formattedDate()) \(Date().dateOfCurrentTimeZone().shortWeekdaySymbol)"
 
         // Bar buttons.
         let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped))
         dateBarButton.tintColor = .white
 
-        let committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        if let committed = schedule.committed {
-            committedBarButton.title = committed ? "🟢" : "🔴"
-        }
         committedBarButton.tintColor = .white
         
         navigationItem.leftBarButtonItems = [dateBarButton, committedBarButton]
@@ -181,7 +184,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func changeSchedule() {
         Schedule.saveSchedule(schedule)
                     
-        let newScheduleDate = datePickerView.datePicker.date.GMT8()
+        let newScheduleDate = datePickerView.datePicker.date.dateOfCurrentTimeZone()
         navigationItem.title = "\(newScheduleDate.formattedDate()) \(newScheduleDate.shortWeekdaySymbol)"
         
         schedule = Schedule.loadSchedule(date: newScheduleDate)!
@@ -216,17 +219,17 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             initDuration = latestTask.dateInterval.duration
             initEnd = Date(timeInterval: initDuration, since: initStart)
         } else {
-            if Date().GMT8() < schedule.date {  // More likely to plan for the next day.
-                initStart = Date(hour: 8, minute: 30).GMT8()
+            if Date().dateOfCurrentTimeZone() < schedule.date {  // More likely to plan for the next day.
+                initStart = Date(hour: 8, minute: 30).dateOfCurrentTimeZone()
                 initDuration = 2400
-                initEnd = Date(hour: 9, minute: 10).GMT8()
+                initEnd = Date(hour: 9, minute: 10).dateOfCurrentTimeZone()
             } else {  // More likely to plan for the current day.
                 let calendar = Calendar(identifier: .gregorian)
                 let currentHourAndMinute = calendar.dateComponents([.hour, .minute], from: Date())
                 let currentHour = currentHourAndMinute.hour!
                 let currentMinute = currentHourAndMinute.minute!
         
-                initStart = Date(hour: currentHour, minute: currentMinute).GMT8()
+                initStart = Date(hour: currentHour, minute: currentMinute).dateOfCurrentTimeZone()
                 initDuration = 2400
                 initEnd = Date(timeInterval: initDuration, since: initStart)
             }

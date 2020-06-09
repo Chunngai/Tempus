@@ -52,7 +52,7 @@ class ScheduleDatePickerView: UIView {
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         
         datePicker.datePickerMode = .date
-        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date().GMT8())
+        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date().dateOfCurrentTimeZone())
         
         datePicker.setValue(UIColor.white, forKeyPath: "textColor")
         

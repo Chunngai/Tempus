@@ -131,11 +131,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         startButton.setTitleColor(.white, for: .normal)
         startButton.contentHorizontalAlignment = .left
-        if let initStart = initStart {
-            startButton.setTitle(initStart.formattedTime(), for: .normal)
-        } else {
-            startButton.setTitle(Date(hour: 8, minute: 30).GMT8().formattedTime(), for: .normal)
-        }
+        startButton.setTitle(initStart.formattedTime(), for: .normal)
         
         durationButton = UIButton()
         
@@ -143,23 +139,15 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         durationButton.setTitleColor(.lightText, for: .normal)
         durationButton.contentHorizontalAlignment = .left
-        if let initDuration = initDuration {
-            durationButton.setTitle(String(initDuration.formattedDuration()), for: .normal)
-        } else {
-            durationButton.setTitle("40m", for: .normal)
-        }
-                
+        durationButton.setTitle(String(initDuration.formattedDuration()), for: .normal)
+               
         endButton = UIButton()
         
         endButton.addTarget(self, action: #selector(endButtonTapped), for: .touchUpInside)
         
         endButton.setTitleColor(.lightText, for: .normal)
         endButton.contentHorizontalAlignment = .left
-        if let initEnd = initEnd {
-            endButton.setTitle(initEnd.formattedTime(), for: .normal)
-        } else {
-            endButton.setTitle(Date(hour: 9, minute: 10).GMT8().formattedTime(), for: .normal)
-        }
+        endButton.setTitle(initEnd.formattedTime(), for: .normal)
         
         // Time button stack view.
         timeButtons = [startButton, durationButton, endButton]
@@ -187,7 +175,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         startPicker.setValue(UIColor.white, forKeyPath: "textColor")
         startPicker.datePickerMode = .time
-        startPicker.setDate(Date(timeInterval: -8 * 3600, since: initStart), animated: true)
+        startPicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: initStart), animated: true)
         
         durationPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
         view.addSubview(durationPicker)
@@ -208,7 +196,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         endPicker.setValue(UIColor.white, forKeyPath: "textColor")
         endPicker.datePickerMode = .time
         endPicker.isHidden = true
-        endPicker.setDate(Date(timeInterval: -8 * 3600, since: initEnd), animated: true)
+        endPicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: initEnd), animated: true)
         
         timePickers = [startPicker, durationPicker, endPicker]
         
@@ -268,7 +256,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func saveButtonTapped() {
-        task.dateInterval = DateInterval(start: startPicker.date.GMT8(), end: endPicker.date.GMT8())
+        task.dateInterval = DateInterval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false
         
@@ -327,28 +315,28 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func startPickerValueChanged() {
-        startButton.setTitle(startPicker.date.GMT8().formattedTime(), for: .normal)
+        startButton.setTitle(startPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
         
         endPicker.setDate(Date(timeInterval: durationPicker.countDownDuration, since: startPicker.date), animated: true)
-        endButton.setTitle(endPicker.date.GMT8().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
     }
 
     @objc func durationPickerValueChanged() {
         durationButton.setTitle(durationPicker.countDownDuration.formattedDuration(), for: .normal)
         
         endPicker.setDate(Date(timeInterval: durationPicker.countDownDuration, since: startPicker.date), animated: true)
-        endButton.setTitle(endPicker.date.GMT8().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
     }
     
     @objc func endPickerValueChanged() {
-        endButton.setTitle(endPicker.date.GMT8().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
         
         if startPicker.date < endPicker.date {
             durationPicker.setValue(DateInterval(start: startPicker.date, end: endPicker.date).duration, forKeyPath: "countDownDuration")
             durationButton.setTitle(durationPicker.countDownDuration.formattedDuration(), for: .normal)
         } else {
             startPicker.setDate(endPicker.date - durationPicker.countDownDuration, animated: true)
-            startButton.setTitle(startPicker.date.GMT8().formattedTime(), for: .normal)
+            startButton.setTitle(startPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
         }
     }
     
