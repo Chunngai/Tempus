@@ -54,24 +54,32 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func formattedLongDate(separator: String="/") -> String {
+    func formattedLongDate(separator: String = "/") -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy\(separator)MM\(separator)dd"
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return dateFormatter.string(from: self)
     }
+    
+    func getComponent(identifier: Calendar.Identifier = .gregorian, dateComponent: Calendar.Component) -> DateComponents {
+        return Calendar(identifier: identifier).dateComponents([dateComponent], from: self)
+    }
 }
 
 extension DateInterval {
-    func formatted() -> String {
+    func formatted(omitZero: Bool = false) -> String {
         func concat(component: Int?, identifier: String) -> String {
-            if let component = component, component != 0 {
+            if let component = component {
+                if omitZero && component == 0 {
+                    return ""
+                }
+                
                 return "\(component)\(identifier) "
             }
             return ""
         }
-        
+
         let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start)
         let to = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end)
         

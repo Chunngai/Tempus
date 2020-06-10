@@ -16,8 +16,8 @@ class ToDoTableViewCell: UITableViewCell {
         
     // Views.
     var view = UIView()
-    var dateLabel = UILabel()
-    var remainingTimeLabel = UILabel()
+    var dateLabel: UILabel!
+    var remainingTimeLabel: UILabel!
     var contentLabel = UILabel()
     
     var gradientLayer = CAGradientLayer()
@@ -59,29 +59,6 @@ class ToDoTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(15)
         }
         
-        // Date label.
-        view.addSubview(dateLabel)
-                
-        dateLabel.textColor = .lightText
-        
-        dateLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(15)
-            make.width.equalTo(200)
-        }
-        
-        // Remaining time label.
-        view.addSubview(remainingTimeLabel)
-        
-        remainingTimeLabel.textAlignment = .right
-        remainingTimeLabel.textColor = .lightText
-        
-        remainingTimeLabel.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(dateLabel.snp.top)
-            make.width.equalTo(200)
-        }
-        
         // Content label.
         view.addSubview(contentLabel)
         
@@ -89,11 +66,11 @@ class ToDoTableViewCell: UITableViewCell {
         contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentLabel.textColor = .white
         
-        contentLabel.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(dateLabel.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(15)
-        }
+//        contentLabel.snp.makeConstraints { (make) in
+//            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+//            make.top.equalToSuperview().offset(15)
+//            make.bottom.equalToSuperview().inset(15)
+//        }
         
         // Gradient layer.
         view.addGradientLayer(gradientLayer: gradientLayer,
@@ -113,9 +90,56 @@ class ToDoTableViewCell: UITableViewCell {
         self.toDoViewController = toDoViewController
 
         // Updates the views.
-        dateLabel.text = "date label"
-        remainingTimeLabel.text = "remaining time"
+        if let dateInterval = task.dateInterval {
+            // Date label.
+            dateLabel = UILabel()
+            
+            view.addSubview(dateLabel)
+                    
+            dateLabel.text = "\(dateInterval.start.formattedDate()) - \(dateInterval.end.formattedDate())"
+            dateLabel.textColor = .lightText
+            
+            dateLabel.snp.makeConstraints { (make) in
+                make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+                make.top.equalToSuperview().offset(15)
+                make.width.equalTo(200)
+            }
+            
+            // Remaining time label.
+            remainingTimeLabel = UILabel()
+            
+            view.addSubview(remainingTimeLabel)
+            
+            remainingTimeLabel.text = "\(DateInterval(start: dateInterval.start, end: dateInterval.end).formatted(omitZero: true))"
+            remainingTimeLabel.textAlignment = .right
+            remainingTimeLabel.textColor = getRemainingTimeTextColor()
+            
+            remainingTimeLabel.snp.makeConstraints { (make) in
+                make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+                make.top.equalTo(dateLabel.snp.top)
+                make.width.equalTo(200)
+            }
+            
+            // Modifies the constraints of the content label.
+            contentLabel.snp.makeConstraints { (make) in
+                make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+                make.top.equalTo(dateLabel.snp.bottom).offset(8)
+                make.bottom.equalToSuperview().inset(15)
+            }
+        } else {
+            contentLabel.snp.makeConstraints { (make) in
+                make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+                make.top.equalToSuperview().offset(15)
+                make.bottom.equalToSuperview().inset(15)
+            }
+        }
         contentLabel.text = task.content
+    }
+    
+    func getRemainingTimeTextColor() -> UIColor {
+        let days = Calendar(identifier: .gregorian).dateComponents([.day], from: Date().dateOfCurrentTimeZone(), to: task.dateInterval.end).day!
+        
+        return days >= 3 ? UIColor.lightText : UIColor.red
     }
     
     @objc func viewLongPressed() {

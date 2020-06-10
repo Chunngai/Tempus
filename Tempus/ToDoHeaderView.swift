@@ -50,7 +50,7 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         
         sectionNameLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(0)
+            make.bottom.equalToSuperview().inset(-5)
             make.width.equalTo(300)
         }
     }
