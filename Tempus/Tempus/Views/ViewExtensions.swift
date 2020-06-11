@@ -62,8 +62,21 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func getComponent(identifier: Calendar.Identifier = .gregorian, dateComponent: Calendar.Component) -> DateComponents {
-        return Calendar(identifier: identifier).dateComponents([dateComponent], from: self)
+    func formattedDateAndTime(separator: String = "/", omitZero: Bool = false) -> String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "MM\(separator)dd hh:mm"
+        if omitZero && self.getComponent(.hour).hour! == 0 && self.getComponent(.minute).minute! == 0 {
+            dateFormatter.dateFormat = "MM\(separator)dd"
+        }
+        
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        
+        return dateFormatter.string(from: self)
+    }
+    
+    func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {
+        return Calendar(identifier: identifier).dateComponents([component], from: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self))
     }
 }
 
@@ -90,6 +103,12 @@ extension DateInterval {
             + concat(component: components.day, identifier: "d")
             + concat(component: components.hour, identifier: "h")
             + concat(component: components.minute, identifier: "m")
+    }
+    
+    func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {
+        return Calendar(identifier: identifier).dateComponents([component],
+                                                               from: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start),
+                                                               to: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end))
     }
 }
 

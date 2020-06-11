@@ -96,13 +96,13 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(dateLabel)
                     
-            dateLabel.text = "\(dateInterval.start.formattedDate()) - \(dateInterval.end.formattedDate())"
+            dateLabel.text = "\(dateInterval.start.formattedDateAndTime(omitZero: true)) - \(dateInterval.end.formattedDateAndTime(omitZero: true))"
             dateLabel.textColor = .lightText
             
             dateLabel.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalToSuperview().offset(15)
-                make.width.equalTo(200)
+                make.width.equalTo(230)
             }
             
             // Remaining time label.
@@ -137,7 +137,7 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeTextColor() -> UIColor {
-        let days = Calendar(identifier: .gregorian).dateComponents([.day], from: Date().dateOfCurrentTimeZone(), to: task.dateInterval.end).day!
+        let days = task.dateInterval.getComponent(.day).day!
         
         return days >= 3 ? UIColor.lightText : UIColor.red
     }

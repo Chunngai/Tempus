@@ -134,7 +134,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         fromButton.setTitleColor(.white, for: .normal)
         fromButton.contentHorizontalAlignment = .center
-        fromButton.setTitle("\(task.dateInterval.start.formattedDate())", for: .normal)
+        fromButton.setTitle("\(task.dateInterval.start.formattedDateAndTime())", for: .normal)
         
         remainingTimeButton.setTitleColor(.lightText, for: .normal)
         remainingTimeButton.contentHorizontalAlignment = .center
@@ -144,10 +144,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         toButton.setTitleColor(.lightText, for: .normal)
         toButton.contentHorizontalAlignment = .center
-        toButton.setTitle("\(task.dateInterval.end.formattedDate())", for: .normal)
+        toButton.setTitle("\(task.dateInterval.end.formattedDateAndTime())", for: .normal)
         
         // Time button stack view.
-        dateButtons = [fromButton, remainingTimeButton, toButton]
+        dateButtons = [fromButton, toButton]
         
         dateButtonStackView = UIStackView(arrangedSubviews: dateButtons)
         view.addSubview(dateButtonStackView)
@@ -270,19 +270,19 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func fromPickerValueChanged() {
-        fromButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        fromButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         if fromDatePicker.date > toDatePicker.date {
             toDatePicker.setDate(fromDatePicker.date, animated: true)
-            toButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+            toButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         }
         remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
     }
     
     @objc func toPickerValueChanged() {
-        toButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+        toButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         if fromDatePicker.date > toDatePicker.date {
             fromDatePicker.setDate(toDatePicker.date, animated: true)
-            fromButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDate())", for: .normal)
+            fromButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         }
         remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
     }
