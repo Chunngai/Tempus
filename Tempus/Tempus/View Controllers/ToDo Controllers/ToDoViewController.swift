@@ -69,7 +69,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: DateInterval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
+        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
@@ -90,6 +90,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var originalIndices: (clsIndex: Int, taskIndex: Int)?
         for clsIndex in 0..<toDo.count {
             for taskIndex in 0..<toDo[clsIndex].tasks.count {
+                print(toDo[clsIndex].tasks[taskIndex])
+                print(task)
+                print()
                 if toDo[clsIndex].tasks[taskIndex] == task {
                     originalIndices = (clsIndex: clsIndex, taskIndex: taskIndex)
                 }

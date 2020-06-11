@@ -90,13 +90,21 @@ class ToDoTableViewCell: UITableViewCell {
         self.toDoViewController = toDoViewController
 
         // Updates the views.
-        if let dateInterval = task.dateInterval {
+        if task.dateInterval != nil && (task.dateInterval.start != nil || task.dateInterval.end != nil) {
             // Date label.
             dateLabel = UILabel()
             
             view.addSubview(dateLabel)
                     
-            dateLabel.text = "\(dateInterval.start.formattedDateAndTime(omitZero: true)) - \(dateInterval.end.formattedDateAndTime(omitZero: true))"
+            if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
+                dateLabel.text = "\(taskDateIntervalStart.formattedDateAndTime(omitZero: true)) - \(taskDateIntervalEnd.formattedDateAndTime(omitZero: true))"
+            } else if task.dateInterval.start != nil  {
+                dateLabel.text = "\(task.dateInterval.start!.formattedDateAndTime(omitZero: true)) -"
+            } else if task.dateInterval.end != nil {
+                dateLabel.text = "- \(task.dateInterval.end!.formattedDateAndTime(omitZero: true))"
+            } else {
+                dateLabel.text = "--/-- --:--"
+            }
             dateLabel.textColor = .lightText
             
             dateLabel.snp.makeConstraints { (make) in
@@ -110,9 +118,17 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(remainingTimeLabel)
             
-            remainingTimeLabel.text = "\(DateInterval(start: dateInterval.start, end: dateInterval.end).formatted(omitZero: true))"
+            if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
+                remainingTimeLabel.text = "\(DateInterval(start: taskDateIntervalStart, end: taskDateIntervalEnd).formatted(omitZero: true))"
+            } else {
+                remainingTimeLabel.text = ""
+            }
             remainingTimeLabel.textAlignment = .right
-            remainingTimeLabel.textColor = getRemainingTimeTextColor()
+            if task.dateInterval.start != nil, task.dateInterval.end != nil {
+                remainingTimeLabel.textColor = getRemainingTimeTextColor()
+            } else {
+                remainingTimeLabel.textColor = .lightText
+            }
             
             remainingTimeLabel.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
@@ -137,7 +153,7 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeTextColor() -> UIColor {
-        let days = task.dateInterval.getComponent(.day).day!
+        let days = DateInterval(start: task.dateInterval.start!, end: task.dateInterval.end!).getComponent(.day).day!
         
         return days >= 3 ? UIColor.lightText : UIColor.red
     }

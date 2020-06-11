@@ -10,7 +10,7 @@ import Foundation
 
 struct Task: Equatable, Comparable, Codable {
     var content: String!
-    var dateInterval: DateInterval!
+    var dateInterval: Interval!
     var isFinished: Bool!
     
     static func == (lhs: Task, rhs: Task) -> Bool {
@@ -27,7 +27,11 @@ struct Task: Equatable, Comparable, Codable {
         } else if !lhs.isFinished && rhs.isFinished {
             return true
         } else {
-            return lhs.dateInterval.start < rhs.dateInterval.start
+            if let lhsDateIntervalStart = lhs.dateInterval.start, let rhsDateIntervalStart = rhs.dateInterval.start {
+                return lhsDateIntervalStart < rhsDateIntervalStart
+            } else {
+                return false
+            }
         }
     }
 }

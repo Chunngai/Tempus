@@ -20,6 +20,7 @@
 		FF4BAFE3248A94EC00F536CC /* ToDoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE2248A94EB00F536CC /* ToDoHeaderView.swift */; };
 		FF4BAFE7248A959200F536CC /* ScheduleDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE6248A959200F536CC /* ScheduleDatePickerView.swift */; };
 		FF4BAFE9248A95E800F536CC /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE8248A95E800F536CC /* ToDoTableViewCell.swift */; };
+		FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC1DE824926C6200C81ACD /* Interval.swift */; };
 		FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BB2421127000313C7D /* AppDelegate.swift */; };
 		FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BD2421127000313C7D /* SceneDelegate.swift */; };
 		FFBF90C02421127000313C7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BF2421127000313C7D /* ViewController.swift */; };
@@ -78,6 +79,7 @@
 		FF4BAFE2248A94EB00F536CC /* ToDoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoHeaderView.swift; sourceTree = SOURCE_ROOT; };
 		FF4BAFE6248A959200F536CC /* ScheduleDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleDatePickerView.swift; sourceTree = "<group>"; };
 		FF4BAFE8248A95E800F536CC /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
+		FFBC1DE824926C6200C81ACD /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		FFBF90B82421127000313C7D /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFBF90BB2421127000313C7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFBF90BD2421127000313C7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 		FFBF90DC24211FCD00313C7D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				FFBC1DE824926C6200C81ACD /* Interval.swift */,
 				FFBF90DA24211C4C00313C7D /* Task.swift */,
 				FFBF90DD2421226700313C7D /* Schedule.swift */,
 				FF3BE371242FA0B5006677A2 /* ToDo.swift */,
@@ -346,6 +349,7 @@
 				FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */,
 				FFBF90D6242117FC00313C7D /* ScheduleViewController.swift in Sources */,
 				FF4BAFE3248A94EC00F536CC /* ToDoHeaderView.swift in Sources */,
+				FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */,
 				FF3CA8202430EAD60054BB49 /* ScheduleEditViewController.swift in Sources */,
 				FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */,
 				FF3CA81E2430E1EF0054BB49 /* ToDoEditViewController.swift in Sources */,

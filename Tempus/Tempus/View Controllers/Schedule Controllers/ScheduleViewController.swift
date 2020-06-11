@@ -48,7 +48,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         var latestTask = schedule.tasks[0]
         for task in schedule.tasks[0..<schedule.tasks.count] {
-            if task.dateInterval.start > latestTask.dateInterval.start {
+            if task.dateInterval.start! > latestTask.dateInterval.start! {
                 latestTask = task
             }
         }
@@ -215,8 +215,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         var initDuration: TimeInterval
         var initEnd: Date
         if let latestTask = latestTask {
-            initStart = latestTask.dateInterval.end
-            initDuration = latestTask.dateInterval.duration
+            initStart = latestTask.dateInterval.end!
+            initDuration = latestTask.dateInterval.duration!
             initEnd = Date(timeInterval: initDuration, since: initStart)
         } else {
             if Date().dateOfCurrentTimeZone() < schedule.date {  // More likely to plan for the next day.
@@ -245,7 +245,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     func presentEditingView(task: Task) {
         let scheduleEditViewController = ScheduleEditViewController()
         scheduleEditViewController.updateValues(scheduleViewController: self, task: task,
-                                                initStart: task.dateInterval.start, initDuration: task.dateInterval.duration, initEnd: task.dateInterval.end,
+                                                initStart: task.dateInterval.start!, initDuration: task.dateInterval.duration!, initEnd: task.dateInterval.end!,
                                                 indexCountedFromOne: schedule.tasks.firstIndex(of: task)! + 1)
         navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
     }

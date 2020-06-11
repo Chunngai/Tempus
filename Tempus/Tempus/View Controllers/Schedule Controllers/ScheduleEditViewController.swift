@@ -256,7 +256,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func saveButtonTapped() {
-        task.dateInterval = DateInterval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
+        task.dateInterval = Interval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false
         
