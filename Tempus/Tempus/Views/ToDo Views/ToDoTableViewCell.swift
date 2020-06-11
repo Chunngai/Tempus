@@ -118,8 +118,8 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(remainingTimeLabel)
             
-            if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
-                remainingTimeLabel.text = "\(DateInterval(start: taskDateIntervalStart, end: taskDateIntervalEnd).formatted(omitZero: true))"
+            if let taskDateIntervalEnd = task.dateInterval.end {
+                remainingTimeLabel.text = "\(DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).formatted(omitZero: true))"
             } else {
                 remainingTimeLabel.text = ""
             }

@@ -13,6 +13,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // Data source.
     var toDo: [ToDo]! {
         didSet {
+            for i in 0..<self.toDo.count {
+                self.toDo[i].tasks.sort()
+            }
+            
             ToDo.saveToDo(self.toDo!)
         }
     }
@@ -90,9 +94,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var originalIndices: (clsIndex: Int, taskIndex: Int)?
         for clsIndex in 0..<toDo.count {
             for taskIndex in 0..<toDo[clsIndex].tasks.count {
-                print(toDo[clsIndex].tasks[taskIndex])
-                print(task)
-                print()
                 if toDo[clsIndex].tasks[taskIndex] == task {
                     originalIndices = (clsIndex: clsIndex, taskIndex: taskIndex)
                 }

@@ -313,7 +313,11 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ScheduleTableViewCell()
-        cell.updateValues(task: schedule.tasks[indexPath.row], scheduleViewController: self)
+        
+        var task = schedule.tasks[indexPath.row]
+        task = Task(content: task.content, dateInterval: Interval(start: task.dateInterval.start, end: task.dateInterval.end), isFinished: task.isFinished)
+        schedule.tasks[indexPath.row] = task
+        cell.updateValues(task: task, scheduleViewController: self)
         
         return cell
     }

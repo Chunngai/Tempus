@@ -27,11 +27,7 @@ struct Task: Equatable, Comparable, Codable {
         } else if !lhs.isFinished && rhs.isFinished {
             return true
         } else {
-            if let lhsDateIntervalStart = lhs.dateInterval.start, let rhsDateIntervalStart = rhs.dateInterval.start {
-                return lhsDateIntervalStart < rhsDateIntervalStart
-            } else {
-                return false
-            }
+            return lhs.dateInterval < rhs.dateInterval
         }
     }
 }

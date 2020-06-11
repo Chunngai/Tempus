@@ -190,6 +190,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             fromDatePicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: taskDateIntervalStart), animated: true)
         } else {
             fromDatePicker.setDate(Date(), animated: true)
+            fromDatePicker.isHidden = true
         }
         
         toDatePicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.15, y: 360, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28))
@@ -205,6 +206,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             toDatePicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: taskDateIntervalEnd), animated: true)
         } else {
             toDatePicker.setDate(Date(timeInterval: 3600, since: Date()), animated: true)
+            toDatePicker.isHidden = true
         }
             
         // Repated, emergent, important buttons.
@@ -349,6 +351,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         self.task.content = contentTextView.text
         self.task.dateInterval = Interval(start: fromDatePicker.isHidden ? nil : fromDatePicker.date.dateOfCurrentTimeZone(),
                                           end: toDatePicker.isHidden ? nil : toDatePicker.date.dateOfCurrentTimeZone())
+        self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
         
         self.toDoViewController.editTask(task: self.task, originalIndices: originalIndices, currentIndex: getClsIndex())
 
