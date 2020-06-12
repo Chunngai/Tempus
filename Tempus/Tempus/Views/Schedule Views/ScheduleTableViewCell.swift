@@ -113,8 +113,15 @@ class ScheduleTableViewCell: UITableViewCell {
         self.scheduleViewController = scheduleViewController
         
         // Updates the views.
-        let timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"
-        let durationLabelText = "\(task.dateInterval.duration!.formattedDuration())"
+        let timeLabelText: String
+        let durationLabelText: String
+        if task.dateInterval.start != nil && task.dateInterval.end != nil {
+            timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"
+            durationLabelText = "\(task.dateInterval.duration!.formattedDuration())"
+        } else {
+            timeLabelText = "--:-- - --:--"
+            durationLabelText = "--"
+        }
         
         let contentLabelText = task.content!
         

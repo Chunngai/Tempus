@@ -124,7 +124,7 @@ class ToDoTableViewCell: UITableViewCell {
                 remainingTimeLabel.text = ""
             }
             remainingTimeLabel.textAlignment = .right
-            if task.dateInterval.start != nil, task.dateInterval.end != nil {
+            if task.dateInterval.end != nil {
                 remainingTimeLabel.textColor = getRemainingTimeTextColor()
             } else {
                 remainingTimeLabel.textColor = .lightText
@@ -153,7 +153,7 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeTextColor() -> UIColor {
-        let days = DateInterval(start: task.dateInterval.start!, end: task.dateInterval.end!).getComponent(.day).day!
+        let days = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponent(.day).day!
         
         return days >= 3 ? UIColor.lightText : UIColor.red
     }
