@@ -9,7 +9,7 @@
 import Foundation
 
 struct ToDo: Codable {
-    var cls: String
+    var category: String
     var tasks: [Task]
    
     // Loading and saving data.

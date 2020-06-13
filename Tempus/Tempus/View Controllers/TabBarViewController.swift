@@ -22,10 +22,10 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
                 
         // Color of the bar.
-        tabBar.barTintColor = UIColor.aqua.withAlphaComponent(0)
-        tabBar.alpha = 0.5
+//        tabBar.barTintColor = UIColor.aqua.withAlphaComponent(0)
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightText
+        tabBar.setTransparent()
         
         // Creates a gradient layer.
         self.view.addGradientLayer(gradientLayer: gradientLayer,

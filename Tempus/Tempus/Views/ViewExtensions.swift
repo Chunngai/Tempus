@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+extension UITabBar {
+    func setTransparent() {
+        self.backgroundImage = UIImage()
+        self.shadowImage = UIImage()
+    }
+}
+
 extension UINavigationBar {
     func setTransparent() {
         self.setBackgroundImage(UIImage(), for: .default)

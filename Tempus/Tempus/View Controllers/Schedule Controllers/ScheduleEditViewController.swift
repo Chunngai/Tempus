@@ -92,12 +92,13 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         contentTextView.backgroundColor = UIColor.sky.withAlphaComponent(0)
         contentTextView.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
         contentTextView.inputAccessoryView = addDoneButton()
+        contentTextView.textColor = .white
         if let content = task.content {
             contentTextView.text = content
-            contentTextView.textColor = .white
+//            contentTextView.textColor = .white
         } else {
-            contentTextView.text = "Input task content"
-            contentTextView.textColor = .lightText
+            contentTextView.text = ""
+//            contentTextView.textColor = .lightText
         }
 
         contentTextView.snp.makeConstraints { (make) in
@@ -267,18 +268,17 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "Input task content" {
-           textView.text = ""
-        }
-        
-        textView.textColor = .white
+//        if textView.text == "Input task content" {
+//           textView.text = ""
+//        }
+//        textView.textColor = .white
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text!.isEmpty {
-            contentTextView.text = "Input task content"
-            contentTextView.textColor = .lightText
-        }
+//        if textView.text!.isEmpty {
+//            contentTextView.text = "Input task content"
+//            contentTextView.textColor = .lightText
+//        }
     }
 
     @objc func finishEditing() {

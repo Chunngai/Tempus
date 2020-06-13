@@ -12,6 +12,14 @@ struct Task: Equatable, Comparable, Codable {
     var content: String!
     var dateInterval: Interval!
     var isFinished: Bool!
+    var category: String!
+    
+    init(content: String? = "", dateInterval: Interval? = Interval(start: nil, end: nil), isFinished: Bool? = false, category: String? = "") {
+        self.content = content
+        self.dateInterval = dateInterval
+        self.isFinished = isFinished
+        self.category = category
+    }
     
     static func == (lhs: Task, rhs: Task) -> Bool {
         return (

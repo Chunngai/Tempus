@@ -30,12 +30,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         toDo =
             ToDo.loadToDo() ??
             [
-                ToDo(cls: "Repeated", tasks: []),
-                ToDo(cls: "Emergent & Important", tasks: [Task(content: "aaaaaaaaaaaaaaaa", dateInterval: nil, isFinished: false)]),
-                ToDo(cls: "Emergent & Not Important", tasks: [Task(content: "bbb", dateInterval: nil, isFinished: false)]),
-                ToDo(cls: "Not Emergent & Important", tasks: [Task(content: "ccc", dateInterval: nil, isFinished: false)]),
-                ToDo(cls: "Not Emergent & Not Important", tasks: [Task(content: "ddd", dateInterval: nil, isFinished: false)]),
-                
+                ToDo(category: "Courses", tasks: [Task(content: "courses")]),
+                ToDo(category: "School", tasks: [Task(content: "school")]),
+                ToDo(category: "Others", tasks: [Task(content: "others")]),
         ]
         
         updateViews()
@@ -125,7 +122,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return toDo.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -145,9 +142,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = ToDoHeaderView()
         
-        headerView.updateValues(sectionName: toDo[section].cls)
+        headerView.updateValues(sectionName: toDo[section].category)
     
-        return headerView
+//        return headerView
+        return nil
     }
 
     /*

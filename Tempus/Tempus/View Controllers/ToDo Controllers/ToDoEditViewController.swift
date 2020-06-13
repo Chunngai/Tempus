@@ -95,6 +95,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         contentLabel = UILabel()
         view.addSubview(contentLabel)
 
+        contentLabel.isHidden = true
         contentLabel.textColor = .white
         contentLabel.text = "Content"
         contentLabel.textAlignment = .center
@@ -113,13 +114,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
 
         contentTextView.backgroundColor = UIColor.sky.withAlphaComponent(0)
         contentTextView.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+        contentTextView.textColor = .white
         contentTextView.inputAccessoryView = addDoneButton()
         if let content = task.content {
             contentTextView.text = content
-            contentTextView.textColor = .white
+//            contentTextView.textColor = .white
         } else {
-            contentTextView.text = "Input task content"
-            contentTextView.textColor = .lightText
+            contentTextView.text = ""
+//            contentTextView.textColor = .lightText
         }
 
         contentTextView.snp.makeConstraints { (make) in
@@ -171,7 +173,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         dateButtonStackView.spacing = 20
         
         dateButtonStackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.18)
             make.top.equalTo(contentTextView.snp.bottom).offset(25)
 //            make.width.equalTo(UIScreen.main.bounds.width * 0.30)
 //            make.height.equalTo(UIScreen.main.bounds.height * 0.28)
@@ -370,18 +372,18 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text == "Input task content" {
-           textView.text = ""
-        }
-        
-        textView.textColor = .white
+//        if textView.text == "Input task content" {
+//           textView.text = ""
+//        }
+//
+//        textView.textColor = .white
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text!.isEmpty {
-            contentTextView.text = "Input task content"
-            contentTextView.textColor = .lightText
-        }
+//        if textView.text!.isEmpty {
+//            contentTextView.text = "Input task content"
+//            contentTextView.textColor = .lightText
+//        }
     }
 
     @objc func finishEditing() {
