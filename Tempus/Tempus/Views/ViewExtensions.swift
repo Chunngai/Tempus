@@ -103,13 +103,17 @@ extension DateInterval {
         let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start)
         let to = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end)
         
-        let components = Calendar(identifier: .gregorian).dateComponents([.month, .day, .hour, .minute],
+        let components = Calendar(identifier: .gregorian).dateComponents([.month, .day, .hour],
                                                                          from: from, to: to)
 
-        return concat(component: components.month, identifier: "M")
+        var formattedString = concat(component: components.month, identifier: "M")
             + concat(component: components.day, identifier: "d")
             + concat(component: components.hour, identifier: "h")
-            + concat(component: components.minute, identifier: "m")
+        if formattedString.isEmpty {
+            formattedString = "0 h"
+        }
+        
+        return formattedString
     }
     
     func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {

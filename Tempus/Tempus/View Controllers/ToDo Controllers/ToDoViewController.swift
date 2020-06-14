@@ -63,6 +63,18 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         ]
         
         updateViews()
+        
+        Thread.detachNewThreadSelector(#selector(reloadTableView), toTarget: self, with: nil)
+    }
+    
+    @objc func reloadTableView() {
+        while true {
+            DispatchQueue.main.async {
+                self.toDoTableView?.reloadData()
+            }
+            
+            Thread.sleep(forTimeInterval: 10 * 3600)
+        }
     }
     
     func updateViews() {

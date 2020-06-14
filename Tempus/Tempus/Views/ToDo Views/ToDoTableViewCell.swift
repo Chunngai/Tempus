@@ -119,7 +119,11 @@ class ToDoTableViewCell: UITableViewCell {
             view.addSubview(remainingTimeLabel)
             
             if let taskDateIntervalEnd = task.dateInterval.end {
-                remainingTimeLabel.text = "\(DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).formatted(omitZero: true))"
+                if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {
+                    remainingTimeLabel.text = "\(DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).formatted(omitZero: true))"
+                } else {
+                    remainingTimeLabel.text = "Overdue"
+                }
             } else {
                 remainingTimeLabel.text = ""
             }
@@ -153,9 +157,13 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeTextColor() -> UIColor {
-        let days = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponent(.day).day!
-        
-        return days >= 3 ? UIColor.lightText : UIColor.red
+        if Date().dateOfCurrentTimeZone() <= task.dateInterval.end! {
+            let days = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponent(.day).day!
+            
+            return days >= 3 ? UIColor.lightText : UIColor.red
+        } else {
+            return .yellow
+        }
     }
     
     @objc func viewLongPressed() {
