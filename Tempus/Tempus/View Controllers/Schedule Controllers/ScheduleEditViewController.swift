@@ -256,7 +256,19 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
     
+    func emptyContentAlert() {
+        let alertController = UIAlertController(title: "Error", message: "Content cannot be empty", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @objc func saveButtonTapped() {
+        if contentTextView.text.trimmingCharacters(in: CharacterSet(charactersIn: " ")).isEmpty {
+            emptyContentAlert()
+            return
+        }
+        
         task.dateInterval = Interval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false

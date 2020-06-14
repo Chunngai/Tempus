@@ -11,15 +11,42 @@ import UIKit
 class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     // Data source.
-    var toDo: [ToDo]! {
+    var toDoList: [ToDo]! {
         didSet {
-            for i in 0..<self.toDo.count {
-                self.toDo[i].tasks.sort()
+            for i in 0..<self.toDoList.count {
+                self.toDoList[i].tasks.sort()
             }
             
-            ToDo.saveToDo(self.toDo!)
+            ToDo.saveToDo(self.toDoList!)
         }
     }
+    
+    var categories: [String] {
+        get {
+            var categoryList: [String] = []
+            for todo in toDoList {
+                categoryList.append(todo.category)
+            }
+            
+            return categoryList
+        }
+        set {
+            var newToDoList: [ToDo] = []
+            for category in newValue {
+                var toDo = ToDo(category: category, tasks: [])
+                if self.categories.contains(category) {
+                    toDo.tasks = toDoList[getCategoryIdx(category: category)].tasks
+                }
+                
+                newToDoList.append(toDo)
+            }
+            
+            toDoList = newToDoList
+            
+            toDoTableView?.reloadData()
+        }
+    }
+    
     
     // Views.
     var toDoTableView: UITableView?
@@ -27,12 +54,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        toDo =
+        toDoList =
             ToDo.loadToDo() ??
             [
-                ToDo(category: "Courses", tasks: [Task(content: "courses")]),
-                ToDo(category: "School", tasks: [Task(content: "school")]),
-                ToDo(category: "Others", tasks: [Task(content: "others")]),
+                ToDo(category: "Courses", tasks: [Task(content: "courses", category: "Courses")]),
+                ToDo(category: "School", tasks: [Task(content: "school", category: "School")]),
+                ToDo(category: "Others", tasks: [Task(content: "others", category: "Others")]),
         ]
         
         updateViews()
@@ -41,7 +68,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func updateViews() {
         // Sets the title of the navigation item.
         navigationItem.title = "To Do"
-        
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addButton.tintColor = .white
@@ -70,50 +96,72 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, originalIndices: nil, isRepeated: false, isEmergent: false, isImportant: false)
+        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, mode: "a", oldIdx: nil)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
-    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool, Bool)? {
-        switch clsIndex {
-        case 0: return (true, false, false)
-        case 1: return (false, true, true)
-        case 2: return (false, true, false)
-        case 3: return (false, false, true)
-        case 4: return (false, false, false)
-        default: return nil
-        }
-    }
+//    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool, Bool)? {
+//        switch clsIndex {
+//        case 0: return (true, false, false)
+//        case 1: return (false, true, true)
+//        case 2: return (false, true, false)
+//        case 3: return (false, false, true)
+//        case 4: return (false, false, false)
+//        default: return nil
+//        }
+//    }
     
     func presentEditingView(task: Task) {
         let toDoEditViewController = ToDoEditViewController()
         
-        var originalIndices: (clsIndex: Int, taskIndex: Int)?
-        for clsIndex in 0..<toDo.count {
-            for taskIndex in 0..<toDo[clsIndex].tasks.count {
-                if toDo[clsIndex].tasks[taskIndex] == task {
-                    originalIndices = (clsIndex: clsIndex, taskIndex: taskIndex)
+        var oldIdx: (Int, Int)?
+        for clsIndex in 0..<toDoList.count {
+            for taskIndex in 0..<toDoList[clsIndex].tasks.count {
+                if toDoList[clsIndex].tasks[taskIndex] == task {
+                    oldIdx = (clsIndex, taskIndex)
                 }
             }
         }
-        let (isRepeated, isEmergent, isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
+//        let (isRepeated, isEmergent, isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
         
-        toDoEditViewController.updateValues(task: task, toDoViewController: self, originalIndices: originalIndices, isRepeated: isRepeated, isEmergent: isEmergent, isImportant: isImportant)
+        toDoEditViewController.updateValues(task: task, toDoViewController: self, mode: "e", oldIdx: oldIdx)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
-    func editTask(task: Task, originalIndices: (clsIndex: Int, taskIndex: Int)!, currentIndex: Int?) {
-        if originalIndices == nil {
-            toDo?[currentIndex!].tasks.append(task)
-        } else if originalIndices != nil && currentIndex == nil {
-            toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
-        } else {
-            if originalIndices!.clsIndex == currentIndex {
-                toDo?[originalIndices!.clsIndex].tasks[originalIndices!.taskIndex] = task
-            } else {
-                toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
-                toDo?[currentIndex!].tasks.append(task)
+    func getCategoryIdx(category: String) -> Int {
+        for i in 0..<toDoList.count {
+            if toDoList[i].category == category {
+                return i
             }
+        }
+        
+        return 0
+    }
+    
+    func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
+//        if originalIndices == nil {
+//            toDo?[currentIndex!].tasks.append(task)
+//        } else if originalIndices != nil && currentIndex == nil {
+//            toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
+//        } else {
+//            if originalIndices!.clsIndex == currentIndex {
+//                toDo?[originalIndices!.clsIndex].tasks[originalIndices!.taskIndex] = task
+//            } else {
+//                toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
+//                toDo?[currentIndex!].tasks.append(task)
+//            }
+//        }
+        if mode == "a" {
+            toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
+        }
+        
+        if mode == "e" {
+            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
+            toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
+        }
+        
+        if mode == "d" {
+            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
         }
         
         toDoTableView?.reloadData()
@@ -122,17 +170,17 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return toDo.count
+        return toDoList.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDo[section].tasks.count
+        return toDoList[section].tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ToDoTableViewCell()
         
-        cell.updateValues(task: toDo[indexPath.section].tasks[indexPath.row], toDoViewController: self)
+        cell.updateValues(task: toDoList[indexPath.section].tasks[indexPath.row], toDoViewController: self)
 
         return cell
     }
@@ -142,10 +190,30 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = ToDoHeaderView()
         
-        headerView.updateValues(sectionName: toDo[section].category)
+        headerView.updateValues(sectionName: toDoList[section].category)
     
-//        return headerView
+        return headerView
+    }
+    
+    // For hiding empty categories.
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if toDoList[section].tasks.isEmpty {
+            return 0
+        }
+        return tableView.sectionHeaderHeight
+    }
+    
+    // For hiding empty categories.
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return nil
+    }
+    
+    // For hiding empty categories.
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if toDoList[section].tasks.isEmpty {
+            return 0
+        }
+        return tableView.sectionFooterHeight
     }
 
     /*

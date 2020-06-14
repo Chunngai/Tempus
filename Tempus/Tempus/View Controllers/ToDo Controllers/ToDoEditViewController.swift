@@ -13,11 +13,19 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
 
     // Data.
     var task: Task!
-    
     var toDoViewController: ToDoViewController!
     
-    var originalIndices: (clsIndex: Int, taskIndex: Int)!
+    var originalIndices: (Int, Int)!
     var currentIndex: Int!
+    
+    var mode: String!
+    var oldIdx: (categoryIdx: Int, taskIdx: Int)!
+    
+    var categoryIdx: Int! {
+        didSet {
+            categoryButton.setTitle(toDoViewController.categories[self.categoryIdx], for: .normal)
+        }
+    }
     
     // Views.
     var gradientLayer = CAGradientLayer()
@@ -33,38 +41,40 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var dateButtonStackView: UIStackView!
     var dateButtons: [UIView]!
     
-    var repeatedButton = UIButton()
-    var emergentButton = UIButton()
-    var importantButton = UIButton()
-    lazy var buttonStackView = UIStackView(arrangedSubviews: [repeatedButton, emergentButton, importantButton])
+    var categoryButton = UIButton()
     
-    var isRepeated: Bool! {
-        didSet {
-            if self.isRepeated {
-                repeatedButton.setTitleColor(.white, for: .normal)
-            } else {
-                repeatedButton.setTitleColor(.lightText, for: .normal)
-            }
-        }
-    }
-    var isEmergent: Bool! {
-        didSet {
-            if self.isEmergent {
-                emergentButton.setTitleColor(.white, for: .normal)
-            } else {
-                emergentButton.setTitleColor(.lightText, for: .normal)
-            }
-        }
-    }
-    var isImportant: Bool! {
-        didSet {
-            if self.isImportant {
-                importantButton.setTitleColor(.white, for: .normal)
-            } else {
-                importantButton.setTitleColor(.lightText, for: .normal)
-            }
-        }
-    }
+//    var repeatedButton = UIButton()
+//    var emergentButton = UIButton()
+//    var importantButton = UIButton()
+//    lazy var buttonStackView = UIStackView(arrangedSubviews: [repeatedButton, emergentButton, importantButton])
+    
+//    var isRepeated: Bool! {
+//        didSet {
+//            if self.isRepeated {
+//                repeatedButton.setTitleColor(.white, for: .normal)
+//            } else {
+//                repeatedButton.setTitleColor(.lightText, for: .normal)
+//            }
+//        }
+//    }
+//    var isEmergent: Bool! {
+//        didSet {
+//            if self.isEmergent {
+//                emergentButton.setTitleColor(.white, for: .normal)
+//            } else {
+//                emergentButton.setTitleColor(.lightText, for: .normal)
+//            }
+//        }
+//    }
+//    var isImportant: Bool! {
+//        didSet {
+//            if self.isImportant {
+//                importantButton.setTitleColor(.white, for: .normal)
+//            } else {
+//                importantButton.setTitleColor(.lightText, for: .normal)
+//            }
+//        }
+//    }
     
     var deleteButton: UIButton!
     
@@ -185,8 +195,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         fromDatePicker.addTarget(self, action: #selector(fromPickerValueChanged), for: .valueChanged)
         
-        fromDatePicker.minuteInterval = 5
+//        fromDatePicker.minuteInterval = 5
+        fromDatePicker.minimumDate = Date()
         fromDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        fromDatePicker.isHighlighted = false
         fromDatePicker.datePickerMode = .dateAndTime
         if let taskDateIntervalStart = task.dateInterval.start {
             fromDatePicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: taskDateIntervalStart), animated: true)
@@ -200,8 +212,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         toDatePicker.addTarget(self, action: #selector(toPickerValueChanged), for: .valueChanged)
         
-        toDatePicker.minuteInterval = 5
+//        toDatePicker.minuteInterval = 5
+        toDatePicker.minimumDate = Date()
         toDatePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        toDatePicker.isHighlighted = false
         toDatePicker.datePickerMode = .dateAndTime
         toDatePicker.isHidden = true
         if let taskDateIntervalEnd = task.dateInterval.end {
@@ -212,42 +226,60 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         }
             
         // Repated, emergent, important buttons.
-        repeatedButton.addTarget(self, action: #selector(repeatedButtonTapped), for: .touchUpInside)
+//        repeatedButton.addTarget(self, action: #selector(repeatedButtonTapped), for: .touchUpInside)
+//
+//        repeatedButton.setTitle("Repeated", for: .normal)
+//        repeatedButton.contentHorizontalAlignment = .center
+//
+//        emergentButton.addTarget(self, action: #selector(emergentButtonTapped), for: .touchUpInside)
+//
+//        emergentButton.setTitle("Emergent", for: .normal)
+//        emergentButton.contentHorizontalAlignment = .center
+//
+//        importantButton.addTarget(self, action: #selector(importantButtonTapped), for: .touchUpInside)
+//
+//        importantButton.setTitle("Important", for: .normal)
+//        importantButton.contentHorizontalAlignment = .center
+//
+//        view.addSubview(buttonStackView)
+//
+//        buttonStackView.axis = .horizontal
+//        buttonStackView.distribution = .fillEqually
+//        buttonStackView.alignment = .center
+//        buttonStackView.spacing = 20
+//
+//        buttonStackView.snp.makeConstraints { (make) in
+//            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
+//            make.top.equalTo(fromDatePicker.snp.bottom).offset(20)
+//        }
         
-        repeatedButton.setTitle("Repeated", for: .normal)
-        repeatedButton.contentHorizontalAlignment = .center
+        // Category button.
+        view.addSubview(categoryButton)
         
-        emergentButton.addTarget(self, action: #selector(emergentButtonTapped), for: .touchUpInside)
+        categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
-        emergentButton.setTitle("Emergent", for: .normal)
-        emergentButton.contentHorizontalAlignment = .center
-        
-        importantButton.addTarget(self, action: #selector(importantButtonTapped), for: .touchUpInside)
-        
-        importantButton.setTitle("Important", for: .normal)
-        importantButton.contentHorizontalAlignment = .center
-
-        view.addSubview(buttonStackView)
-        
-        buttonStackView.axis = .horizontal
-        buttonStackView.distribution = .fillEqually
-        buttonStackView.alignment = .center
-        buttonStackView.spacing = 20
-        
-        buttonStackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
-            make.top.equalTo(fromDatePicker.snp.bottom).offset(20)
+        if mode == "a" {
+            categoryIdx = 0
+            categoryButton.setTitle(toDoViewController.categories[0], for: .normal)
+        } else {
+            categoryIdx = toDoViewController.getCategoryIdx(category: task.category)
+            categoryButton.setTitle(task.category, for: .normal)
+        }
+        categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        categoryButton.snp.makeConstraints { (make) in
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+            make.bottom.equalToSuperview().inset(100)
         }
         
         // Delete Button.
         deleteButton = UIButton()
 
-        if originalIndices != nil {
+        if oldIdx != nil {
             view.addSubview(deleteButton)
             
             deleteButton.snp.makeConstraints { (make) in
                 make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
-                make.top.equalTo(buttonStackView.snp.bottom).offset(20)
+                make.bottom.equalTo(UIScreen.main.bounds.height * 0.06).inset(30)
             }
         }
         
@@ -258,17 +290,19 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
 
-    func updateValues(task: Task, toDoViewController: ToDoViewController, originalIndices: (clsIndex: Int, taskIndex: Int)?, isRepeated: Bool, isEmergent: Bool, isImportant: Bool) {
+    func updateValues(task: Task, toDoViewController: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
         self.task = task
         if task.dateInterval == nil {
             self.task.dateInterval = Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)
         }
         
         self.toDoViewController = toDoViewController
-        self.originalIndices = originalIndices
-        self.isRepeated = isRepeated
-        self.isEmergent = isEmergent
-        self.isImportant = isImportant
+//        self.originalIndices = originalIndices
+//        self.isRepeated = isRepeated
+//        self.isEmergent = isEmergent
+//        self.isImportant = isImportant
+        self.mode = mode
+        self.oldIdx = oldIdx
     }
     
     @objc func fromButtonTapped() {
@@ -303,7 +337,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             toDatePicker.setDate(fromDatePicker.date, animated: true)
             toButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         }
-        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
+//        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
     }
     
     @objc func toPickerValueChanged() {
@@ -312,64 +346,77 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             fromDatePicker.setDate(toDatePicker.date, animated: true)
             fromButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
         }
-        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
+//        remainingTimeButton.setTitle("\(DateInterval(start: fromDatePicker.date.dateOfCurrentTimeZone(), end: toDatePicker.date.dateOfCurrentTimeZone()).formatted())", for: .normal)
     }
     
-    @objc func repeatedButtonTapped() {
-        isRepeated.toggle()
-        
-        if isRepeated {
-            isImportant = false
-            isEmergent = false
-        } else {
-        }
-    }
-    
-    @objc func emergentButtonTapped() {
-        isEmergent.toggle()
-        
-        if isEmergent {
-            
-            isRepeated = false
-        } else {
-        }
-    }
-    
-    @objc func importantButtonTapped() {
-        isImportant.toggle()
-        
-        if isImportant {
-            
-            isRepeated = false
-        } else {
-        }
-    }
+//    @objc func repeatedButtonTapped() {
+//        isRepeated.toggle()
+//
+//        if isRepeated {
+//            isImportant = false
+//            isEmergent = false
+//        } else {
+//        }
+//    }
+//
+//    @objc func emergentButtonTapped() {
+//        isEmergent.toggle()
+//
+//        if isEmergent {
+//
+//            isRepeated = false
+//        } else {
+//        }
+//    }
+//
+//    @objc func importantButtonTapped() {
+//        isImportant.toggle()
+//
+//        if isImportant {
+//
+//            isRepeated = false
+//        } else {
+//        }
+//    }
     
     @objc func cancelButtonTapped() {
         toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
     
+    func emptyContentAlert() {
+        let alertController = UIAlertController(title: "Error", message: "Content cannot be empty", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @objc func saveButtonTapped() {
-        self.task.content = contentTextView.text
-        self.task.dateInterval = Interval(start: fromDatePicker.isHidden ? nil : fromDatePicker.date.dateOfCurrentTimeZone(),
-                                          end: toDatePicker.isHidden ? nil : toDatePicker.date.dateOfCurrentTimeZone())
-        self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
+        if contentTextView.text.trimmingCharacters(in: CharacterSet(charactersIn: " ")).isEmpty {
+            emptyContentAlert()
+            return
+        }
         
-        self.toDoViewController.editTask(task: self.task, originalIndices: originalIndices, currentIndex: getClsIndex())
+        self.task.content = contentTextView.text
+        self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == "--/-- --:--" ? nil : fromDatePicker.date.dateOfCurrentTimeZone(),
+                                          end: toButton.title(for: .normal) == "--/-- --:--" ? nil : toDatePicker.date.dateOfCurrentTimeZone())
+        self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
+        self.task.category = toDoViewController.categories[categoryIdx]
+
+        self.toDoViewController.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 
         toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func getClsIndex() -> Int {
-        switch (isRepeated, isEmergent, isImportant) {
-        case (true, false, false): return 0
-        case (false, true, true): return 1
-        case (false, true, false): return 2
-        case (false, false, true): return 3
-        case (false, false, false): return 4
-        default: return -1
-        }
-    }
+//    func getClsIndex() -> Int {
+//        switch (isRepeated, isEmergent, isImportant) {
+//        case (true, false, false): return 0
+//        case (false, true, true): return 1
+//        case (false, true, false): return 2
+//        case (false, false, true): return 3
+//        case (false, false, false): return 4
+//        default: return -1
+//        }
+//    }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
 //        if textView.text == "Input task content" {
@@ -404,8 +451,16 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         return toolBar
     }
     
+    @objc func categoryButtonTapped() {
+        let toDoCategoryTableViewController = ToDoCategoryTableViewController()
+        toDoCategoryTableViewController.updateValues(toDoEditViewController: self)
+//        toDoCategoryTableViewController.categories = toDoViewController.categories
+
+        navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
+    }
+    
     @objc func deleteButtonTapped() {
-        self.toDoViewController.editTask(task: self.task, originalIndices: originalIndices!, currentIndex: nil)
+        self.toDoViewController.editTask(task: self.task, mode: "d", oldIdx: oldIdx)
 //
         toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
