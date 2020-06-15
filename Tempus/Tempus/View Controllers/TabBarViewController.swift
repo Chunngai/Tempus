@@ -22,7 +22,6 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
                 
         // Color of the bar.
-//        tabBar.barTintColor = UIColor.aqua.withAlphaComponent(0)
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightText
         tabBar.setTransparent()

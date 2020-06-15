@@ -95,10 +95,8 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         contentTextView.textColor = .white
         if let content = task.content {
             contentTextView.text = content
-//            contentTextView.textColor = .white
         } else {
             contentTextView.text = ""
-//            contentTextView.textColor = .lightText
         }
 
         contentTextView.snp.makeConstraints { (make) in
@@ -248,7 +246,6 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func cancelButtonTapped() {
-//        scheduleViewController.navigationController?.popViewController(animated: true)
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
     
@@ -275,22 +272,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: self.indexCountedFromOne)
         
-//        scheduleViewController.navigationController?.popViewController(animated: true)
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-//        if textView.text == "Input task content" {
-//           textView.text = ""
-//        }
-//        textView.textColor = .white
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-//        if textView.text!.isEmpty {
-//            contentTextView.text = "Input task content"
-//            contentTextView.textColor = .lightText
-//        }
     }
 
     @objc func finishEditing() {

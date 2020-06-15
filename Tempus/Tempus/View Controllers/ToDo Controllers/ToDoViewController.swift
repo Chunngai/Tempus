@@ -73,7 +73,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.toDoTableView?.reloadData()
             }
             
-            Thread.sleep(forTimeInterval: 10 * 3600)
+            Thread.sleep(forTimeInterval: 3600)
         }
     }
     
@@ -112,17 +112,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
-//    func clsIndex2Bool(clsIndex: Int) -> (Bool, Bool, Bool)? {
-//        switch clsIndex {
-//        case 0: return (true, false, false)
-//        case 1: return (false, true, true)
-//        case 2: return (false, true, false)
-//        case 3: return (false, false, true)
-//        case 4: return (false, false, false)
-//        default: return nil
-//        }
-//    }
-    
     func presentEditingView(task: Task) {
         let toDoEditViewController = ToDoEditViewController()
         
@@ -134,7 +123,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-//        let (isRepeated, isEmergent, isImportant) = clsIndex2Bool(clsIndex: originalIndices!.clsIndex)!
         
         toDoEditViewController.updateValues(task: task, toDoViewController: self, mode: "e", oldIdx: oldIdx)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
@@ -151,28 +139,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
-//        if originalIndices == nil {
-//            toDo?[currentIndex!].tasks.append(task)
-//        } else if originalIndices != nil && currentIndex == nil {
-//            toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
-//        } else {
-//            if originalIndices!.clsIndex == currentIndex {
-//                toDo?[originalIndices!.clsIndex].tasks[originalIndices!.taskIndex] = task
-//            } else {
-//                toDo?[originalIndices!.clsIndex].tasks.remove(at: originalIndices!.taskIndex)
-//                toDo?[currentIndex!].tasks.append(task)
-//            }
-//        }
         if mode == "a" {
             toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
-        }
-        
-        if mode == "e" {
+        } else if mode == "e" {
             toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
             toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
-        }
-        
-        if mode == "d" {
+        } else if mode == "d" {
             toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
         }
         
