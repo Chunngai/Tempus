@@ -18,6 +18,8 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             
             ToDo.saveToDo(self.toDoList!)
+            
+            checkEmergentTasks()
         }
     }
     
@@ -54,13 +56,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        toDoList =
-            ToDo.loadToDo() ??
-            [
-                ToDo(category: "Courses", tasks: [Task(content: "courses", category: "Courses")]),
-                ToDo(category: "School", tasks: [Task(content: "school", category: "School")]),
-                ToDo(category: "Others", tasks: [Task(content: "others", category: "Others")]),
-        ]
+        toDoList = ToDo.loadToDo()
+        guard toDoList != nil else {
+            return
+        }
         
         updateViews()
         
@@ -104,6 +103,31 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         toDoTableView?.estimatedRowHeight = 120
         toDoTableView?.rowHeight = UITableView.automaticDimension
+        
+        checkEmergentTasks()
+    }
+    
+    func checkEmergentTasks() {
+        var count = 0
+        
+        for toDo in toDoList {
+            for task in toDo.tasks {
+                if let taskDateIntervalEnd = task.dateInterval.end {
+                    if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {
+                        let components = DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).getComponents([.month, .day])
+                        
+                        if components.month! == 0 && components.day! < 3 {
+                            count += 1
+                        }
+                    } else {
+                        count += 1
+                    }
+                }
+            }
+        }
+        
+        let toDoItem = tabBarController?.tabBar.items![1]
+        toDoItem?.badgeValue = String(count)
     }
     
     @objc func presentAddingView() {

@@ -116,8 +116,8 @@ extension DateInterval {
         return formattedString
     }
     
-    func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {
-        return Calendar(identifier: identifier).dateComponents([component],
+    func getComponents(identifier: Calendar.Identifier = .gregorian, _ components: Set<Calendar.Component>) -> DateComponents {
+        return Calendar(identifier: identifier).dateComponents(components,
                                                                from: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start),
                                                                to: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end))
     }

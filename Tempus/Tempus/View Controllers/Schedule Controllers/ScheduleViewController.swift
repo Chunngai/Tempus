@@ -62,55 +62,61 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     var datePickerView: ScheduleDatePickerView!
     var datePickerViewDisplayed = false
     
-    let committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+    var committedBarButton: UIBarButtonItem!
     
     var advancementArcLayer = CAShapeLayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        updateViews()
+        
         schedule = Schedule.loadSchedule(date: Date().dateOfCurrentTimeZone())
         guard schedule != nil else {
             return
         }
         
-        updateViews()
-
-        Thread.detachNewThreadSelector(#selector(checkEditability), toTarget: self, with: nil)
-        Thread.detachNewThreadSelector(#selector(checkGithubCommit), toTarget: self, with: nil)
+        Thread.detachNewThreadSelector(#selector(checkEditabilityThread), toTarget: self, with: nil)
+        Thread.detachNewThreadSelector(#selector(checkGithubCommitsThread), toTarget: self, with: nil)
     }
     
-    @objc func checkGithubCommit() {
-        while true {
-            // Makes a request.
-            let url = URL(string: "https://github.com/Chunngai")!
-            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-                if let data = data, let string = String(data: data, encoding: .utf8) {
-                    let htmlText = string
-                    
-                    // Gets the value of data-count.
-                    let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
-                    let regex = try? NSRegularExpression(pattern: pattern, options: [])
-                    let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
-                    
-                    if let res = res {
-                        let dataCountRange = res.range(at: 1)
-                        let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
-                        let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
-                        let dataCount = Int(htmlText[startIndex..<endIndex])!
-                        if dataCount > 0 {
-                            self.schedule.committed = true
-                        }
+    @objc func checkGithubCommits() {
+        // Makes a request.
+        let url = URL(string: "https://github.com/Chunngai")!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let string = String(data: data, encoding: .utf8) {
+                let htmlText = string
+                
+                // Gets the value of data-count.
+                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
+                let regex = try? NSRegularExpression(pattern: pattern, options: [])
+                let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
+                
+                if let res = res {
+                    let dataCountRange = res.range(at: 1)
+                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
+                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
+                    let dataCount = Int(htmlText[startIndex..<endIndex])!
+                    if dataCount > 0 {
+                        self.schedule.committed = true
                     }
                 }
             }
-            task.resume()
+        }
+        task.resume()
+    }
+    
+    @objc func checkGithubCommitsThread() {
+        while true {
+            DispatchQueue.main.async {
+                self.checkGithubCommits()
+            }
             
-            Thread.sleep(forTimeInterval: 5 * 60)
+            Thread.sleep(forTimeInterval: 3600)
         }
     }
     
-    @objc func checkEditability() {
+    @objc func checkEditabilityThread() {
         while true {
             DispatchQueue.main.async {
                 self.verifyEditability()
@@ -128,6 +134,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped))
         dateBarButton.tintColor = .white
 
+        committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(checkGithubCommits))
         committedBarButton.tintColor = .white
         
         navigationItem.leftBarButtonItems = [dateBarButton, committedBarButton]

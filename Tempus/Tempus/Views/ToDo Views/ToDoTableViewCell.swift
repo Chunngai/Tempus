@@ -158,9 +158,9 @@ class ToDoTableViewCell: UITableViewCell {
     
     func getRemainingTimeTextColor() -> UIColor {
         if Date().dateOfCurrentTimeZone() <= task.dateInterval.end! {
-            let days = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponent(.day).day!
+            let components = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponents([.month, .day])
             
-            return days >= 3 ? UIColor.lightText : UIColor.red
+            return components.month! == 0 && components.day! >= 3 ? UIColor.lightText : UIColor.red
         } else {
             return .yellow
         }

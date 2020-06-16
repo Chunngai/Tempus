@@ -20,7 +20,9 @@ struct Schedule: Codable {
         let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(date.archiveURLDateComponent())").appendingPathExtension("plist")
 
         guard let codedSchedule = try? Data(contentsOf: archiveURL) else {
-            return Schedule(date: date, tasks: [Task](), committed: false)
+            return Schedule(date: date,
+                            tasks: [Task](),
+                            committed: false)
         }
         
         let propertyListDecoder = PropertyListDecoder()
