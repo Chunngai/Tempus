@@ -81,16 +81,17 @@ class ToDoCategoryTableViewController: UITableViewController {
     
     @objc func doneButtonTapped() {
         for i in 0..<tmpCategories.count {
-            let cell = (tableView.cellForRow(at: IndexPath(row: i, section: 0))) as! ToDoCategoryTableViewCell
-            let category = cell.textfield.text!
-            
-            // Sees if all category names are empty.
-            if category.trimmingCharacters(in: CharacterSet(charactersIn: " ")) == "" {
-                emptyCategoriesAlert()
-                return
+            if let cell = (tableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
+                let category = cell.textfield.text!
+                
+                // Sees if all category names are empty.
+                if category.trimmingCharacters(in: CharacterSet(charactersIn: " ")) == "" {
+                    emptyCategoriesAlert()
+                    return
+                }
+                
+                tmpCategories[i] = category
             }
-            
-            tmpCategories[i] = category
         }
         
         if tmpCategories.count != Set(tmpCategories).count {
