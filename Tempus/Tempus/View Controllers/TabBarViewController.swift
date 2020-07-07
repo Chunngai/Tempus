@@ -21,6 +21,9 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
+        // Hides the top sep line.
+        self.tabBar.clipsToBounds = true
+        
         // Color of the bar.
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightText

@@ -19,7 +19,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             Schedule.saveSchedule(self.schedule)
             
             if let committed = self.schedule.committed {
-                self.committedBarButton.title = committed ? "🟢" : "🔴"
+                self.committedBarButton.title = committed ? "✓" : "✗"
             } else {
                 self.committedBarButton.title = ""
             }
@@ -88,7 +88,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
                 let htmlText = string
                 
                 // Gets the value of data-count.
-                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
+//                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
+                let pattern = "data-count=\"(\\d+)\" data-date=\"\(self.schedule.date.formattedLongDate(separator: "-"))\""
                 let regex = try? NSRegularExpression(pattern: pattern, options: [])
                 let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
                 
