@@ -19,12 +19,11 @@ struct ToDo: Codable {
         let archiveURL = DocumentsDirectory.appendingPathComponent("todo").appendingPathExtension("plist")
 
         guard let codedToDo = try? Data(contentsOf: archiveURL) else {
-            return [ToDo(category: "Default", tasks: [Task(content: "default task",
-                                                           dateInterval: Interval(start: Date().dateOfCurrentTimeZone(),
-                                                                                  duration: 3600),
-                                                           isFinished: false,
-                                                           category: "Default")])]
-            
+            return [ToDo(category: "Default",
+                         tasks: [Task(content: "default task",
+                                      dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600),
+                                      isFinished: false,
+                                      category: "Default")])]
         }
         
         let propertyListDecoder = PropertyListDecoder()
@@ -32,9 +31,9 @@ struct ToDo: Codable {
     }
 
     static func saveToDo(_ toDo: [ToDo]) {
+        let archiveURL = DocumentsDirectory.appendingPathComponent("todo").appendingPathExtension("plist")
         let propertyListEncoder = PropertyListEncoder()
         let codedToDo = try? propertyListEncoder.encode(toDo)
-        let archiveURL = DocumentsDirectory.appendingPathComponent("todo").appendingPathExtension("plist")
         try? codedToDo?.write(to: archiveURL, options: .noFileProtection)
     }
 }

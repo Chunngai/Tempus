@@ -30,9 +30,10 @@ struct Schedule: Codable {
     }
     
     static func saveSchedule(_ schedule: Schedule) {
+        let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(schedule.date.archiveURLDateComponent())").appendingPathExtension("plist")
+
         let propertyListEncoder = PropertyListEncoder()
         let codedSchedule = try? propertyListEncoder.encode(schedule)
-        let archiveURL = DocumentsDirectory.appendingPathComponent("schedule \(schedule.date.archiveURLDateComponent())").appendingPathExtension("plist")
         try? codedSchedule?.write(to: archiveURL, options: .noFileProtection)
     }
 }
