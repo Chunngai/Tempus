@@ -199,7 +199,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         }
         categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         categoryButton.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
             make.bottom.equalToSuperview().inset(100)
         }
         

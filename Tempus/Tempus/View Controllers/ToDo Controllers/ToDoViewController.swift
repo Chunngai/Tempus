@@ -101,7 +101,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         toDoTableView?.backgroundColor = UIColor.sky.withAlphaComponent(0)
         toDoTableView?.separatorStyle = .none
         
-        toDoTableView?.estimatedRowHeight = 120
+        toDoTableView?.estimatedRowHeight = 130
         toDoTableView?.rowHeight = UITableView.automaticDimension
         
         checkEmergentTasks()
