@@ -97,11 +97,11 @@ class ToDoTableViewCell: UITableViewCell {
             view.addSubview(dateLabel)
                     
             if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
-                dateLabel.text = "\(taskDateIntervalStart.formattedDateAndTime(omitZero: true)) - \(taskDateIntervalEnd.formattedDateAndTime(omitZero: true))"
+                dateLabel.text = "\(taskDateIntervalStart.formattedDateAndTime(omitZero: true)) - \(taskDateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
             } else if task.dateInterval.start != nil  {
                 dateLabel.text = "\(task.dateInterval.start!.formattedDateAndTime(omitZero: true)) -"
             } else if task.dateInterval.end != nil {
-                dateLabel.text = "- \(task.dateInterval.end!.formattedDateAndTime(omitZero: true))"
+                dateLabel.text = "- \(task.dateInterval.end!.formattedDateAndTime(omitZero: true, withWeekday: true))"
             } else {
                 dateLabel.text = "--/-- --:--"
             }
@@ -110,7 +110,7 @@ class ToDoTableViewCell: UITableViewCell {
             dateLabel.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalToSuperview().offset(15)
-                make.width.equalTo(230)
+                make.width.equalTo(300)
             }
             
             // Remaining time label.
@@ -137,7 +137,7 @@ class ToDoTableViewCell: UITableViewCell {
             remainingTimeLabel.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalTo(dateLabel.snp.top)
-                make.width.equalTo(200)
+                make.width.equalTo(100)
             }
             
             // Modifies the constraints of the content label.

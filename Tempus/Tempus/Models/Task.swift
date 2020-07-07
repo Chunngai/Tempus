@@ -58,14 +58,6 @@ extension Date {
     func dateOfCurrentTimeZone() -> Date {
         return Date(timeInterval: TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
     }
-    
-    var shortWeekdaySymbol: String {
-        let calendar = Calendar(identifier: .gregorian)  // Timezone of the date generated is according to the system.
-        let gmtDate = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
-        
-        let weekday = calendar.component(.weekday, from: gmtDate)
-        return calendar.shortWeekdaySymbols[weekday - 1]
-    }
 }
 
 extension TimeInterval {

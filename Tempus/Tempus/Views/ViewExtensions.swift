@@ -69,17 +69,32 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func formattedDateAndTime(separator: String = "/", omitZero: Bool = false) -> String {
+    func formattedDateAndTime(separator: String = "/", omitZero: Bool = false, withWeekday: Bool = false) -> String {
         let dateFormatter = DateFormatter()
+        let timeFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        timeFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        dateFormatter.dateFormat = "MM\(separator)dd"
+        timeFormatter.dateFormat = "hh:mm"
         
-        dateFormatter.dateFormat = "MM\(separator)dd hh:mm"
-        if omitZero && self.getComponent(.hour).hour! == 0 && self.getComponent(.minute).minute! == 0 {
-            dateFormatter.dateFormat = "MM\(separator)dd"
+        var formattedString = dateFormatter.string(from: self)
+        if withWeekday {
+            formattedString += " (\(self.shortWeekdaySymbol))"
+        }
+        if !(omitZero && self.getComponent(.hour).hour! == 0 && self.getComponent(.minute).minute! == 0) {
+            formattedString += " " + timeFormatter.string(from: self)
         }
         
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formattedString
+    }
+    
+    var shortWeekdaySymbol: String {
+        let calendar = Calendar(identifier: .gregorian)  // Timezone of the date generated is according to the system.
+        let gmtDate = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
         
-        return dateFormatter.string(from: self)
+        let weekday = calendar.component(.weekday, from: gmtDate)
+        return calendar.shortWeekdaySymbols[weekday - 1]
     }
     
     func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {
