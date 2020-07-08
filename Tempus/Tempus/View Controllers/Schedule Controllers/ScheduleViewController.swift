@@ -9,15 +9,21 @@
 import UIKit
 
 class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TaskEditingDelegate {
-
+    // Models.
     var schedule: Schedule! {
         didSet {
+            // Sorts the schedule.
             self.schedule.tasks.sort()
-//            drawAdvancementArc()
             
             // Saves to disk.
             Schedule.saveSchedule(self.schedule)
             
+            // Sets the title of the navigation item.
+            DispatchQueue.main.async {
+                self.navigationItem.title = "\(self.schedule.date.formattedDate()) \(self.schedule.date.shortWeekdaySymbol)"
+            }
+            
+            // Determines the text of the commit bar button.
             if let committed = self.schedule.committed {
                 self.committedBarButton.title = committed ? "✓" : "✗"
             } else {
@@ -27,32 +33,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     var editable: Bool {
-        if schedule.date < Date().dateOfCurrentTimeZone()
-            && Calendar(identifier: .gregorian).dateComponents([.day], from: schedule.date, to: Date().dateOfCurrentTimeZone()).day! > 0 {
-            return false
-        } else {
-            return true
-        }
-    }
-    
-//    var finishedTaskNumber: Int {
-//        schedule.tasks.filter({ (task) -> Bool in
-//            task.isFinished
-//        }).count
-//    }
-    
-    var latestTask: Task? {
-        if schedule.tasks.count == 0 {
-            return nil
-        }
-        
-        var latestTask = schedule.tasks[0]
-        for task in schedule.tasks[0..<schedule.tasks.count] {
-            if task.dateInterval.start! > latestTask.dateInterval.start! {
-                latestTask = task
-            }
-        }
-        return latestTask
+        return (schedule.date >= Date().dateOfCurrentTimeZone()
+            || DateInterval(start: schedule.date, end: Date().dateOfCurrentTimeZone()).getComponents([.day]).day! <= 0)
     }
     
     // Views.
@@ -66,71 +48,20 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var advancementArcLayer = CAShapeLayer()
     
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
     
         updateViews()
         
         schedule = Schedule.loadSchedule(date: Date().dateOfCurrentTimeZone())
-        guard schedule != nil else {
-            return
-        }
         
         Thread.detachNewThreadSelector(#selector(checkEditabilityThread), toTarget: self, with: nil)
         Thread.detachNewThreadSelector(#selector(checkGithubCommitsThread), toTarget: self, with: nil)
     }
     
-    @objc func checkGithubCommits() {
-        // Makes a request.
-        let url = URL(string: "https://github.com/Chunngai")!
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let data = data, let string = String(data: data, encoding: .utf8) {
-                let htmlText = string
-                
-                // Gets the value of data-count.
-//                let pattern = "data-count=\"(\\d+)\" data-date=\"\(Date().dateOfCurrentTimeZone().formattedLongDate(separator: "-"))\""
-                let pattern = "data-count=\"(\\d+)\" data-date=\"\(self.schedule.date.formattedLongDate(separator: "-"))\""
-                let regex = try? NSRegularExpression(pattern: pattern, options: [])
-                let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
-                
-                if let res = res {
-                    let dataCountRange = res.range(at: 1)
-                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
-                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
-                    let dataCount = Int(htmlText[startIndex..<endIndex])!
-                    if dataCount > 0 {
-                        self.schedule.committed = true
-                    }
-                }
-            }
-        }
-        task.resume()
-    }
-    
-    @objc func checkGithubCommitsThread() {
-        while true {
-            DispatchQueue.main.async {
-                self.checkGithubCommits()
-            }
-            
-            Thread.sleep(forTimeInterval: 3600)
-        }
-    }
-    
-    @objc func checkEditabilityThread() {
-        while true {
-            DispatchQueue.main.async {
-                self.verifyEditability()
-            }
-            
-            Thread.sleep(forTimeInterval: 5 * 60)
-        }
-    }
-    
+    // Customized funcs.
     func updateViews() {
-        // Sets the title of the navigation item.
-        navigationItem.title = "\(Date().dateOfCurrentTimeZone().formattedDate()) \(Date().dateOfCurrentTimeZone().shortWeekdaySymbol)"
-
         // Bar buttons.
         let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped))
         dateBarButton.tintColor = .white
@@ -164,10 +95,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         scheduleTableView.estimatedRowHeight = 130
         scheduleTableView.rowHeight = UITableView.automaticDimension
-        
-        // Advancement arc.
-//        view.layer.addSublayer(advancementArcLayer!)
-        
+                
         // Date picker.
         datePickerView = ScheduleDatePickerView(frame: CGRect(
             x: 0,
@@ -179,28 +107,76 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         datePickerView.updateValues(scheduleViewController: self)
     }
     
+    @objc func checkGithubCommits() {
+        // Makes a request.
+        let url = URL(string: "https://github.com/Chunngai")!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data, let string = String(data: data, encoding: .utf8) {
+                let htmlText = string
+                
+                // Gets the value of data-count.
+                let pattern = "data-count=\"(\\d+)\" data-date=\"\(self.schedule.date.formattedLongDate(separator: "-"))\""
+                let regex = try? NSRegularExpression(pattern: pattern, options: [])
+                let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
+                
+                // Sees if committed.
+                if let res = res {
+                    let dataCountRange = res.range(at: 1)
+                    let startIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location)
+                    let endIndex = htmlText.index(htmlText.startIndex, offsetBy: dataCountRange.location + dataCountRange.length)
+                    let dataCount = Int(htmlText[startIndex..<endIndex])!
+                    if dataCount > 0 {
+                        self.schedule.committed = true
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    @objc func checkGithubCommitsThread() {
+        while true {
+            DispatchQueue.main.async {
+                self.checkGithubCommits()
+            }
+            
+            Thread.sleep(forTimeInterval: 3600)
+        }
+    }
+    
     func verifyEditability() {
         if !editable {
+            // Rm the add button.
             navigationItem.rightBarButtonItem = nil
         } else {
+            // Adds an add button.
             let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
             addBarButton.tintColor = .white
             navigationItem.rightBarButtonItem = addBarButton
         }
     }
     
+    @objc func checkEditabilityThread() {
+        while true {
+            DispatchQueue.main.async {
+                self.verifyEditability()
+            }
+            
+            Thread.sleep(forTimeInterval: 5 * 60)
+        }
+    }
+    
     func changeSchedule() {
         Schedule.saveSchedule(schedule)
-                    
-        let newScheduleDate = datePickerView.datePicker.date.dateOfCurrentTimeZone()
-        navigationItem.title = "\(newScheduleDate.formattedDate()) \(newScheduleDate.shortWeekdaySymbol)"
         
-        schedule = Schedule.loadSchedule(date: newScheduleDate)!
-        guard schedule != nil else {
-            return
-        }
+        // Gets the schedule of the selected date.
+        let selectedDate = datePickerView.datePicker.date.dateOfCurrentTimeZone()
+        schedule = Schedule.loadSchedule(date: selectedDate)!
+
+        // Reloads the table.
         scheduleTableView.reloadData()
         
+        // Sees if it is editable.
         verifyEditability()
     }
     
@@ -219,30 +195,26 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func presentAddingView() {
+        // Gets initStart, initDuration and initEnd.
         var initStart: Date
         var initDuration: TimeInterval
         var initEnd: Date
-        if let latestTask = latestTask {
+        if let latestTask = schedule.latestTask {
             initStart = latestTask.dateInterval.end!
             initDuration = latestTask.dateInterval.duration!
             initEnd = Date(timeInterval: initDuration, since: initStart)
         } else {
             if Date().dateOfCurrentTimeZone() < schedule.date {  // More likely to plan for the next day.
                 initStart = Date(hour: 8, minute: 30).dateOfCurrentTimeZone()
-                initDuration = 2400
-                initEnd = Date(hour: 9, minute: 10).dateOfCurrentTimeZone()
             } else {  // More likely to plan for the current day.
-                let calendar = Calendar(identifier: .gregorian)
-                let currentHourAndMinute = calendar.dateComponents([.hour, .minute], from: Date())
-                let currentHour = currentHourAndMinute.hour!
-                let currentMinute = currentHourAndMinute.minute!
-        
-                initStart = Date(hour: currentHour, minute: currentMinute).dateOfCurrentTimeZone()
-                initDuration = 2400
-                initEnd = Date(timeInterval: initDuration, since: initStart)
+                let components = Date().dateOfCurrentTimeZone().getComponents([.hour, .minute])
+                initStart = Date(hour: components.hour!, minute: components.minute!).dateOfCurrentTimeZone()
             }
+            initDuration = 2400
+            initEnd = Date(timeInterval: initDuration, since: initStart)
         }
-                
+        
+        // Presents a schedule view controller.
         let scheduleEditViewController = ScheduleEditViewController()
         scheduleEditViewController.updateValues(scheduleViewController: self, task: Task(),
                                                 initStart: initStart, initDuration: initDuration, initEnd: initEnd,
@@ -251,6 +223,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func presentEditingView(task: Task) {
+        // Presents a schedule view controller.
         let scheduleEditViewController = ScheduleEditViewController()
         scheduleEditViewController.updateValues(scheduleViewController: self, task: task,
                                                 initStart: task.dateInterval.start!, initDuration: task.dateInterval.duration!, initEnd: task.dateInterval.end!,
@@ -260,15 +233,17 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func toggleFinishStatus(task: Task) {
         if let taskIndex = schedule.tasks.firstIndex(of: task) {
+            // Gets the cell tapped.
             var toggledTask = schedule.tasks[taskIndex]
             toggledTask.isFinished.toggle()
-            
-            schedule.tasks[taskIndex].isFinished.toggle()
-            
+                        
+            // Updates the task corresponding to the cell.
             let indexPath = IndexPath(row: taskIndex, section: 0)
             let cell = scheduleTableView!.cellForRow(at: indexPath) as! ScheduleTableViewCell
             cell.updateValues(task: toggledTask, scheduleViewController: self)
             
+            // Rearranges the cell.
+            schedule.tasks[taskIndex].isFinished.toggle()
             if let TaskNewIndex = schedule.tasks.firstIndex(of: toggledTask) {
                 let newIndexPath = IndexPath(row: TaskNewIndex, section: 0)
                 scheduleTableView.moveRow(at: indexPath, to: newIndexPath)
@@ -276,33 +251,14 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-//    func drawAdvancementArc() {
-//        var ratio: CGFloat = 0
-//        if schedule.tasks.count != 0 {
-//            ratio = CGFloat(Double(finishedTaskNumber) / Double(schedule!.tasks.count))
-//        }
-//
-//        let advancementArcRadius: CGFloat = 16
-//        let advancementArcCenterX: CGFloat = view.bounds.width - 28
-//        let advancementArcCenterY: CGFloat = navigationController!.navigationBar.bounds.maxY + advancementArcRadius
-//
-//        let advancementArcPath = UIBezierPath(arcCenter: CGPoint(x: advancementArcCenterX, y: CGFloat(advancementArcCenterY)), radius: advancementArcRadius, startAngle: .pi * 1.5, endAngle: .pi * 2 * ratio + .pi * 1.5, clockwise: true)
-//
-//        advancementArcLayer.path = advancementArcPath.cgPath
-//        advancementArcLayer.fillColor = nil
-//        advancementArcLayer.strokeColor = UIColor.white.cgColor
-//        advancementArcLayer.lineWidth = 2
-//        advancementArcLayer.setNeedsDisplay()
-//    }
-    
     func editTask(task: Task, indexCountedFromOne: Int?) {
         if let index = indexCountedFromOne {
-            if index > 0 {
+            if index > 0 {  // Update.
                 schedule.tasks[index - 1] = task
-            } else {
+            } else {  // Deletion.
                 schedule.tasks.remove(at: index * -1 - 1)
             }
-        } else {
+        } else {  // Insertion.
             schedule.tasks.append(task)
         }
         
@@ -323,8 +279,10 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         let cell = ScheduleTableViewCell()
         
         var task = schedule.tasks[indexPath.row]
+        // Capacity.
         task = Task(content: task.content, dateInterval: Interval(start: task.dateInterval.start, end: task.dateInterval.end), isFinished: task.isFinished)
         schedule.tasks[indexPath.row] = task
+        
         cell.updateValues(task: task, scheduleViewController: self)
         
         return cell

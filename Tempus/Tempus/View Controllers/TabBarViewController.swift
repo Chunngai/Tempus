@@ -9,21 +9,20 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-
-    var gradientLayer: CAGradientLayer = CAGradientLayer()
-    
+    // Controllers.
     var scheduleNavigationViewController: ScheduleNavigationViewController?
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
     
     var toDoNavigationViewController: ToDoNavigationViewController?
     var toDoViewController = ToDoViewController()
     
+    // Views.
+    var gradientLayer: CAGradientLayer = CAGradientLayer()
+    
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        // Hides the top sep line.
-        self.tabBar.clipsToBounds = true
-        
+                        
         // Color of the bar.
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightText

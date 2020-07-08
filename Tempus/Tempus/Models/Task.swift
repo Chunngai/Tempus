@@ -44,6 +44,7 @@ struct Task: Equatable, Comparable, Codable {
 }
 
 extension Date {
+    // Creates a date with hour and min.
     init(hour: Int, minute: Int) {
         let now = Date()
 

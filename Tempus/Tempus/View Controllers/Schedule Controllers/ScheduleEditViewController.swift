@@ -9,26 +9,26 @@
 import UIKit
 
 class ScheduleEditViewController: UIViewController, UITextViewDelegate {
-
-    // Data.
+    // Models.
     var task: Task!
-
-    var scheduleViewController: ScheduleViewController!
 
     var initStart: Date!
     var initEnd: Date!
     var initDuration: TimeInterval!
-
+    
+    // Controllers.
+    var scheduleViewController: ScheduleViewController!
+    
     var indexCountedFromOne: Int?
 
     // Views.
     var gradientLayer = CAGradientLayer()
     
-    var contentLabel: UILabel!
+//    var contentLabel: UILabel!
 
     var contentTextView: UITextView!
 
-    var timeLabel: UILabel!
+//    var timeLabel: UILabel!
 
     var startButton: UIButton!
     var durationButton: UIButton!
@@ -43,15 +43,15 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
 
     var deleteButton: UIButton!
       
-    
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateInitialViews()
     }
 
+    // Customized funcs.
     func updateInitialViews() {
-        // Table view.
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
         view.addGradientLayer(gradientLayer: gradientLayer,
@@ -63,25 +63,27 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         // Title of navigation item.
         navigationItem.title = "Detail"
+        
+        // Nav bar items.
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
         
         // Content.
-        contentLabel = UILabel()
-        view.addSubview(contentLabel)
-
-        contentLabel.textColor = .white
-        contentLabel.text = "Content"
-        contentLabel.textAlignment = .center
-        
-        // TODO: rm the content label?
-        contentLabel.isHidden = true
-
-        contentLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 8)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
+//        contentLabel = UILabel()
+//        view.addSubview(contentLabel)
+//
+//        contentLabel.textColor = .white
+//        contentLabel.text = "Content"
+//        contentLabel.textAlignment = .center
+//
+//        // TODO: rm the content label?
+//        contentLabel.isHidden = true
+//
+//        contentLabel.snp.makeConstraints { (make) in
+//            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+//            make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 8)
+//            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
+//        }
 
         // Content text view.
         contentTextView = UITextView()
@@ -89,9 +91,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
 
         contentTextView.delegate = self
 
+        contentTextView.inputAccessoryView = addDoneButton()
         contentTextView.backgroundColor = UIColor.sky.withAlphaComponent(0)
         contentTextView.font = UIFont.systemFont(ofSize: UIFont.systemFontSize)
-        contentTextView.inputAccessoryView = addDoneButton()
         contentTextView.textColor = .white
         if let content = task.content {
             contentTextView.text = content
@@ -101,27 +103,27 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
 
         contentTextView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.10)
-            make.top.equalTo(contentLabel.snp.bottom).offset(20)
+            make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 8 + 20)
             make.width.equalTo(UIScreen.main.bounds.width * 0.90)
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
         
         // Time label.
-        timeLabel = UILabel()
-        view.addSubview(timeLabel)
-
-        timeLabel.textColor = .white
-        timeLabel.text = "Time"
-        timeLabel.textAlignment = .center
-        
-        // rm the time label?
-        timeLabel.isHidden = true
-
-        timeLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalTo(contentTextView).offset(180)
-            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-        }
+//        timeLabel = UILabel()
+//        view.addSubview(timeLabel)
+//
+//        timeLabel.textColor = .white
+//        timeLabel.text = "Time"
+//        timeLabel.textAlignment = .center
+//
+//        // rm the time label?
+//        timeLabel.isHidden = true
+//
+//        timeLabel.snp.makeConstraints { (make) in
+//            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
+//            make.top.equalTo(contentTextView).offset(180)
+//            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
+//        }
         
         // Time button views.
         startButton = UIButton()
@@ -160,14 +162,19 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         
         timeButtonStackView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.12)
-            make.top.equalTo(timeLabel).offset(30)
+            make.top.equalTo(contentTextView).offset(230)
             make.width.equalTo(UIScreen.main.bounds.width * 0.30)
             make.height.equalTo(UIScreen.main.bounds.height * 0.28)
         }
         
         // Time Picker views.
-        // TODO: modify the y pos
-        startPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
+        let pickerX = UIScreen.main.bounds.width * 0.30
+        let pickerY = UIScreen.main.bounds.height * 0.43
+        let pickerWidth = UIScreen.main.bounds.width * 0.60
+        let pickerHeight = UIScreen.main.bounds.height * 0.28
+        let pickerFrame = CGRect(x: pickerX, y: pickerY, width: pickerWidth, height: pickerHeight)
+        
+        startPicker = UIDatePicker(frame: pickerFrame)
         view.addSubview(startPicker)
         
         startPicker.addTarget(self, action: #selector(startPickerValueChanged), for: .valueChanged)
@@ -176,7 +183,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         startPicker.datePickerMode = .time
         startPicker.setDate(Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: initStart), animated: true)
         
-        durationPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
+        durationPicker = UIDatePicker(frame: pickerFrame)
         view.addSubview(durationPicker)
         
         durationPicker.addTarget(self, action: #selector(durationPickerValueChanged), for: .valueChanged)
@@ -187,7 +194,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         durationPicker.minuteInterval = 5
         durationPicker.setValue(initDuration, forKeyPath: "countDownDuration")
         
-        endPicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.30, y: 350, width: UIScreen.main.bounds.width * 0.60, height: UIScreen.main.bounds.height * 0.28))
+        endPicker = UIDatePicker(frame: pickerFrame)
         view.addSubview(endPicker)
         
         endPicker.addTarget(self, action: #selector(endPickerValueChanged), for: .valueChanged)
@@ -204,16 +211,16 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         if indexCountedFromOne != nil {
             view.addSubview(deleteButton)
             
+            deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+            
+            deleteButton.setTitle("Delete", for: .normal)
+            deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
+            
             deleteButton.snp.makeConstraints { (make) in
                 make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
                 make.top.equalTo(timeButtonStackView).offset(320)
             }
         }
-        
-        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        
-        deleteButton.setTitle("Delete", for: .normal)
-        deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
         
         // Disables editing if the task is set before the current day.
         if !scheduleViewController.editable {
@@ -237,11 +244,12 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     func updateValues(scheduleViewController: ScheduleViewController, task: Task, initStart: Date, initDuration: TimeInterval, initEnd: Date, indexCountedFromOne: Int?) {
-        self.scheduleViewController = scheduleViewController
         self.task = task
         self.initStart = initStart
         self.initDuration = initDuration
         self.initEnd = initEnd
+        
+        self.scheduleViewController = scheduleViewController
         self.indexCountedFromOne = indexCountedFromOne
     }
     
@@ -261,7 +269,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func saveButtonTapped() {
-        if contentTextView.text.trimmingCharacters(in: CharacterSet(charactersIn: " ")).isEmpty {
+        if contentTextView.text.trimmingCharacters(in: CharacterSet(charactersIn: " ")).isEmpty {  // No content.
             emptyContentAlert()
             return
         }
@@ -269,7 +277,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         task.dateInterval = Interval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false
-        
+
         self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: self.indexCountedFromOne)
         
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
@@ -279,7 +287,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         view.endEditing(false)
     }
     
-    func addDoneButton() -> UIToolbar{
+    func addDoneButton() -> UIToolbar {
            let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: contentTextView.frame.width, height: 20))
            
            toolBar.tintColor = .sky
@@ -294,17 +302,14 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
        }
     
     @objc func startButtonTapped() {
-        timePickers[0].isHidden.toggle()
         updateTimeViews(buttonIdx: 0)
     }
     
     @objc func durationButtonTapped() {
-        timePickers[1].isHidden.toggle()
         updateTimeViews(buttonIdx: 1)
     }
     
     @objc func endButtonTapped() {
-        timePickers[2].isHidden.toggle()
         updateTimeViews(buttonIdx: 2)
     }
     
@@ -341,14 +346,17 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
                 timeButtons[i].setTitleColor(.lightText, for: .normal)
             }
         }
-        
+        timePickers[buttonIdx].isHidden = false
         timeButtons[buttonIdx].setTitleColor(timePickers[buttonIdx].isHidden ? .lightText : .white, for: .normal)
+        
+        timeButtons[0].setTitle("\(timePickers[0].date.dateOfCurrentTimeZone().formattedTime())", for: .normal)
+        timeButtons[1].setTitle("\(timePickers[1].countDownDuration.formattedDuration())", for: .normal)
+        timeButtons[2].setTitle("\(timePickers[2].date.dateOfCurrentTimeZone().formattedTime())", for: .normal)
     }
 
     @objc func deleteButtonTapped() {
         self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: indexCountedFromOne! * -1)
 
-//        scheduleViewController.navigationController?.popViewController(animated: true)
         scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
 }

@@ -9,18 +9,16 @@
 import UIKit
 
 class ToDoCategoryTableViewCell: UITableViewCell {
-
+    // Views.
     var textfield = UITextField()
     
+    // Initializers.
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
 
     required init?(coder: NSCoder) {
@@ -33,10 +31,12 @@ class ToDoCategoryTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
+    // Customized funcs.
     func updateInitialViews() {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
         selectionStyle = .none
         
+        // Text field.
         contentView.addSubview(textfield)
         
         textfield.textColor = .white

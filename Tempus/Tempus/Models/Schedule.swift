@@ -37,6 +37,22 @@ struct Schedule: Codable {
         try? codedSchedule?.write(to: archiveURL, options: .noFileProtection)
     }
 }
+
+extension Schedule {
+    var latestTask: Task? {
+        if tasks.count == 0 {
+            return nil
+        }
+        
+        var latestTask = tasks[0]
+        for task in tasks[0..<tasks.count] {
+            if task.dateInterval.start! > latestTask.dateInterval.start! {
+                latestTask = task
+            }
+        }
+        return latestTask
+    }
+}
         
 extension Date {
     func archiveURLDateComponent() -> String {

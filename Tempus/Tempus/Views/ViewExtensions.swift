@@ -9,13 +9,6 @@
 import Foundation
 import UIKit
 
-extension UITabBar {
-    func setTransparent() {
-        self.backgroundImage = UIImage()
-        self.shadowImage = UIImage()
-    }
-}
-
 extension UINavigationBar {
     func setTransparent() {
         self.setBackgroundImage(UIImage(), for: .default)
@@ -24,11 +17,18 @@ extension UINavigationBar {
     }
 }
 
+extension UITabBar {
+    func setTransparent() {
+        self.backgroundImage = UIImage()
+        self.shadowImage = UIImage()
+        self.clipsToBounds = true
+    }
+}
+
 extension UIColor {
     static var sky = UIColor(red: 0.462, green: 0.838, blue: 1.000, alpha: 1)
     static var aqua = UIColor(red: 0.000, green: 0.590, blue: 1.000, alpha: 1)
 }
-
 
 extension UIView {
     func addGradientLayer(gradientLayer: CAGradientLayer, colors: [CGColor], locations: [NSNumber], startPoint: CGPoint, endPoint: CGPoint, frame: CGRect) {
@@ -82,7 +82,7 @@ extension Date {
         if withWeekday {
             formattedString += " (\(self.shortWeekdaySymbol))"
         }
-        if !(omitZero && self.getComponent(.hour).hour! == 0 && self.getComponent(.minute).minute! == 0) {
+        if !(omitZero && self.getComponents([.hour]).hour! == 0 && self.getComponents([.minute]).minute! == 0) {
             formattedString += " " + timeFormatter.string(from: self)
         }
         
@@ -97,44 +97,40 @@ extension Date {
         return calendar.shortWeekdaySymbols[weekday - 1]
     }
     
-    func getComponent(identifier: Calendar.Identifier = .gregorian, _ component: Calendar.Component) -> DateComponents {
-        return Calendar(identifier: identifier).dateComponents([component], from: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self))
+    func getComponents(identifier: Calendar.Identifier = .gregorian, _ components: Set<Calendar.Component>) -> DateComponents {
+        let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
+        
+        return Calendar(identifier: identifier).dateComponents(components, from: from)
     }
 }
 
 extension DateInterval {
     func formatted(omitZero: Bool = false) -> String {
         func concat(component: Int?, identifier: String) -> String {
-            if let component = component {
-                if omitZero && component == 0 {
-                    return ""
-                }
-                
-                return "\(component)\(identifier) "
+            if omitZero && component! == 0 {
+                return ""
+            } else {
+                return "\(component!)\(identifier) "
             }
-            return ""
         }
 
-        let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start)
-        let to = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end)
-        
-        let components = Calendar(identifier: .gregorian).dateComponents([.month, .day, .hour],
-                                                                         from: from, to: to)
-
-        var formattedString = concat(component: components.month, identifier: "M")
+        let components = getComponents([.month, .day, .hour])
+        let formattedString = concat(component: components.month, identifier: "M")
             + concat(component: components.day, identifier: "d")
             + concat(component: components.hour, identifier: "h")
-        if formattedString.isEmpty {
-            formattedString = "0 h"
-        }
         
-        return formattedString
+        if !formattedString.isEmpty {
+            return formattedString
+        } else {
+            return "0 h"
+        }
     }
     
     func getComponents(identifier: Calendar.Identifier = .gregorian, _ components: Set<Calendar.Component>) -> DateComponents {
-        return Calendar(identifier: identifier).dateComponents(components,
-                                                               from: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start),
-                                                               to: Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end))
+        let from = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.start)
+        let to = Date(timeInterval: -TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self.end)
+        
+        return Calendar(identifier: identifier).dateComponents(components, from: from, to: to)
     }
 }
 

@@ -10,8 +10,10 @@ import UIKit
 import SnapKit
 
 class ScheduleTableViewCell: UITableViewCell {
-        
+    // Models.
     var task: Task!
+    
+    // Controllers.
     var scheduleViewController: ScheduleViewController!
     
     // Views.
@@ -22,15 +24,13 @@ class ScheduleTableViewCell: UITableViewCell {
         
     var gradientLayer = CAGradientLayer()
     
+    // Initializers.
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     required init?(coder: NSCoder) {
@@ -43,6 +43,7 @@ class ScheduleTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
+    // Customized funcs.
     func updateInitialViews() {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)
@@ -103,7 +104,7 @@ class ScheduleTableViewCell: UITableViewCell {
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
         view.addGestureRecognizer(longPressGestureRecognizer)
         
-        // Tap to toggle finish status.
+        // Taps to toggle finish status.
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         view.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -115,16 +116,17 @@ class ScheduleTableViewCell: UITableViewCell {
         // Updates the views.
         let timeLabelText: String
         let durationLabelText: String
-        if task.dateInterval.start != nil && task.dateInterval.end != nil {
+        if task.dateInterval.start != nil && task.dateInterval.end != nil {  // Start and end provided.
             timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"
             durationLabelText = "\(task.dateInterval.duration!.formattedDuration())"
-        } else {
+        } else {  // Start and end not provided.
             timeLabelText = "--:-- - --:--"
             durationLabelText = "--"
         }
         
         let contentLabelText = task.content!
         
+        // Config text attrs according to the finish status.
         var textAttrs: [NSAttributedString.Key: Any] = [:]
         if task.isFinished {
             textAttrs[.foregroundColor] = UIColor.lightText

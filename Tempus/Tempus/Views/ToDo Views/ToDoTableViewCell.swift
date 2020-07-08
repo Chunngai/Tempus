@@ -10,8 +10,10 @@ import UIKit
 import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
-    
+    // Models.
     var task: Task!
+    
+    // Controllers.
     var toDoViewController: ToDoViewController!
         
     // Views.
@@ -22,15 +24,13 @@ class ToDoTableViewCell: UITableViewCell {
     
     var gradientLayer = CAGradientLayer()
     
+    // Initializers.
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
     required init?(coder: NSCoder) {
@@ -43,6 +43,7 @@ class ToDoTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
+    // Customized funcs.
     func updateInitialViews() {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)
@@ -66,12 +67,6 @@ class ToDoTableViewCell: UITableViewCell {
         contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         contentLabel.textColor = .white
         
-//        contentLabel.snp.makeConstraints { (make) in
-//            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-//            make.top.equalToSuperview().offset(15)
-//            make.bottom.equalToSuperview().inset(15)
-//        }
-        
         // Gradient layer.
         view.addGradientLayer(gradientLayer: gradientLayer,
                               colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
@@ -90,12 +85,14 @@ class ToDoTableViewCell: UITableViewCell {
         self.toDoViewController = toDoViewController
 
         // Updates the views.
-        if task.dateInterval != nil && (task.dateInterval.start != nil || task.dateInterval.end != nil) {
+        if task.dateInterval != nil && (task.dateInterval.start != nil || task.dateInterval.end != nil) {  // When start or end provided.
             // Date label.
             dateLabel = UILabel()
             
             view.addSubview(dateLabel)
-                    
+            
+            dateLabel.textColor = .lightText
+            // Determines how start and due should be displayed.
             if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
                 dateLabel.text = "\(taskDateIntervalStart.formattedDateAndTime(omitZero: true)) - \(taskDateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
             } else if task.dateInterval.start != nil  {
@@ -105,7 +102,6 @@ class ToDoTableViewCell: UITableViewCell {
             } else {
                 dateLabel.text = "--/-- --:--"
             }
-            dateLabel.textColor = .lightText
             
             dateLabel.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
@@ -118,20 +114,17 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(remainingTimeLabel)
             
-            if let taskDateIntervalEnd = task.dateInterval.end {
-                if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {
+            remainingTimeLabel.textAlignment = .right
+            if let taskDateIntervalEnd = task.dateInterval.end {  // If due provided.
+                remainingTimeLabel.textColor = getRemainingTimeTextColor()
+
+                if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {  // If due is after the current day.
                     remainingTimeLabel.text = "\(DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).formatted(omitZero: true))"
                 } else {
                     remainingTimeLabel.text = "Overdue"
                 }
             } else {
                 remainingTimeLabel.text = ""
-            }
-            remainingTimeLabel.textAlignment = .right
-            if task.dateInterval.end != nil {
-                remainingTimeLabel.textColor = getRemainingTimeTextColor()
-            } else {
-                remainingTimeLabel.textColor = .lightText
             }
             
             remainingTimeLabel.snp.makeConstraints { (make) in
@@ -153,15 +146,17 @@ class ToDoTableViewCell: UITableViewCell {
                 make.bottom.equalToSuperview().inset(15)
             }
         }
+        
+        // Content label.
         contentLabel.text = task.content
     }
     
     func getRemainingTimeTextColor() -> UIColor {
-        if Date().dateOfCurrentTimeZone() <= task.dateInterval.end! {
+        if Date().dateOfCurrentTimeZone() <= task.dateInterval.end! {  // Not overdue.
             let components = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponents([.month, .day])
             
             return components.month! == 0 && components.day! >= 3 ? UIColor.lightText : UIColor.red
-        } else {
+        } else {  // Overdue.
             return .yellow
         }
     }

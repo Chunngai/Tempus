@@ -10,20 +10,14 @@ import UIKit
 import SnapKit
 
 class ScheduleDatePickerView: UIView {
-
+    // Controllers.
     var scheduleViewController: ScheduleViewController!
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
+    // Views.
     var gradientLayer = CAGradientLayer()
     var datePicker = UIDatePicker()
 
+    // Initializers.
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -34,6 +28,7 @@ class ScheduleDatePickerView: UIView {
         updateViews()
     }
     
+    // Customized funcs.
     func updateViews() {
         // Gradient layer.
         self.addGradientLayer(gradientLayer: gradientLayer,
