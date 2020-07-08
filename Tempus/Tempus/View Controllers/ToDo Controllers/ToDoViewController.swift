@@ -100,8 +100,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         toDoTableView?.estimatedRowHeight = 130
         toDoTableView?.rowHeight = UITableView.automaticDimension
-        
-//        checkEmergentTasks()
     }
     
     func checkEmergentTasks() {
@@ -124,7 +122,11 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         let toDoItem = tabBarController?.tabBar.items![1]
-        toDoItem?.badgeValue = String(count)
+        if count > 1 {
+            toDoItem?.badgeValue = String(count)
+        } else {
+            toDoItem?.badgeValue = nil
+        }
     }
     
     @objc func presentAddingView() {

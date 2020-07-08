@@ -24,11 +24,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     // Views.
     var gradientLayer = CAGradientLayer()
     
-//    var contentLabel: UILabel!
-
     var contentTextView: UITextView!
-
-//    var timeLabel: UILabel!
 
     var startButton: UIButton!
     var durationButton: UIButton!
@@ -67,23 +63,6 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         // Nav bar items.
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
-        
-        // Content.
-//        contentLabel = UILabel()
-//        view.addSubview(contentLabel)
-//
-//        contentLabel.textColor = .white
-//        contentLabel.text = "Content"
-//        contentLabel.textAlignment = .center
-//
-//        // TODO: rm the content label?
-//        contentLabel.isHidden = true
-//
-//        contentLabel.snp.makeConstraints { (make) in
-//            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-//            make.top.equalToSuperview().offset(UIScreen.main.bounds.height / 8)
-//            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-//        }
 
         // Content text view.
         contentTextView = UITextView()
@@ -107,23 +86,6 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
             make.width.equalTo(UIScreen.main.bounds.width * 0.90)
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
-        
-        // Time label.
-//        timeLabel = UILabel()
-//        view.addSubview(timeLabel)
-//
-//        timeLabel.textColor = .white
-//        timeLabel.text = "Time"
-//        timeLabel.textAlignment = .center
-//
-//        // rm the time label?
-//        timeLabel.isHidden = true
-//
-//        timeLabel.snp.makeConstraints { (make) in
-//            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-//            make.top.equalTo(contentTextView).offset(180)
-//            make.width.equalTo(UIScreen.main.bounds.width * 0.94)
-//        }
         
         // Time button views.
         startButton = UIButton()
