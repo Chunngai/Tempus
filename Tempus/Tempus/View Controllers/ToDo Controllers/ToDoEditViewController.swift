@@ -10,22 +10,20 @@ import UIKit
 import SnapKit
 
 class ToDoEditViewController: UIViewController, UITextViewDelegate {
-
-    // Data.
+    // Models
     var task: Task!
-    var toDoViewController: ToDoViewController!
     
-    var originalIndices: (Int, Int)!
-    var currentIndex: Int!
-    
-    var mode: String!
     var oldIdx: (categoryIdx: Int, taskIdx: Int)!
-    
-    var categoryIdx: Int! {
+    var currentIdx: Int! {
         didSet {
-            categoryButton.setTitle(toDoViewController.categories[self.categoryIdx], for: .normal)
+            categoryButton.setTitle(toDoViewController.categories[self.currentIdx], for: .normal)
         }
     }
+    
+    // Controllers.
+    var toDoViewController: ToDoViewController!
+        
+    var mode: String!
     
     // Views.
     var gradientLayer = CAGradientLayer()
@@ -34,26 +32,26 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var contentTextView: UITextView!
     
     var fromButton = UIButton()
-    var fromDatePicker: UIDatePicker!
-    var remainingTimeButton = UIButton()
     var toButton = UIButton()
-    var toDatePicker: UIDatePicker!
     var dateButtonStackView: UIStackView!
     var dateButtons: [UIView]!
+    
+    var fromDatePicker: UIDatePicker!
+    var toDatePicker: UIDatePicker!
     
     var categoryButton = UIButton()
     
     var deleteButton: UIButton!
     
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         updateInitialViews()
     }
     
+    // Customized funcs.
     func updateInitialViews() {
-        // Table view.
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
         view.addGradientLayer(gradientLayer: gradientLayer,
@@ -115,14 +113,6 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         } else {
             fromButton.setTitle("--/-- --:--", for: .normal)
         }
-        
-        remainingTimeButton.setTitleColor(.lightText, for: .normal)
-        remainingTimeButton.contentHorizontalAlignment = .center
-        if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
-            remainingTimeButton.setTitle("\(DateInterval(start: taskDateIntervalStart, end: taskDateIntervalEnd).formatted())", for: .normal)
-        } else {
-            remainingTimeButton.setTitle("--", for: .normal)
-        }
                        
         toButton.addTarget(self, action: #selector(toButtonTapped), for: .touchUpInside)
         
@@ -133,7 +123,6 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         } else {
             toButton.setTitle("--/-- --:--", for: .normal)
         }
-        
         
         // Time button stack view.
         dateButtons = [fromButton, toButton]
@@ -152,7 +141,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         }
         
         // Time Picker views.
-        fromDatePicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.15, y: 360, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28))
+        let datePickerFrame = CGRect(x: UIScreen.main.bounds.width * 0.15, y: UIScreen.main.bounds.height * 0.43, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28)
+        
+        fromDatePicker = UIDatePicker(frame: datePickerFrame)
         view.addSubview(fromDatePicker)
         
         fromDatePicker.addTarget(self, action: #selector(fromPickerValueChanged), for: .valueChanged)
@@ -168,7 +159,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             fromDatePicker.isHidden = true
         }
         
-        toDatePicker = UIDatePicker(frame: CGRect(x: UIScreen.main.bounds.width * 0.15, y: 360, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28))
+        toDatePicker = UIDatePicker(frame: datePickerFrame)
         view.addSubview(toDatePicker)
         
         toDatePicker.addTarget(self, action: #selector(toPickerValueChanged), for: .valueChanged)
@@ -191,13 +182,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
         if mode == "a" {
-            categoryIdx = 0
+            currentIdx = 0
             categoryButton.setTitle(toDoViewController.categories[0], for: .normal)
         } else {
-            categoryIdx = toDoViewController.getCategoryIdx(category: task.category)
+            currentIdx = toDoViewController.toDoList.getCategoryIdx(category: task.category)
             categoryButton.setTitle(task.category, for: .normal)
         }
         categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        
         categoryButton.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
             make.bottom.equalToSuperview().inset(100)
@@ -297,7 +289,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == "--/-- --:--" ? nil : fromDatePicker.date.dateOfCurrentTimeZone(),
                                           end: toButton.title(for: .normal) == "--/-- --:--" ? nil : toDatePicker.date.dateOfCurrentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
-        self.task.category = toDoViewController.categories[categoryIdx]
+        self.task.category = toDoViewController.categories[currentIdx]
 
         self.toDoViewController.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 
@@ -334,15 +326,4 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
 
         toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -9,22 +9,29 @@
 import UIKit
 
 class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    // Data source.
+    // Models
     var toDoList: [ToDo]! {
         didSet {
+            // Sorts tasks of each category.
             for i in 0..<self.toDoList.count {
                 self.toDoList[i].tasks.sort()
             }
             
             ToDo.saveToDo(self.toDoList!)
             
-            checkEmergentTasks()
+            // Badge.
+            let toDoItem = tabBarController?.tabBar.items![1]
+            if self.toDoList.emergentTaskNumber > 1 {
+                toDoItem?.badgeValue = String(self.toDoList.emergentTaskNumber)
+            } else {
+                toDoItem?.badgeValue = nil
+            }
         }
     }
     
     var categories: [String] {
         get {
+            // Gets all categories from the todo list.
             var categoryList: [String] = []
             for todo in toDoList {
                 categoryList.append(todo.category)
@@ -36,10 +43,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var newToDoList: [ToDo] = []
             for category in newValue {
                 var toDo = ToDo(category: category, tasks: [])
-                if self.categories.contains(category) {
-                    toDo.tasks = toDoList[getCategoryIdx(category: category)].tasks
+                if self.categories.contains(category) {  // The category originally exists.
+                    let categoryIdx = self.toDoList.getCategoryIdx(category: category)
+                    toDo.tasks = toDoList[categoryIdx].tasks
                 }
-                
                 newToDoList.append(toDo)
             }
             
@@ -49,10 +56,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    
     // Views.
     var toDoTableView: UITableView?
     
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,20 +70,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         Thread.detachNewThreadSelector(#selector(reloadTableView), toTarget: self, with: nil)
     }
     
-    @objc func reloadTableView() {
-        while true {
-            DispatchQueue.main.async {
-                self.toDoTableView?.reloadData()
-            }
-            
-            Thread.sleep(forTimeInterval: 3600)
-        }
-    }
-    
+    // Customized funcs.
     func updateViews() {
         // Sets the title of the navigation item.
         navigationItem.title = "To Do"
         
+        // Nav item buttons.
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addButton.tintColor = .white
         navigationItem.rightBarButtonItem = addButton
@@ -102,36 +101,22 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         toDoTableView?.rowHeight = UITableView.automaticDimension
     }
     
-    func checkEmergentTasks() {
-        var count = 0
-        
-        for toDo in toDoList {
-            for task in toDo.tasks {
-                if task.isOverdue {
-                    count += 1
-                } else {
-                    if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start,  // Before start.
-                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                            count += 1
-                    } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due,  // Before end.
-                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                            count += 1
-                    }
-                }
-            }
-        }
-        
-        let toDoItem = tabBarController?.tabBar.items![1]
-        if count > 1 {
-            toDoItem?.badgeValue = String(count)
-        } else {
-            toDoItem?.badgeValue = nil
-        }
-    }
+    @objc func reloadTableView() {
+         while true {
+             DispatchQueue.main.async {
+                 self.toDoTableView?.reloadData()
+             }
+             
+             Thread.sleep(forTimeInterval: 3600)
+         }
+     }
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)), toDoViewController: self, mode: "a", oldIdx: nil)
+        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)),
+                                            toDoViewController: self,
+                                            mode: "a",
+                                            oldIdx: nil)
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
@@ -151,22 +136,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
-    func getCategoryIdx(category: String) -> Int {
-        for i in 0..<toDoList.count {
-            if toDoList[i].category == category {
-                return i
-            }
-        }
-        
-        return 0
-    }
-    
     func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
-        if mode == "a" {
-            toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
-        } else if mode == "e" {
-            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
-            toDoList[getCategoryIdx(category: task.category)].tasks.append(task)
+        if mode == "a" {  // Append.
+            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
+            toDoList[categoryIdx].tasks.append(task)
+        } else if mode == "e" {  // Update.
+            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)  // Removes the old one.
+            
+            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
+            toDoList[categoryIdx].tasks.append(task)
         } else if mode == "d" {
             toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
         }
@@ -222,15 +200,37 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         return tableView.sectionFooterHeight
     }
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+extension Array where Element == ToDo {
+    var emergentTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            for task in toDo.tasks {
+                if task.isOverdue {
+                    count += 1
+                } else {
+                    if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start,  // Before start.
+                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                            count += 1
+                    } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due,  // Before end.
+                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                            count += 1
+                    }
+                }
+            }
+        }
+        
+        return count
     }
-    */
-
+    
+    func getCategoryIdx(category: String) -> Int {
+        for i in 0..<self.count {
+            if self[i].category == category {
+                return i
+            }
+        }
+        
+        return 0
+    }
 }

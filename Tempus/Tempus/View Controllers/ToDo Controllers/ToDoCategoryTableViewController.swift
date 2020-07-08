@@ -9,8 +9,7 @@
 import UIKit
 
 class ToDoCategoryTableViewController: UITableViewController {
-
-    var toDoEditViewController: ToDoEditViewController!
+    // Models.
     var categories: [String] {
         get {
             return toDoEditViewController.toDoViewController.categories
@@ -20,20 +19,19 @@ class ToDoCategoryTableViewController: UITableViewController {
         }
     }
     
+    // Controllers.
+    var toDoEditViewController: ToDoEditViewController!
+    
     var tmpCategories: [String]!
     
+    // Init.
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateViews()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    // Customized funcs.
     func updateViews() {
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
@@ -84,7 +82,7 @@ class ToDoCategoryTableViewController: UITableViewController {
             if let cell = (tableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
                 let category = cell.textfield.text!
                 
-                // Sees if all category names are empty.
+                // Sees if the category name is not empty.
                 if category.trimmingCharacters(in: CharacterSet(charactersIn: " ")) == "" {
                     emptyCategoriesAlert()
                     return
@@ -94,11 +92,13 @@ class ToDoCategoryTableViewController: UITableViewController {
             }
         }
         
+        // Repeated category name not allowed.
         if tmpCategories.count != Set(tmpCategories).count {
             repeatedCategoriesAlert()
             return
         }
         
+        // Empty category name not allowed.
         if tmpCategories.isEmpty {
             tmpCategories = ["Default"]
         }
@@ -128,24 +128,23 @@ class ToDoCategoryTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return tmpCategories.count + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
         let cell = ToDoCategoryTableViewCell()
         
+        // Normal categories.
         if indexPath.row < tmpCategories.count {
             cell.updateValues(text: tmpCategories[indexPath.row])
             cell.textfield.isEnabled = isEditing ? true : false
         }
         
+        // Add button.
         if indexPath.row == tmpCategories.count {
             cell.textfield.isEnabled = false
             if isEditing {
@@ -166,8 +165,8 @@ class ToDoCategoryTableViewController: UITableViewController {
         if editingStyle == .delete {
             let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textfield.text!
             if categories.contains(category) {
-                let idx = toDoEditViewController.toDoViewController.getCategoryIdx(category: category)
-                if !toDoEditViewController.toDoViewController.toDoList[idx].tasks.isEmpty {
+                let idx = toDoEditViewController.toDoViewController.toDoList.getCategoryIdx(category: category)
+                if !toDoEditViewController.toDoViewController.toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
                     notEmptyCategoryDeletionAlert()
                     return
                 }
@@ -180,6 +179,7 @@ class ToDoCategoryTableViewController: UITableViewController {
         }    
     }
     
+    // Editing style.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row == tmpCategories.count {
             return UITableViewCell.EditingStyle.insert
@@ -189,9 +189,10 @@ class ToDoCategoryTableViewController: UITableViewController {
         return UITableViewCell.EditingStyle.none
     }
 
+    // When a category is tapped.
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < tmpCategories.count {
-            toDoEditViewController.categoryIdx = indexPath.row
+            toDoEditViewController.currentIdx = indexPath.row
             
             toDoEditViewController.dismiss(animated: true, completion: nil)
         }
@@ -204,23 +205,10 @@ class ToDoCategoryTableViewController: UITableViewController {
 
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-//        return true
         if indexPath.row < tmpCategories.count {
             return true
         } else {
             return false
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
