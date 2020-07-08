@@ -37,3 +37,13 @@ struct ToDo: Codable {
         try? codedToDo?.write(to: archiveURL, options: .noFileProtection)
     }
 }
+
+extension Task {
+    var isOverdue: Bool {
+        guard let dateIntervalEnd = self.dateInterval.end else {
+            return false
+        }
+        
+        return dateIntervalEnd < Date().dateOfCurrentTimeZone()
+    }
+}

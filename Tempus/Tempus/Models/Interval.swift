@@ -37,14 +37,10 @@ struct Interval: Equatable, Comparable, Codable {
     
     // Comparable protocol.
     static func < (lhs: Interval, rhs: Interval) -> Bool {
-        if let lhsEnd = lhs.end, let rhsEnd = rhs.end {
-            if lhsEnd != rhsEnd {
-                return lhsEnd < rhsEnd
-            } else if let lhsStart = lhs.start, let rhsStart = rhs.start {
-                return lhsStart < rhsStart
-            }
-        } else if lhs.end != nil && rhs.end == nil {
-            return true
+        if let lhsStart = lhs.start, let rhsStart = rhs.start, lhsStart != rhsStart {
+            return lhsStart < rhsStart
+        } else if let lhsEnd = lhs.end, let rhsEnd = rhs.end {
+            return lhsEnd < rhsEnd
         }
         return false
     }

@@ -32,6 +32,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    // Controllers.
     var editable: Bool {
         return (schedule.date >= Date().dateOfCurrentTimeZone()
             || DateInterval(start: schedule.date, end: Date().dateOfCurrentTimeZone()).getComponents([.day]).day! <= 0)
@@ -199,7 +200,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         var initStart: Date
         var initDuration: TimeInterval
         var initEnd: Date
-        if let latestTask = schedule.latestTask {
+        if let latestTask = schedule.latestUnfinishedTask {
             initStart = latestTask.dateInterval.end!
             initDuration = latestTask.dateInterval.duration!
             initEnd = Date(timeInterval: initDuration, since: initStart)
@@ -292,5 +293,21 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return nil
+    }
+}
+
+extension Schedule {
+    var latestUnfinishedTask: Task? {
+        if tasks.count == 0 {
+            return nil
+        }
+        
+        var latestTask = tasks[0]
+        for task in tasks[0..<tasks.count] {
+            if task.dateInterval.start! > latestTask.dateInterval.start! {
+                latestTask = task
+            }
+        }
+        return latestTask
     }
 }

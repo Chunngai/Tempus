@@ -91,17 +91,8 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(dateLabel)
             
+            dateLabel.text = getDateLabelText(dateInterval: task.dateInterval)
             dateLabel.textColor = .lightText
-            // Determines how start and due should be displayed.
-            if let taskDateIntervalStart = task.dateInterval.start, let taskDateIntervalEnd = task.dateInterval.end {
-                dateLabel.text = "\(taskDateIntervalStart.formattedDateAndTime(omitZero: true)) - \(taskDateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
-            } else if task.dateInterval.start != nil  {
-                dateLabel.text = "\(task.dateInterval.start!.formattedDateAndTime(omitZero: true)) -"
-            } else if task.dateInterval.end != nil {
-                dateLabel.text = "- \(task.dateInterval.end!.formattedDateAndTime(omitZero: true, withWeekday: true))"
-            } else {
-                dateLabel.text = "--/-- --:--"
-            }
             
             dateLabel.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
@@ -115,18 +106,9 @@ class ToDoTableViewCell: UITableViewCell {
             view.addSubview(remainingTimeLabel)
             
             remainingTimeLabel.textAlignment = .right
-            if let taskDateIntervalEnd = task.dateInterval.end {  // If due provided.
-                remainingTimeLabel.textColor = getRemainingTimeTextColor()
-
-                if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {  // If due is after the current day.
-                    remainingTimeLabel.text = "\(DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).formatted(omitZero: true))"
-                } else {
-                    remainingTimeLabel.text = "Overdue"
-                }
-            } else {
-                remainingTimeLabel.text = ""
-            }
-            
+            remainingTimeLabel.text = getRemainingTimeLabelText(task: task)
+            remainingTimeLabel.textColor = getRemainingTimeLabelTextColor(task: task)
+        
             remainingTimeLabel.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalTo(dateLabel.snp.top)
@@ -151,16 +133,6 @@ class ToDoTableViewCell: UITableViewCell {
         contentLabel.text = task.content
     }
     
-    func getRemainingTimeTextColor() -> UIColor {
-        if Date().dateOfCurrentTimeZone() <= task.dateInterval.end! {  // Not overdue.
-            let components = DateInterval(start: Date().dateOfCurrentTimeZone(), end: task.dateInterval.end!).getComponents([.month, .day])
-            
-            return components.month! == 0 && components.day! >= 3 ? UIColor.lightText : UIColor.red
-        } else {  // Overdue.
-            return .yellow
-        }
-    }
-    
     @objc func viewLongPressed() {
         if let toDoEditNavigationViewController = toDoViewController.presentedViewController,
             toDoEditNavigationViewController is ToDoEditNavigationViewController {
@@ -168,5 +140,55 @@ class ToDoTableViewCell: UITableViewCell {
         }
         
         toDoViewController.presentEditingView(task: task)
+    }
+    
+    func getDateLabelText(dateInterval: Interval) -> String {
+        if let dateIntervalStart = dateInterval.start, let dateIntervalEnd = dateInterval.end {
+            return "\(dateIntervalStart.formattedDateAndTime(omitZero: true)) - \(dateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
+        } else if dateInterval.start != nil  {
+            return "\(dateInterval.start!.formattedDateAndTime(omitZero: true)) -"
+        } else if dateInterval.end != nil {
+            return "- \(dateInterval.end!.formattedDateAndTime(omitZero: true, withWeekday: true))"
+        } else {
+            return "--/-- --:--"
+        }
+    }
+    
+    func getRemainingTimeLabelText(task: Task) -> String {
+        if task.isOverdue {
+            return "Overdue"
+        } else {
+            if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start {  // Start provided.
+                return DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).formatted(omitZero: true)
+            } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due {  // Due provided.
+                return DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).formatted(omitZero: true)
+            } else {  // Neither provided.
+                return ""
+            }
+        }
+    }
+    
+    func getRemainingTimeLabelTextColor(task: Task) -> UIColor {
+        if task.isOverdue {
+            return .yellow
+        } else {
+            if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start {  // Before start.
+                if DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                    return .orange
+                } else {  // More than 3 days.
+                    return .lightText
+                }
+            } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due {  // Before end.
+                if DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                    return .red
+                } else if task.dateInterval.start != nil {  // Doing.
+                    return .purple
+                } else {  // More than 3 days.
+                    return .lightText
+                }
+            } else {  // Neither provided.
+                return .lightText
+            }
+        }
     }
 }

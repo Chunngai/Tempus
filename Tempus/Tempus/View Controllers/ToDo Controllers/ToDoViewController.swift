@@ -57,9 +57,6 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.viewDidLoad()
 
         toDoList = ToDo.loadToDo()
-        guard toDoList != nil else {
-            return
-        }
         
         updateViews()
         
@@ -104,7 +101,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         toDoTableView?.estimatedRowHeight = 130
         toDoTableView?.rowHeight = UITableView.automaticDimension
         
-        checkEmergentTasks()
+//        checkEmergentTasks()
     }
     
     func checkEmergentTasks() {
@@ -112,15 +109,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         for toDo in toDoList {
             for task in toDo.tasks {
-                if let taskDateIntervalEnd = task.dateInterval.end {
-                    if Date().dateOfCurrentTimeZone() <= taskDateIntervalEnd {
-                        let components = DateInterval(start: Date().dateOfCurrentTimeZone(), end: taskDateIntervalEnd).getComponents([.month, .day])
-                        
-                        if components.month! == 0 && components.day! < 3 {
+                if task.isOverdue {
+                    count += 1
+                } else {
+                    if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start,  // Before start.
+                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
                             count += 1
-                        }
-                    } else {
-                        count += 1
+                    } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due,  // Before end.
+                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                            count += 1
                     }
                 }
             }
