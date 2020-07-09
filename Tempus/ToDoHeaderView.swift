@@ -9,11 +9,13 @@
 import UIKit
 
 class ToDoHeaderView: UITableViewHeaderFooterView {
-    // Views.
+    // MARK: - Views
+    
     var view = UIView()
     var sectionNameLabel = UILabel()
     
-    // Initializers.
+    // MARK: - Initializers
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -24,7 +26,8 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         updateViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateViews() {
         // A view for placing contents.
         contentView.addSubview(view)

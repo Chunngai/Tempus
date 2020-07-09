@@ -10,14 +10,18 @@ import UIKit
 import SnapKit
 
 class ScheduleDatePickerView: UIView {
-    // Controllers.
+    
+    // MARK: - Controllers
+    
     var scheduleViewController: ScheduleViewController!
     
-    // Views.
+    // MARK: - Views
+    
     var gradientLayer = CAGradientLayer()
     var datePicker: UIDatePicker!
     
-    // Initializers.
+    // MARK: - Initializers
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -25,8 +29,11 @@ class ScheduleDatePickerView: UIView {
     init(datePickerFrame: CGRect, scheduleViewController: ScheduleViewController) {
         super.init(frame: UIScreen.main.bounds)
         
-        // Delegate.
+        // MARK: Controllers init
+        
         self.scheduleViewController = scheduleViewController
+        
+        // MARK: Views init
         
         // The frame is the whole screen.
         self.frame = UIScreen.main.bounds
@@ -50,14 +57,7 @@ class ScheduleDatePickerView: UIView {
         datePicker.layer.masksToBounds = true
     }
     
-    // Customized funcs.
-    func updateValues(scheduleViewController: ScheduleViewController) {
-        self.scheduleViewController = scheduleViewController
-    }
-
-    @objc func datePickerValueChanged() {
-        scheduleViewController.changeSchedule()
-    }
+    // MARK: - UIView funcs
     
     // Taps to make disappear.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -75,5 +75,11 @@ class ScheduleDatePickerView: UIView {
         }) { (view) in
             self.removeFromSuperview()
         }
+    }
+    
+    // MARK: - Customized funcs
+
+    @objc func datePickerValueChanged() {
+        scheduleViewController.changeSchedule()
     }
 }

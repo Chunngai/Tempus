@@ -13,7 +13,8 @@ struct Schedule: Codable {
     var tasks: [Task]
     var committed: Bool?
     
-    // Loading and saving data.
+    // MARK: - Loading and saving data
+    
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
     static func loadSchedule(date: Date) -> Schedule? {

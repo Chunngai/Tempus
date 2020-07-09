@@ -9,7 +9,8 @@
 import UIKit
 
 class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TaskEditingDelegate {
-    // Models.
+    // MARK: - Models
+    
     var schedule: Schedule! {
         didSet {
             // Sorts the schedule.
@@ -32,13 +33,15 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var editable: Bool {
         return (schedule.date >= Date().dateOfCurrentTimeZone()
             || DateInterval(start: schedule.date, end: Date().dateOfCurrentTimeZone()).getComponents([.day]).day! <= 0)
     }
     
-    // Views.
+    // MARK: - Views
+    
     var scheduleTableView: UITableView!
     
     var datePickerView: ScheduleDatePickerView!
@@ -47,7 +50,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var advancementArcLayer = CAShapeLayer()
     
-    // Init.
+    // MARK: Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -68,7 +72,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
     func updateViews() {
         // Bar buttons.
         let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped_))

@@ -10,13 +10,16 @@ import UIKit
 import SnapKit
 
 class ScheduleTableViewCell: UITableViewCell {
-    // Models.
+    // MARK: - Models
+    
     var task: Task!
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var scheduleViewController: ScheduleViewController!
     
-    // Views.
+    // MARK: - Views
+    
     var view = UIView()
     var timeLabel = UILabel()
     var durationLabel = UILabel()
@@ -24,7 +27,8 @@ class ScheduleTableViewCell: UITableViewCell {
         
     var gradientLayer = CAGradientLayer()
     
-    // Initializers.
+    // MARK: - Initializers
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -43,7 +47,8 @@ class ScheduleTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateInitialViews() {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)

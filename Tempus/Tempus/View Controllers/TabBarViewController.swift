@@ -9,17 +9,20 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-    // Controllers.
+    // MARK: - Controllers
+    
     var scheduleNavigationViewController: ScheduleNavigationViewController?
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
     
     var toDoNavigationViewController: ToDoNavigationViewController?
     var toDoViewController = ToDoViewController()
     
-    // Views.
+    // MARK: - Views
+    
     var gradientLayer: CAGradientLayer = CAGradientLayer()
     
-    // Init.
+    // MARK: Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                         

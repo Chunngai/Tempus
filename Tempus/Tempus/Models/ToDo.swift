@@ -12,7 +12,8 @@ struct ToDo: Codable {
     var category: String
     var tasks: [Task]
    
-    // Loading and saving data.
+    // MARK: - Loading and saving data
+    
     static let DocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 
     static func loadToDo() -> [ToDo]? {
@@ -35,15 +36,5 @@ struct ToDo: Codable {
         let propertyListEncoder = PropertyListEncoder()
         let codedToDo = try? propertyListEncoder.encode(toDo)
         try? codedToDo?.write(to: archiveURL, options: .noFileProtection)
-    }
-}
-
-extension Task {
-    var isOverdue: Bool {
-        guard let dateIntervalEnd = self.dateInterval.end else {
-            return false
-        }
-        
-        return dateIntervalEnd < Date().dateOfCurrentTimeZone()
     }
 }

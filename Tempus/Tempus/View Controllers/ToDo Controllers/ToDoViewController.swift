@@ -9,7 +9,8 @@
 import UIKit
 
 class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    // Models
+    // MARK: - Models
+    
     var toDoList: [ToDo]! {
         didSet {
             // Sorts tasks of each category.
@@ -56,10 +57,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    // Views.
+    // MARK: - Views
+    
     var toDoTableView: UITableView?
     
-    // Init.
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -70,7 +73,8 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         Thread.detachNewThreadSelector(#selector(reloadTableView), toTarget: self, with: nil)
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateViews() {
         // Sets the title of the navigation item.
         navigationItem.title = "To Do"

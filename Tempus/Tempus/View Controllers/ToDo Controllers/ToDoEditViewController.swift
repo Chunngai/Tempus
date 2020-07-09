@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 
 class ToDoEditViewController: UIViewController, UITextViewDelegate {
-    // Models
+    // MARK: - Models
+    
     var task: Task!
     
     var oldIdx: (categoryIdx: Int, taskIdx: Int)!
@@ -20,12 +21,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var toDoViewController: ToDoViewController!
         
     var mode: String!
     
-    // Views.
+    // MARK: - Views
+    
     var gradientLayer = CAGradientLayer()
     
     var contentLabel: UILabel!
@@ -43,14 +46,16 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     
     var deleteButton: UIButton!
     
-    // Init.
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateInitialViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateInitialViews() {
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
@@ -213,7 +218,6 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
     }
     
-
     func updateValues(task: Task, toDoViewController: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
         self.task = task
         if task.dateInterval == nil {

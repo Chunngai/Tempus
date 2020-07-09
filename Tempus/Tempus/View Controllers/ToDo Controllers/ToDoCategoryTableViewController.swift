@@ -9,7 +9,8 @@
 import UIKit
 
 class ToDoCategoryTableViewController: UITableViewController {
-    // Models.
+    // MARK: - Models
+    
     var categories: [String] {
         get {
             return toDoEditViewController.toDoViewController.categories
@@ -19,19 +20,22 @@ class ToDoCategoryTableViewController: UITableViewController {
         }
     }
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var toDoEditViewController: ToDoEditViewController!
     
     var tmpCategories: [String]!
     
-    // Init.
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateViews() {
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
@@ -154,6 +158,8 @@ class ToDoCategoryTableViewController: UITableViewController {
         
         return cell
     }
+    
+    // MARK: - Table view delegate
 
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

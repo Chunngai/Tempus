@@ -10,13 +10,15 @@ import UIKit
 import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
-    // Models.
+    // MARK: Models
+    
     var task: Task!
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var toDoViewController: ToDoViewController!
         
-    // Views.
+    // MARK: - Views
     var view = UIView()
     var dateLabel: UILabel!
     var remainingTimeLabel: UILabel!
@@ -24,7 +26,8 @@ class ToDoTableViewCell: UITableViewCell {
     
     var gradientLayer = CAGradientLayer()
     
-    // Initializers.
+    // MARK: - Initializers
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -43,7 +46,8 @@ class ToDoTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateInitialViews() {
         self.selectionStyle = .none
         self.backgroundColor = UIColor.sky.withAlphaComponent(0)

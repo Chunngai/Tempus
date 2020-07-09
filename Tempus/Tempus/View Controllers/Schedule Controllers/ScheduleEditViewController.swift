@@ -9,19 +9,22 @@
 import UIKit
 
 class ScheduleEditViewController: UIViewController, UITextViewDelegate {
-    // Models.
+    // MARK: - Models
+    
     var task: Task!
 
     var initStart: Date!
     var initEnd: Date!
     var initDuration: TimeInterval!
     
-    // Controllers.
+    // MARK: - Controllers
+    
     var scheduleViewController: ScheduleViewController!
     
     var indexCountedFromOne: Int?
 
-    // Views.
+    // MARK: -  Views
+    
     var gradientLayer = CAGradientLayer()
     
     var contentTextView: UITextView!
@@ -39,14 +42,16 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
 
     var deleteButton: UIButton!
       
-    // Init.
+    // MARK: - Init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateInitialViews()
     }
 
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateInitialViews() {
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         

@@ -19,7 +19,8 @@ struct Interval: Equatable, Comparable, Codable {
         }
     }
     
-    // Initializers.
+    // MARK: - Initializers
+    
     init(start: Date, duration: TimeInterval) {
         self.start = start
         self.end = DateInterval(start: start, duration: duration).end
@@ -30,12 +31,12 @@ struct Interval: Equatable, Comparable, Codable {
         self.end = end
     }
     
-    // Equatable protocol.
+    // MARK: - Protocols
+    
     static func == (lhs: Interval, rhs: Interval) -> Bool {
         return (lhs.start == rhs.start && lhs.end == rhs.end)
     }
     
-    // Comparable protocol.
     static func < (lhs: Interval, rhs: Interval) -> Bool {
         if let lhsStart = lhs.start, let rhsStart = rhs.start, lhsStart != rhsStart {
             return lhsStart < rhsStart

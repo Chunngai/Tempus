@@ -9,10 +9,12 @@
 import UIKit
 
 class ToDoCategoryTableViewCell: UITableViewCell {
-    // Views.
+    // MARK: Views
+    
     var textfield = UITextField()
     
-    // Initializers.
+    // MARK: - Initializers
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -31,7 +33,8 @@ class ToDoCategoryTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // Customized funcs.
+    // MARK: - Customized funcs
+    
     func updateInitialViews() {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
         selectionStyle = .none

@@ -14,7 +14,8 @@ struct Task: Equatable, Comparable, Codable {
     var isFinished: Bool!
     var category: String!
     
-    // Initializer.
+    // MARK: - Initializers
+    
     init(content: String? = "", dateInterval: Interval? = Interval(start: nil, end: nil), isFinished: Bool? = false, category: String? = "") {
         self.content = content
         self.dateInterval = dateInterval
@@ -22,7 +23,8 @@ struct Task: Equatable, Comparable, Codable {
         self.category = category
     }
     
-    // Equatable protocol.
+    // MARK: - Protocols
+    
     static func == (lhs: Task, rhs: Task) -> Bool {
         return (
             lhs.content == rhs.content
@@ -31,7 +33,6 @@ struct Task: Equatable, Comparable, Codable {
         )
     }
     
-    // Comparable protocol.
     static func < (lhs: Task, rhs: Task) -> Bool {
         if lhs.isFinished && !rhs.isFinished {
             return false
@@ -40,6 +41,16 @@ struct Task: Equatable, Comparable, Codable {
         } else {
             return lhs.dateInterval < rhs.dateInterval
         }
+    }
+}
+
+extension Task {
+    var isOverdue: Bool {
+        guard let dateIntervalEnd = self.dateInterval.end else {
+            return false
+        }
+        
+        return dateIntervalEnd < Date().dateOfCurrentTimeZone()
     }
 }
 
