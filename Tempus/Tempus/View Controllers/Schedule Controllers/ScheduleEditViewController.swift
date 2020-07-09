@@ -241,7 +241,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        task.dateInterval = Interval(start: startPicker.date.dateOfCurrentTimeZone(), end: endPicker.date.dateOfCurrentTimeZone())
+        task.dateInterval = Interval(start: startPicker.date.currentTimeZone(), end: endPicker.date.currentTimeZone())
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false
 
@@ -281,28 +281,28 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func startPickerValueChanged() {
-        startButton.setTitle(startPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
+        startButton.setTitle(startPicker.date.currentTimeZone().formattedTime(), for: .normal)
         
         endPicker.setDate(Date(timeInterval: durationPicker.countDownDuration, since: startPicker.date), animated: true)
-        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.currentTimeZone().formattedTime(), for: .normal)
     }
 
     @objc func durationPickerValueChanged() {
         durationButton.setTitle(durationPicker.countDownDuration.formattedDuration(), for: .normal)
         
         endPicker.setDate(Date(timeInterval: durationPicker.countDownDuration, since: startPicker.date), animated: true)
-        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.currentTimeZone().formattedTime(), for: .normal)
     }
     
     @objc func endPickerValueChanged() {
-        endButton.setTitle(endPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
+        endButton.setTitle(endPicker.date.currentTimeZone().formattedTime(), for: .normal)
         
         if startPicker.date < endPicker.date {
             durationPicker.setValue(DateInterval(start: startPicker.date, end: endPicker.date).duration, forKeyPath: "countDownDuration")
             durationButton.setTitle(durationPicker.countDownDuration.formattedDuration(), for: .normal)
         } else {
             startPicker.setDate(endPicker.date - durationPicker.countDownDuration, animated: true)
-            startButton.setTitle(startPicker.date.dateOfCurrentTimeZone().formattedTime(), for: .normal)
+            startButton.setTitle(startPicker.date.currentTimeZone().formattedTime(), for: .normal)
         }
     }
     
@@ -316,9 +316,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         timePickers[buttonIdx].isHidden = false
         timeButtons[buttonIdx].setTitleColor(timePickers[buttonIdx].isHidden ? .lightText : .white, for: .normal)
         
-        timeButtons[0].setTitle("\(timePickers[0].date.dateOfCurrentTimeZone().formattedTime())", for: .normal)
+        timeButtons[0].setTitle("\(timePickers[0].date.currentTimeZone().formattedTime())", for: .normal)
         timeButtons[1].setTitle("\(timePickers[1].countDownDuration.formattedDuration())", for: .normal)
-        timeButtons[2].setTitle("\(timePickers[2].date.dateOfCurrentTimeZone().formattedTime())", for: .normal)
+        timeButtons[2].setTitle("\(timePickers[2].date.currentTimeZone().formattedTime())", for: .normal)
     }
 
     @objc func deleteButtonTapped() {

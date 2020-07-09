@@ -117,7 +117,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
-        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)),
+        toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().currentTimeZone(), duration: 3600)),
                                             toDoViewController: self,
                                             mode: "a",
                                             oldIdx: nil)
@@ -214,11 +214,11 @@ extension Array where Element == ToDo {
                 if task.isOverdue {
                     count += 1
                 } else {
-                    if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start,  // Before start.
-                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                    if let start = task.dateInterval.start, Date().currentTimeZone() < start,  // Before start.
+                        DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
                             count += 1
-                    } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due,  // Before end.
-                        DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+                    } else if let due = task.dateInterval.end, Date().currentTimeZone() < due,  // Before end.
+                        DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
                             count += 1
                     }
                 }

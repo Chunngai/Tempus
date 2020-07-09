@@ -162,10 +162,10 @@ class ToDoTableViewCell: UITableViewCell {
         if task.isOverdue {
             return "Overdue"
         } else {
-            if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start {  // Start provided.
-                return DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).formatted(omitZero: true)
-            } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due {  // Due provided.
-                return DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).formatted(omitZero: true)
+            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Start provided.
+                return DateInterval(start: Date().currentTimeZone(), end: start).formatted(omitZero: true)
+            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Due provided.
+                return DateInterval(start: Date().currentTimeZone(), end: due).formatted(omitZero: true)
             } else {  // Neither provided.
                 return ""
             }
@@ -176,14 +176,14 @@ class ToDoTableViewCell: UITableViewCell {
         if task.isOverdue {
             return .yellow
         } else {
-            if let start = task.dateInterval.start, Date().dateOfCurrentTimeZone() < start {  // Before start.
-                if DateInterval(start: Date().dateOfCurrentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Before start.
+                if DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
                     return .orange
                 } else {  // More than 3 days.
                     return .lightText
                 }
-            } else if let due = task.dateInterval.end, Date().dateOfCurrentTimeZone() < due {  // Before end.
-                if DateInterval(start: Date().dateOfCurrentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Before end.
+                if DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
                     return .red
                 } else if task.dateInterval.start != nil {  // Doing.
                     return .purple

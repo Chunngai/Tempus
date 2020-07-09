@@ -22,7 +22,7 @@ struct ToDo: Codable {
         guard let codedToDo = try? Data(contentsOf: archiveURL) else {
             return [ToDo(category: "Default",
                          tasks: [Task(content: "default task",
-                                      dateInterval: Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600),
+                                      dateInterval: Interval(start: Date().currentTimeZone(), duration: 3600),
                                       isFinished: false,
                                       category: "Default")])]
         }

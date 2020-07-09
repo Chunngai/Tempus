@@ -50,7 +50,7 @@ extension Task {
             return false
         }
         
-        return dateIntervalEnd < Date().dateOfCurrentTimeZone()
+        return dateIntervalEnd < Date().currentTimeZone()
     }
 }
 
@@ -70,7 +70,7 @@ extension Date {
         self = Calendar.current.date(from: dateComponents)!  // Timezone of the date generated is according to the system.
     }
     
-    func dateOfCurrentTimeZone() -> Date {
+    func currentTimeZone() -> Date {
         return Date(timeInterval: TimeInterval.secondsOfCurrentTimeZoneFromGMT, since: self)
     }
 }

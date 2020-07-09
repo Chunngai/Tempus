@@ -36,8 +36,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - Controllers
     
     var editable: Bool {
-        return (schedule.date >= Date().dateOfCurrentTimeZone()
-            || DateInterval(start: schedule.date, end: Date().dateOfCurrentTimeZone()).getComponents([.day]).day! <= 0)
+        return (schedule.date >= Date().currentTimeZone()
+            || DateInterval(start: schedule.date, end: Date().currentTimeZone()).getComponents([.day]).day! <= 0)
     }
     
     // MARK: - Views
@@ -57,19 +57,10 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
         updateViews()
         
-        schedule = Schedule.loadSchedule(date: Date().dateOfCurrentTimeZone())
+        schedule = Schedule.loadSchedule(date: Date().currentTimeZone())
         
         Thread.detachNewThreadSelector(#selector(checkEditabilityThread), toTarget: self, with: nil)
         Thread.detachNewThreadSelector(#selector(checkGithubCommitsThread), toTarget: self, with: nil)
-    }
-    
-    @objc func dateBarButtonTapped_() {
-        datePickerView = ScheduleDatePickerView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
-                                                                        y: navigationController!.navigationBar.bounds.height,
-                                                                        width: UIScreen.main.bounds.width/1.5,
-                                                                        height: UIScreen.main.bounds.height/3.5),
-                                                scheduleViewController: self)
-        UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
     
     // MARK: - Customized funcs
@@ -107,6 +98,15 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         scheduleTableView.estimatedRowHeight = 130
         scheduleTableView.rowHeight = UITableView.automaticDimension
+    }
+    
+    @objc func dateBarButtonTapped_() {
+        datePickerView = ScheduleDatePickerView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
+                                                                        y: navigationController!.navigationBar.bounds.height,
+                                                                        width: UIScreen.main.bounds.width/1.3,
+                                                                        height: UIScreen.main.bounds.height/3.5),
+                                                scheduleViewController: self)
+        UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
     
     @objc func checkGithubCommits() {
@@ -172,7 +172,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         Schedule.saveSchedule(schedule)
         
         // Gets the schedule of the selected date.
-        let selectedDate = datePickerView.datePicker.date.dateOfCurrentTimeZone()
+        let selectedDate = datePickerView.datePicker.date.currentTimeZone()
         schedule = Schedule.loadSchedule(date: selectedDate)!
 
         // Reloads the table.
@@ -192,11 +192,11 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
             initDuration = latestTask.dateInterval.duration!
             initEnd = Date(timeInterval: initDuration, since: initStart)
         } else {
-            if Date().dateOfCurrentTimeZone() < schedule.date {  // More likely to plan for the next day.
-                initStart = Date(hour: 8, minute: 30).dateOfCurrentTimeZone()
+            if Date().currentTimeZone() < schedule.date {  // More likely to plan for the next day.
+                initStart = Date(hour: 8, minute: 30).currentTimeZone()
             } else {  // More likely to plan for the current day.
-                let components = Date().dateOfCurrentTimeZone().getComponents([.hour, .minute])
-                initStart = Date(hour: components.hour!, minute: components.minute!).dateOfCurrentTimeZone()
+                let components = Date().currentTimeZone().getComponents([.hour, .minute])
+                initStart = Date(hour: components.hour!, minute: components.minute!).currentTimeZone()
             }
             initDuration = 2400
             initEnd = Date(timeInterval: initDuration, since: initStart)

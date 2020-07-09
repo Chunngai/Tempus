@@ -221,7 +221,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     func updateValues(task: Task, toDoViewController: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
         self.task = task
         if task.dateInterval == nil {
-            self.task.dateInterval = Interval(start: Date().dateOfCurrentTimeZone(), duration: 3600)
+            self.task.dateInterval = Interval(start: Date().currentTimeZone(), duration: 3600)
         }
         
         self.toDoViewController = toDoViewController
@@ -236,7 +236,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         fromDatePicker.isHidden.toggle()
         if !fromDatePicker.isHidden {
-            fromButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+            fromButton.setTitle("\(fromDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
             toDatePicker.isHidden = true
         } else {
             fromButton.setTitle("--/-- --:--", for: .normal)
@@ -249,7 +249,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         toDatePicker.isHidden.toggle()
         if !toDatePicker.isHidden {
-            toButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+            toButton.setTitle("\(toDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
             fromDatePicker.isHidden = true
         } else {
             toButton.setTitle("--/-- --:--", for: .normal)
@@ -257,18 +257,18 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func fromPickerValueChanged() {
-        fromButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+        fromButton.setTitle("\(fromDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
         if fromDatePicker.date > toDatePicker.date {
             toDatePicker.setDate(fromDatePicker.date, animated: true)
-            toButton.setTitle("\(fromDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+            toButton.setTitle("\(fromDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
         }
     }
     
     @objc func toPickerValueChanged() {
-        toButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+        toButton.setTitle("\(toDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
         if fromDatePicker.date > toDatePicker.date {
             fromDatePicker.setDate(toDatePicker.date, animated: true)
-            fromButton.setTitle("\(toDatePicker.date.dateOfCurrentTimeZone().formattedDateAndTime())", for: .normal)
+            fromButton.setTitle("\(toDatePicker.date.currentTimeZone().formattedDateAndTime())", for: .normal)
         }
     }
     
@@ -290,8 +290,8 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         }
         
         self.task.content = contentTextView.text
-        self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == "--/-- --:--" ? nil : fromDatePicker.date.dateOfCurrentTimeZone(),
-                                          end: toButton.title(for: .normal) == "--/-- --:--" ? nil : toDatePicker.date.dateOfCurrentTimeZone())
+        self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == "--/-- --:--" ? nil : fromDatePicker.date.currentTimeZone(),
+                                          end: toButton.title(for: .normal) == "--/-- --:--" ? nil : toDatePicker.date.currentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
         self.task.category = toDoViewController.categories[currentIdx]
 
