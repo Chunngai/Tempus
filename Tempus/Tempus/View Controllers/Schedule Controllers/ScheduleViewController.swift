@@ -41,9 +41,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     // Views.
     var scheduleTableView: UITableView!
     
-    var dateButton = UIButton()
     var datePickerView: ScheduleDatePickerView!
-    var datePickerViewDisplayed = false
     
     var committedBarButton: UIBarButtonItem!
     
@@ -61,10 +59,19 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         Thread.detachNewThreadSelector(#selector(checkGithubCommitsThread), toTarget: self, with: nil)
     }
     
+    @objc func dateBarButtonTapped_() {
+        datePickerView = ScheduleDatePickerView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
+                                                                        y: navigationController!.navigationBar.bounds.height,
+                                                                        width: UIScreen.main.bounds.width/1.5,
+                                                                        height: UIScreen.main.bounds.height/3.5),
+                                                scheduleViewController: self)
+        UIApplication.shared.windows.last?.addSubview(datePickerView)
+    }
+    
     // Customized funcs.
     func updateViews() {
         // Bar buttons.
-        let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped))
+        let dateBarButton = UIBarButtonItem(title: "Date", style: .plain, target: self, action: #selector(dateBarButtonTapped_))
         dateBarButton.tintColor = .white
 
         committedBarButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(checkGithubCommits))
@@ -75,7 +82,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addBarButton.tintColor = .white
         navigationItem.rightBarButtonItem = addBarButton
-        
+                
         // Table view.
         scheduleTableView = UITableView(frame:
             CGRect(
@@ -96,16 +103,6 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         scheduleTableView.estimatedRowHeight = 130
         scheduleTableView.rowHeight = UITableView.automaticDimension
-                
-        // Date picker.
-        datePickerView = ScheduleDatePickerView(frame: CGRect(
-            x: 0,
-            y: UIScreen.main.bounds.height,
-            width: UIScreen.main.bounds.width,
-            height: UIScreen.main.bounds.height * 0.5))
-        view.addSubview(datePickerView)
-        
-        datePickerView.updateValues(scheduleViewController: self)
     }
     
     @objc func checkGithubCommits() {
@@ -179,20 +176,6 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Sees if it is editable.
         verifyEditability()
-    }
-    
-    @objc func dateBarButtonTapped() {
-        if !datePickerViewDisplayed {
-            UIView.animate(withDuration: 0.3) {
-                self.datePickerView.transform = CGAffineTransform(translationX: 0, y: -UIScreen.main.bounds.height * 0.4)
-            }
-        } else {
-            UIView.animate(withDuration: 0.3) {
-                self.datePickerView.transform = CGAffineTransform(translationX: 0, y: +UIScreen.main.bounds.height * 0.4)
-            }
-        }
-        
-        datePickerViewDisplayed.toggle()
     }
     
     @objc func presentAddingView() {
