@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ToDoCategoryNavigationViewController: UINavigationController {
+class ToDoEditCategoryNavigationViewController: UINavigationController {
 
     // Views.
     var gradientLayer = CAGradientLayer()

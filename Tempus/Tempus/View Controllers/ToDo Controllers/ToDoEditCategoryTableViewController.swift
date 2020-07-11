@@ -13,10 +13,10 @@ class ToDoCategoryTableViewController: UITableViewController {
     
     var categories: [String] {
         get {
-            return toDoEditViewController.toDoViewController.categories
+            return toDoEditViewController.toDoViewController.toDoList.categories
         }
         set {
-            toDoEditViewController.toDoViewController.categories = newValue
+            toDoEditViewController.toDoViewController.toDoList.categories = newValue
         }
     }
     
