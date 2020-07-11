@@ -21,6 +21,7 @@ class ScheduleDatePickerView: UIView {
     
     var contentView: UIView!
     
+    var todayButton = UIButton()
     var datePicker = UIDatePicker()
     
     // MARK: - Initializers
@@ -52,6 +53,18 @@ class ScheduleDatePickerView: UIView {
                                      endPoint: CGPoint(x: 1, y: 0),
                                      frame: contentView.bounds)
         
+        // Today button.
+        contentView.addSubview(todayButton)
+        todayButton.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
+        
+        todayButton.setTitle("Today", for: .normal)
+        todayButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+            
+        todayButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(3)
+        }
+        
         // Date picker.
         contentView.addSubview(datePicker)
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
@@ -60,10 +73,10 @@ class ScheduleDatePickerView: UIView {
         datePicker.date = date
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
-        
+                        
         datePicker.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(20)
-            make.top.bottom.equalToSuperview().inset(3)
+            make.top.equalTo(todayButton).inset(35)
         }
     }
     
@@ -89,6 +102,11 @@ class ScheduleDatePickerView: UIView {
     
     // MARK: - Customized funcs
 
+    @objc func todayButtonTapped() {
+        datePicker.date = Date().currentTimeZone()
+        scheduleViewController.changeSchedule()
+    }
+    
     @objc func datePickerValueChanged() {
         scheduleViewController.changeSchedule()
     }

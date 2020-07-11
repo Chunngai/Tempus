@@ -103,8 +103,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     @objc func dateBarButtonTapped_() {
         datePickerView = ScheduleDatePickerView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
                                                                         y: navigationController!.navigationBar.bounds.height,
-                                                                        width: UIScreen.main.bounds.width/1.3,
-                                                                        height: UIScreen.main.bounds.height/3.5),
+                                                                        width: UIScreen.main.bounds.width / 1.3,
+                                                                        height: UIScreen.main.bounds.height / 3),
                                                 scheduleViewController: self,
                                                 date: schedule.date)
         UIApplication.shared.windows.last?.addSubview(datePickerView)
