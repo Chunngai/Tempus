@@ -78,10 +78,14 @@ class ToDoTableViewCell: UITableViewCell {
                               startPoint: CGPoint(x: 0, y: 1),
                               endPoint: CGPoint(x: 1, y: 1),
                               frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-
+        
         // Long press to edit.
         let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
         view.addGestureRecognizer(longPressedGestureRecognizer)
+        
+        // Taps to toggle finish status.
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func updateValues(task: Task, toDoViewController: ToDoViewController) {
@@ -135,6 +139,10 @@ class ToDoTableViewCell: UITableViewCell {
         
         // Content label.
         contentLabel.text = task.content
+    }
+    
+    @objc func viewTapped() {
+        toDoViewController.toggleFinishStatus(task: task)
     }
     
     @objc func viewLongPressed() {

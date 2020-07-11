@@ -1,0 +1,272 @@
+//
+//  ToDoCategoryTableViewController.swift
+//  Tempus
+//
+//  Created by Sola on 2020/6/14.
+//  Copyright © 2020 Sola. All rights reserved.
+//
+
+import UIKit
+
+class ToDoCategoryTableViewController: UITableViewController {
+    // MARK: - Models
+    
+    var categories: [String] {
+        get {
+            return toDoViewController.toDoList.categories
+        }
+        set {
+            toDoViewController.toDoList.categories = newValue
+        }
+    }
+    
+    // MARK: - Controllers
+    
+    var toDoViewController: ToDoViewController!
+    
+    var originalCategories: [String]!
+    
+    // MARK: - Init
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        updateViews()
+    }
+    
+    // MARK: - Customized funcs
+    
+    func updateViews() {
+        view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
+        
+        // Title of navigation item.
+        navigationItem.title = "Categories"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped))
+        
+        tableView.register(ToDoCategoryTableViewCell.classForCoder(), forCellReuseIdentifier: "toDoCategoryTableViewCell")
+    }
+    
+    func updateValues(toDoViewController: ToDoViewController) {
+        self.toDoViewController = toDoViewController
+        
+        originalCategories = categories
+    }
+    
+    @objc func editButtonTapped() {
+        // Enables editing.
+        isEditing = true
+        
+        // Changes bar button items.
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        
+        // Reloads the table.
+        tableView.reloadData()
+    }
+    
+    func emptyCategoriesAlert() {
+        let alertController = UIAlertController(title: "Error", message: "Categories cannot be empty.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func repeatedCategoriesAlert() {
+        let alertController = UIAlertController(title: "Error", message: "Categorys cannot be repeated.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func notEmptyCategoryDeletionAlert() {
+        let alertController = UIAlertController(title: "Error", message: "The category is not empty. Cannot be deleted.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func doneButtonTapped() {
+        for i in 0..<categories.count {
+            if let cell = (tableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
+                let category = cell.textfield.text!
+                
+                // Sees if the category name is not empty.
+                if category.trimmingCharacters(in: CharacterSet(charactersIn: " ")) == "" || category.isEmpty {
+                    emptyCategoriesAlert()
+                    return
+                }
+                
+                categories[i] = category
+            }
+        }
+        
+        // Repeated category name not allowed.
+        if categories.count != Set(categories).count {
+            repeatedCategoriesAlert()
+            return
+        }
+        
+        // Empty category name not allowed.
+        if categories.isEmpty {
+            categories = ["Default"]
+        }
+        
+        // Disables editing.
+        isEditing = false
+        
+        // Changes bar button items.
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped))
+    
+        originalCategories = categories
+        
+        // Reloads the table.
+        tableView.reloadData()
+    }
+    
+    @objc func cancelButtonTapped() {
+        // Disables editing.
+        isEditing = false
+        
+        // Changes bar button items.
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped))
+        
+        // Rolls back.
+        categories = originalCategories
+        
+        // Reloads the table.
+        tableView.reloadData()
+    }
+
+    // MARK: - Table view data source
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {  // Normal categories.
+            return categories.count
+        } else if section == 1 {  // Add button.
+            return 1
+        } else {
+            return 3
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = ToDoCategoryTableViewCell()
+        
+        if indexPath.section == 0 {  // Normal categories.
+            cell.updateValues(text: categories[indexPath.row], taskNumber: toDoViewController.toDoList[indexPath.row].unfinishedTasks.count)
+            cell.textfield.isEnabled = isEditing ? true : false
+        } else if indexPath.section == 1 {  // Add button.
+            if isEditing {
+                cell.updateValues(text: "Add a new category")
+            }
+            cell.textfield.isEnabled = false
+        } else {
+            switch indexPath.row {
+            case 0:  // Emergent tasks
+                cell.updateValues(text: "Emergent", taskNumber: toDoViewController.toDoList.emergentTaskNumber)
+            case 1:  // All tasks
+                cell.updateValues(text: "Unfinished", taskNumber: toDoViewController.toDoList.unfinishedTaskNumber)
+            case 2:  // Histories
+                cell.updateValues(text: "Finished", taskNumber: toDoViewController.toDoList.finishedTaskNumber)
+            default:
+                break
+            }
+            cell.textfield.isEnabled = false
+        }
+        
+        return cell
+    }
+    
+    // MARK: - Table view delegate
+
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section != 2 ? true : false
+    }
+
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textfield.text!
+            if categories.contains(category) {
+                let idx = toDoViewController.toDoList.getCategoryIdx(category: category)
+                if !toDoViewController.toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
+                    notEmptyCategoryDeletionAlert()
+                    return
+                }
+            }
+            
+            categories.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            originalCategories = categories
+        } else if editingStyle == .insert {
+            categories.append("")
+            tableView.insertRows(at: [IndexPath(row: categories.count - 1, section: 0)], with: .automatic)
+        }    
+    }
+    
+    // Editing style.
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.section == 0 {  // Normal categories.
+            return .delete
+        } else if indexPath.section == 1 {  // Add button.
+            return .insert
+        } else {
+            return .none
+        }
+    }
+
+    // When a category is tapped.
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            toDoViewController.displayingCategory = categories[indexPath.row]
+            toDoViewController.navigationItem.title = categories[indexPath.row]
+        } else if indexPath.section == 2 {
+            switch indexPath.row {
+            case 0:
+                toDoViewController.displayingCategory = "emergent"
+                toDoViewController.navigationItem.title = "Emergent"
+            case 1:
+                toDoViewController.displayingCategory = "unfinished"
+                toDoViewController.navigationItem.title = "Unfinished"
+            case 2:
+                toDoViewController.displayingCategory = "finished"
+                toDoViewController.navigationItem.title = "Finished"
+            default:
+                break
+            }
+        }
+        
+        toDoViewController.dismiss(animated: true, completion: nil)
+    }
+
+    // Override to support conditional rearranging of the table view.
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == 0 ? true : false
+    }
+}
+
+extension Array where Element == ToDo {
+    var unfinishedTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            count += toDo.unfinishedTasks.count
+        }
+        return count
+    }
+    
+    var finishedTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            count += toDo.finishedTasks.count
+        }
+        return count
+    }
+}

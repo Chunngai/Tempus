@@ -36,7 +36,7 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().offset(0)
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(10)
         }
         
         // Section name label.

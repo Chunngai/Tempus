@@ -18,7 +18,8 @@
 		FF42EF7E24B9751A0067CA3E /* ToDoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF7D24B9751A0067CA3E /* ToDoHeaderView.swift */; };
 		FF42EF8424B975850067CA3E /* ToDoCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8324B975850067CA3E /* ToDoCategoryTableViewCell.swift */; };
 		FF42EF8624B975B90067CA3E /* ToDoCategoryNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */; };
-		FF4812D42495841300682A99 /* ToDoCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812D32495841300682A99 /* ToDoCategoryTableViewController.swift */; };
+		FF42EF8824B97E650067CA3E /* ToDoCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8724B97E650067CA3E /* ToDoCategoryTableViewController.swift */; };
+		FF4812D42495841300682A99 /* ToDoEditCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812D32495841300682A99 /* ToDoEditCategoryTableViewController.swift */; };
 		FF4812DF24958DD100682A99 /* ToDoNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */; };
 		FF4812E124958DF600682A99 /* ToDoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812E024958DF600682A99 /* ToDoEditViewController.swift */; };
 		FF4BAFE7248A959200F536CC /* ScheduleDatePickerPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE6248A959200F536CC /* ScheduleDatePickerPopView.swift */; };
@@ -80,7 +81,8 @@
 		FF42EF7D24B9751A0067CA3E /* ToDoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoHeaderView.swift; sourceTree = "<group>"; };
 		FF42EF8324B975850067CA3E /* ToDoCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryTableViewCell.swift; sourceTree = "<group>"; };
 		FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryNavigationViewController.swift; sourceTree = "<group>"; };
-		FF4812D32495841300682A99 /* ToDoCategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCategoryTableViewController.swift; sourceTree = "<group>"; };
+		FF42EF8724B97E650067CA3E /* ToDoCategoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryTableViewController.swift; sourceTree = "<group>"; };
+		FF4812D32495841300682A99 /* ToDoEditCategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditCategoryTableViewController.swift; sourceTree = "<group>"; };
 		FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoNavigationViewController.swift; sourceTree = "<group>"; };
 		FF4812E024958DF600682A99 /* ToDoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditViewController.swift; sourceTree = "<group>"; };
 		FF4BAFE6248A959200F536CC /* ScheduleDatePickerPopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleDatePickerPopView.swift; sourceTree = "<group>"; };
@@ -165,10 +167,11 @@
 			children = (
 				FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */,
 				FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */,
+				FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */,
+				FF42EF8724B97E650067CA3E /* ToDoCategoryTableViewController.swift */,
 				FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */,
 				FF4812E024958DF600682A99 /* ToDoEditViewController.swift */,
-				FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */,
-				FF4812D32495841300682A99 /* ToDoCategoryTableViewController.swift */,
+				FF4812D32495841300682A99 /* ToDoEditCategoryTableViewController.swift */,
 			);
 			path = "ToDo Controllers";
 			sourceTree = "<group>";
@@ -361,11 +364,12 @@
 				FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */,
 				FFBF90D6242117FC00313C7D /* ScheduleViewController.swift in Sources */,
 				FF4812E124958DF600682A99 /* ToDoEditViewController.swift in Sources */,
+				FF42EF8824B97E650067CA3E /* ToDoCategoryTableViewController.swift in Sources */,
 				FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */,
 				FF3CA8202430EAD60054BB49 /* ScheduleEditViewController.swift in Sources */,
 				FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */,
 				FFBF90D42421173600313C7D /* ScheduleNavigationViewController.swift in Sources */,
-				FF4812D42495841300682A99 /* ToDoCategoryTableViewController.swift in Sources */,
+				FF4812D42495841300682A99 /* ToDoEditCategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

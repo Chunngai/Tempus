@@ -12,6 +12,7 @@ class ToDoCategoryTableViewCell: UITableViewCell {
     // MARK: Views
     
     var textfield = UITextField()
+    var taskNumberLabel = UILabel()
     
     // MARK: - Initializers
     
@@ -47,11 +48,25 @@ class ToDoCategoryTableViewCell: UITableViewCell {
         textfield.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(15)
-            make.width.equalToSuperview()
+            make.width.equalTo(UIScreen.main.bounds.width * 0.8)  // Without it new categories cannnot be editted.
+        }
+        
+        // Task number.
+        contentView.addSubview(taskNumberLabel)
+        
+        taskNumberLabel.textColor = .white
+        
+        taskNumberLabel.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(20)
+            make.top.equalTo(textfield.snp.top)
         }
     }
     
-    func updateValues(text: String) {
+    func updateValues(text: String, taskNumber: Int? = nil) {
         textfield.text = text
+        
+        if let taskNumber = taskNumber {
+            taskNumberLabel.text = String(taskNumber)
+        }
     }
 }

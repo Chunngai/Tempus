@@ -22,37 +22,19 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             // Badge.
             let toDoItem = tabBarController?.tabBar.items![1]
-            if self.toDoList.emergentTaskNumber > 1 {
+            if self.toDoList.emergentTaskNumber > 0 {
                 toDoItem?.badgeValue = String(self.toDoList.emergentTaskNumber)
             } else {
                 toDoItem?.badgeValue = nil
             }
+            
+            self.toDoTableView?.reloadData()
         }
     }
     
-    var categories: [String] {
-        get {
-            // Gets all categories from the todo list.
-            var categoryList: [String] = []
-            for todo in toDoList {
-                categoryList.append(todo.category)
-            }
-            
-            return categoryList
-        }
-        set {
-            var newToDoList: [ToDo] = []
-            for category in newValue {
-                var toDo = ToDo(category: category, tasks: [])
-                if self.categories.contains(category) {  // The category originally exists.
-                    let categoryIdx = self.toDoList.getCategoryIdx(category: category)
-                    toDo.tasks = toDoList[categoryIdx].tasks
-                }
-                newToDoList.append(toDo)
-            }
-            
-            toDoList = newToDoList
-            
+    // MARK: - Controllers.
+    var displayingCategory: String = "unfinished" {
+        didSet {
             toDoTableView?.reloadData()
         }
     }
@@ -80,6 +62,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationItem.title = "To Do"
         
         // Nav item buttons.
+        let categoryButton = UIBarButtonItem(title: "☆", style: .plain, target: self, action: #selector(categoryButtonTapped))
+        categoryButton.tintColor = .white
+        navigationItem.leftBarButtonItem = categoryButton
+        
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
         addButton.tintColor = .white
         navigationItem.rightBarButtonItem = addButton
@@ -115,6 +101,13 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
          }
      }
     
+    @objc func categoryButtonTapped() {
+        let toDoCategoryTableViewController = ToDoCategoryTableViewController()
+        toDoCategoryTableViewController.updateValues(toDoViewController: self)
+
+        navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
+    }
+    
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
         toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().currentTimeZone(), duration: 3600)),
@@ -140,6 +133,16 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
+    func toggleFinishStatus(task: Task) {
+        for i in 0..<toDoList.count {
+            if let idx = toDoList[i].tasks.firstIndex(of: task) {
+                toDoList[i].tasks[idx].isFinished.toggle()
+                
+                break
+            }
+        }
+    }
+    
     func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
         if mode == "a" {  // Append.
             let categoryIdx = toDoList.getCategoryIdx(category: task.category)
@@ -159,17 +162,42 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return toDoList.count
+        switch displayingCategory {
+        case "emergent", "unfinished", "finished":
+            return toDoList.count
+        default:
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoList[section].tasks.count
+        switch displayingCategory {
+        case "emergent":
+            return toDoList[section].emergentTasks.count
+        case "unfinished":
+            return toDoList[section].unfinishedTasks.count
+        case "finished":
+            return toDoList[section].finishedTasks.count
+        default:
+            return toDoList[toDoList.getCategoryIdx(category: displayingCategory)].unfinishedTasks.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ToDoTableViewCell()
         
-        cell.updateValues(task: toDoList[indexPath.section].tasks[indexPath.row], toDoViewController: self)
+        var task: Task
+        switch displayingCategory {
+        case "emergent":
+            task = toDoList[indexPath.section].emergentTasks[indexPath.row]
+        case "unfinished":
+            task = toDoList[indexPath.section].unfinishedTasks[indexPath.row]
+        case "finished":
+            task = toDoList[indexPath.section].finishedTasks[indexPath.row]
+        default:
+            task = toDoList[toDoList.getCategoryIdx(category: displayingCategory)].unfinishedTasks[indexPath.row]
+        }
+        cell.updateValues(task: task, toDoViewController: self)
 
         return cell
     }
@@ -179,16 +207,39 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = ToDoHeaderView()
         
-        headerView.updateValues(sectionName: toDoList[section].category)
+        var sectionName: String
+        switch displayingCategory {
+        case "emergent", "unfinished", "finished":
+            sectionName = toDoList[section].category
+        default:
+            sectionName = displayingCategory
+        }
+        headerView.updateValues(sectionName: sectionName)
     
         return headerView
     }
     
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if toDoList[section].tasks.isEmpty {
-            return 0
+        switch displayingCategory {
+        case "emergent":
+            if toDoList[section].emergentTasks.count == 0 {
+                return 0
+            }
+        case "unfinished":
+            if toDoList[section].unfinishedTasks.count == 0 {
+                return 0
+            }
+        case "finished":
+            if toDoList[section].finishedTasks.count == 0 {
+                return 0
+            }
+        default:
+            if toDoList[section].tasks.isEmpty {
+                return 0
+            }
         }
+        
         return tableView.sectionHeaderHeight
     }
     
@@ -199,10 +250,85 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if toDoList[section].tasks.isEmpty {
-            return 0
+        switch displayingCategory {
+        case "emergent":
+            if toDoList[section].emergentTasks.count == 0 {
+                return 0
+            }
+        case "unfinished":
+            if toDoList[section].unfinishedTasks.count == 0 {
+                return 0
+            }
+        case "finished":
+            if toDoList[section].finishedTasks.count == 0 {
+                return 0
+            }
+        default:
+            if toDoList[section].tasks.isEmpty {
+                return 0
+            }
         }
+        
         return tableView.sectionFooterHeight
+    }
+}
+
+extension Task {
+    var isEmergent: Bool {
+        if isFinished {
+            return false
+        }
+        
+        if self.isOverdue {
+            return true
+        }
+                
+        if let start = dateInterval.start, Date().currentTimeZone() < start,  // Before start.
+            DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+            return true
+        }
+        
+        if let due = dateInterval.end, Date().currentTimeZone() < due,  // Before end.
+            DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+            return true
+        }
+        
+        return false
+    }
+}
+
+extension ToDo {
+    var emergentTasks: [Task] {
+        var emergentTasks: [Task] = []
+        for task in self.tasks {
+            if task.isEmergent {
+                emergentTasks.append(task)
+            }
+        }
+        
+        return emergentTasks
+    }
+    
+    var unfinishedTasks: [Task] {
+        var unfinishedTasks: [Task] = []
+        for task in self.tasks {
+            if !task.isFinished {
+                unfinishedTasks.append(task)
+            }
+        }
+        
+        return unfinishedTasks
+    }
+    
+    var finishedTasks: [Task] {
+        var finishedTasks: [Task] = []
+        for task in self.tasks {
+            if task.isFinished {
+                finishedTasks.append(task)
+            }
+        }
+        
+        return finishedTasks
     }
 }
 
@@ -210,22 +336,35 @@ extension Array where Element == ToDo {
     var emergentTaskNumber: Int {
         var count = 0
         for toDo in self {
-            for task in toDo.tasks {
-                if task.isOverdue {
-                    count += 1
-                } else {
-                    if let start = task.dateInterval.start, Date().currentTimeZone() < start,  // Before start.
-                        DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                            count += 1
-                    } else if let due = task.dateInterval.end, Date().currentTimeZone() < due,  // Before end.
-                        DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                            count += 1
-                    }
-                }
-            }
+            count += toDo.emergentTasks.count
         }
         
         return count
+    }
+    
+    var categories: [String] {
+        get {
+            // Gets all categories from the todo list.
+            var categoryList: [String] = []
+            for todo in self {
+                categoryList.append(todo.category)
+            }
+            
+            return categoryList
+        }
+        set {
+            var newToDoList: [ToDo] = []
+            for category in newValue {
+                var toDo = ToDo(category: category, tasks: [])
+                if self.categories.contains(category) {  // The category originally exists.
+                    let categoryIdx = self.getCategoryIdx(category: category)
+                    toDo.tasks = self[categoryIdx].tasks
+                }
+                newToDoList.append(toDo)
+            }
+            
+            self = newToDoList
+        }
     }
     
     func getCategoryIdx(category: String) -> Int {

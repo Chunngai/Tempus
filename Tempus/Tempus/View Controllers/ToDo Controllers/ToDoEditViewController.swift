@@ -17,7 +17,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var oldIdx: (categoryIdx: Int, taskIdx: Int)!
     var currentIdx: Int! {
         didSet {
-            categoryButton.setTitle(toDoViewController.categories[self.currentIdx], for: .normal)
+            categoryButton.setTitle(toDoViewController.toDoList.categories[self.currentIdx], for: .normal)
         }
     }
     
@@ -188,7 +188,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         
         if mode == "a" {
             currentIdx = 0
-            categoryButton.setTitle(toDoViewController.categories[0], for: .normal)
+            categoryButton.setTitle(toDoViewController.toDoList.categories[0], for: .normal)
         } else {
             currentIdx = toDoViewController.toDoList.getCategoryIdx(category: task.category)
             categoryButton.setTitle(task.category, for: .normal)
@@ -293,7 +293,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == "--/-- --:--" ? nil : fromDatePicker.date.currentTimeZone(),
                                           end: toButton.title(for: .normal) == "--/-- --:--" ? nil : toDatePicker.date.currentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
-        self.task.category = toDoViewController.categories[currentIdx]
+        self.task.category = toDoViewController.toDoList.categories[currentIdx]
 
         self.toDoViewController.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 
@@ -319,7 +319,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func categoryButtonTapped() {
-        let toDoCategoryTableViewController = ToDoCategoryTableViewController()
+        let toDoCategoryTableViewController = ToDoEditCategoryTableViewController()
         toDoCategoryTableViewController.updateValues(toDoEditViewController: self)
 
         navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
