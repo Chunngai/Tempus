@@ -105,7 +105,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
                                                                         y: navigationController!.navigationBar.bounds.height,
                                                                         width: UIScreen.main.bounds.width/1.3,
                                                                         height: UIScreen.main.bounds.height/3.5),
-                                                scheduleViewController: self)
+                                                scheduleViewController: self,
+                                                date: schedule.date)
         UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
     

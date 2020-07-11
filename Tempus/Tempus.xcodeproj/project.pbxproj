@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FF2A5FEC2425149E00D0AF07 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF2A5FE82425147600D0AF07 /* SnapKit.framework */; };
-		FF2A5FED2425149E00D0AF07 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF2A5FE82425147600D0AF07 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF3BB36B2426741F0063D851 /* ScheduleEditNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */; };
 		FF3BE36E242F9B86006677A2 /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */; };
 		FF3BE372242FA0B5006677A2 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BE371242FA0B5006677A2 /* ToDo.swift */; };
 		FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */; };
 		FF3CA8202430EAD60054BB49 /* ScheduleEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3CA81F2430EAD60054BB49 /* ScheduleEditViewController.swift */; };
 		FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */; };
+		FF42EF7B24B966460067CA3E /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF42EF7824B965D50067CA3E /* SnapKit.framework */; };
+		FF42EF7C24B966460067CA3E /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF42EF7824B965D50067CA3E /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF4812D42495841300682A99 /* ToDoCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812D32495841300682A99 /* ToDoCategoryTableViewController.swift */; };
 		FF4812D824958C6D00682A99 /* ToDoCategoryNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812D724958C6D00682A99 /* ToDoCategoryNavigationViewController.swift */; };
 		FF4812DF24958DD100682A99 /* ToDoNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */; };
@@ -39,16 +39,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FF2A5FE72425147600D0AF07 /* PBXContainerItemProxy */ = {
+		FF42EF7724B965D50067CA3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */;
+			containerPortal = FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
 			remoteInfo = SnapKit;
 		};
-		FF2A5FE92425147600D0AF07 /* PBXContainerItemProxy */ = {
+		FF42EF7924B965D50067CA3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */;
+			containerPortal = FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
 			remoteInfo = "SnapKit Tests";
@@ -62,7 +62,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FF2A5FED2425149E00D0AF07 /* SnapKit.framework in Embed Frameworks */,
+				FF42EF7C24B966460067CA3E /* SnapKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -70,13 +70,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../Downloads/SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditNavigationViewController.swift; sourceTree = "<group>"; };
 		FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
 		FF3BE371242FA0B5006677A2 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditNavigationViewController.swift; sourceTree = "<group>"; };
 		FF3CA81F2430EAD60054BB49 /* ScheduleEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditViewController.swift; sourceTree = "<group>"; };
 		FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		FF4812D32495841300682A99 /* ToDoCategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCategoryTableViewController.swift; sourceTree = "<group>"; };
 		FF4812D724958C6D00682A99 /* ToDoCategoryNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoCategoryNavigationViewController.swift; sourceTree = SOURCE_ROOT; };
 		FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoNavigationViewController.swift; sourceTree = "<group>"; };
@@ -107,27 +107,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF2A5FEC2425149E00D0AF07 /* SnapKit.framework in Frameworks */,
+				FF42EF7B24B966460067CA3E /* SnapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		FF2A5FE32425147600D0AF07 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				FF2A5FE82425147600D0AF07 /* SnapKit.framework */,
-				FF2A5FEA2425147600D0AF07 /* SnapKit Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		FF2A5FEB2425149E00D0AF07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FF42EF7324B965D50067CA3E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF42EF7824B965D50067CA3E /* SnapKit.framework */,
+				FF42EF7A24B965D50067CA3E /* SnapKit Tests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		FF4BAFDB248A93C800F536CC /* Schedule Views */ = {
@@ -176,7 +176,6 @@
 		FFBF90AF2421126F00313C7D = {
 			isa = PBXGroup;
 			children = (
-				FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */,
 				FFBF90BA2421127000313C7D /* Tempus */,
 				FFBF90B92421127000313C7D /* Products */,
 				FF2A5FEB2425149E00D0AF07 /* Frameworks */,
@@ -194,6 +193,7 @@
 		FFBF90BA2421127000313C7D /* Tempus */ = {
 			isa = PBXGroup;
 			children = (
+				FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */,
 				FFBF90CF2421129D00313C7D /* System Files */,
 				FFBF90DC24211FCD00313C7D /* Models */,
 				FFBF90D92421184100313C7D /* Views */,
@@ -296,8 +296,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = FF2A5FE32425147600D0AF07 /* Products */;
-					ProjectRef = FF2A5FE22425147600D0AF07 /* SnapKit.xcodeproj */;
+					ProductGroup = FF42EF7324B965D50067CA3E /* Products */;
+					ProjectRef = FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -308,18 +308,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		FF2A5FE82425147600D0AF07 /* SnapKit.framework */ = {
+		FF42EF7824B965D50067CA3E /* SnapKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SnapKit.framework;
-			remoteRef = FF2A5FE72425147600D0AF07 /* PBXContainerItemProxy */;
+			remoteRef = FF42EF7724B965D50067CA3E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		FF2A5FEA2425147600D0AF07 /* SnapKit Tests.xctest */ = {
+		FF42EF7A24B965D50067CA3E /* SnapKit Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "SnapKit Tests.xctest";
-			remoteRef = FF2A5FE92425147600D0AF07 /* PBXContainerItemProxy */;
+			remoteRef = FF42EF7924B965D50067CA3E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

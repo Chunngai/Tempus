@@ -29,7 +29,7 @@ class ScheduleDatePickerView: UIView {
         super.init(coder: coder)
     }
 
-    init(datePickerFrame: CGRect, scheduleViewController: ScheduleViewController) {
+    init(datePickerFrame: CGRect, scheduleViewController: ScheduleViewController, date: Date) {
         super.init(frame: UIScreen.main.bounds)
                 
         self.scheduleViewController = scheduleViewController
@@ -55,10 +55,11 @@ class ScheduleDatePickerView: UIView {
         // Date picker.
         contentView.addSubview(datePicker)
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-        
+
+        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        datePicker.date = date
         datePicker.datePickerMode = .date
         datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
-        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
         
         datePicker.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(20)
