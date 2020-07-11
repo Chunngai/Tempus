@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ScheduleDatePickerView: UIView {
+class ScheduleDatePickerPopView: UIView {
     
     // MARK: - Controllers
     

@@ -9,17 +9,12 @@
 import UIKit
 
 class ToDoHeaderView: UITableViewHeaderFooterView {
-
+    // MARK: - Views
+    
     var view = UIView()
     var sectionNameLabel = UILabel()
     
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
+    // MARK: - Initializers
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -30,6 +25,8 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         
         updateViews()
     }
+    
+    // MARK: - Customized funcs
     
     func updateViews() {
         // A view for placing contents.
@@ -50,7 +47,7 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         
         sectionNameLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
-            make.top.equalToSuperview().offset(0)
+            make.bottom.equalToSuperview().inset(-5)
             make.width.equalTo(300)
         }
     }

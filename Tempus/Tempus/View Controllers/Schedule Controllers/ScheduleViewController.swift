@@ -44,7 +44,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     var scheduleTableView: UITableView!
     
-    var datePickerView: ScheduleDatePickerView!
+    var datePickerView: ScheduleDatePickerPopView!
     
     var committedBarButton: UIBarButtonItem!
     
@@ -101,7 +101,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func dateBarButtonTapped_() {
-        datePickerView = ScheduleDatePickerView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
+        datePickerView = ScheduleDatePickerPopView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
                                                                         y: navigationController!.navigationBar.bounds.height,
                                                                         width: UIScreen.main.bounds.width / 1.3,
                                                                         height: UIScreen.main.bounds.height / 3),
