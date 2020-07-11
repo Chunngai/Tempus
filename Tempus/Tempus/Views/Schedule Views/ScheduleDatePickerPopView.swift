@@ -103,7 +103,7 @@ class ScheduleDatePickerPopView: UIView {
     // MARK: - Customized funcs
 
     @objc func todayButtonTapped() {
-        datePicker.date = Date().currentTimeZone()
+        datePicker.date = Date()
         scheduleViewController.changeSchedule()
     }
     
