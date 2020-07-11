@@ -11,10 +11,10 @@ import UIKit
 class TabBarViewController: UITabBarController {
     // MARK: - Controllers
     
-    var scheduleNavigationViewController: ScheduleNavigationViewController?
+    var scheduleNavigationViewController: ScheduleNavigationViewController!
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
     
-    var toDoNavigationViewController: ToDoNavigationViewController?
+    var toDoNavigationViewController: ToDoNavigationViewController!
     var toDoViewController = ToDoViewController()
     
     // MARK: - Views
@@ -41,14 +41,15 @@ class TabBarViewController: UITabBarController {
         
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
         scheduleNavigationViewController = ScheduleNavigationViewController(rootViewController: scheduleViewController)
-        if let scheduleNavigationViewController = scheduleNavigationViewController {
-            self.addChild(scheduleNavigationViewController)
-        }
+        scheduleNavigationViewController.tabBarItem.title = "Schedule"
+        self.addChild(scheduleNavigationViewController)
         
         // Creates a navigation controller for todos, whose root controller is a todo view controller.
         toDoNavigationViewController = ToDoNavigationViewController(rootViewController: toDoViewController)
-        if let toDoNavigationViewController = toDoNavigationViewController {
-            self.addChild(toDoNavigationViewController)
+        toDoNavigationViewController.tabBarItem.title = "To Do"
+        if let emergentTaskNumber = ToDo.loadToDo()?.emergentTaskNumber {
+            toDoNavigationViewController.tabBarItem.badgeValue = String(emergentTaskNumber)
         }
+        self.addChild(toDoNavigationViewController)
     }
 }
