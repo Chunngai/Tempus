@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ToDoCategoryTableViewController: UITableViewController {
+class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     // MARK: - Models
     
     var categories: [String] {
@@ -26,6 +26,10 @@ class ToDoCategoryTableViewController: UITableViewController {
     
     var originalCategories: [String]!
     
+    // MARK: - Views
+    
+    var toDoCategoryTableView: UITableView!
+    
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -42,8 +46,21 @@ class ToDoCategoryTableViewController: UITableViewController {
         // Title of navigation item.
         navigationItem.title = "Categories"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonTapped))
+                
+        // Table view.
+        toDoCategoryTableView = UITableView(frame: CGRect(x: 0,
+                                                          y: navigationController!.navigationBar.frame.height,
+                                                          width: view.frame.width,
+                                                          height: view.frame.height - navigationController!.navigationBar.frame.height),
+                                            style: .plain)
+        view.addSubview(toDoCategoryTableView)
         
-        tableView.register(ToDoCategoryTableViewCell.classForCoder(), forCellReuseIdentifier: "toDoCategoryTableViewCell")
+        toDoCategoryTableView.dataSource = self
+        toDoCategoryTableView.delegate = self
+        
+        toDoCategoryTableView.register(ToDoCategoryTableViewCell.classForCoder(), forCellReuseIdentifier: "toDoCategoryTableViewCell")
+        
+        toDoCategoryTableView.backgroundColor = UIColor.sky.withAlphaComponent(0)
     }
     
     func updateValues(toDoViewController: ToDoViewController) {
@@ -54,14 +71,14 @@ class ToDoCategoryTableViewController: UITableViewController {
     
     @objc func editButtonTapped() {
         // Enables editing.
-        isEditing = true
+        toDoCategoryTableView.isEditing = true
         
         // Changes bar button items.
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         
         // Reloads the table.
-        tableView.reloadData()
+        toDoCategoryTableView.reloadData()
     }
     
     func emptyCategoriesAlert() {
@@ -87,7 +104,7 @@ class ToDoCategoryTableViewController: UITableViewController {
     
     @objc func doneButtonTapped() {
         for i in 0..<categories.count {
-            if let cell = (tableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
+            if let cell = (toDoCategoryTableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
                 let category = cell.textfield.text!
                 
                 // Sees if the category name is not empty.
@@ -112,7 +129,7 @@ class ToDoCategoryTableViewController: UITableViewController {
         }
         
         // Disables editing.
-        isEditing = false
+        toDoCategoryTableView.isEditing = false
         
         // Changes bar button items.
         navigationItem.leftBarButtonItem = nil
@@ -121,12 +138,12 @@ class ToDoCategoryTableViewController: UITableViewController {
         originalCategories = categories
         
         // Reloads the table.
-        tableView.reloadData()
+        toDoCategoryTableView.reloadData()
     }
     
     @objc func cancelButtonTapped() {
         // Disables editing.
-        isEditing = false
+        toDoCategoryTableView.isEditing = false
         
         // Changes bar button items.
         navigationItem.leftBarButtonItem = nil
@@ -136,16 +153,16 @@ class ToDoCategoryTableViewController: UITableViewController {
         categories = originalCategories
         
         // Reloads the table.
-        tableView.reloadData()
+        toDoCategoryTableView.reloadData()
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {  // Normal categories.
             return categories.count
         } else if section == 1 {  // Add button.
@@ -155,12 +172,12 @@ class ToDoCategoryTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ToDoCategoryTableViewCell()
         
         if indexPath.section == 0 {  // Normal categories.
             cell.updateValues(text: categories[indexPath.row], taskNumber: toDoViewController.toDoList[indexPath.row].unfinishedTasks.count)
-            cell.textfield.isEnabled = isEditing ? true : false
+            cell.textfield.isEnabled = toDoCategoryTableView.isEditing ? true : false
         } else if indexPath.section == 1 {  // Add button.
             if isEditing {
                 cell.updateValues(text: "Add a new category")
@@ -186,12 +203,12 @@ class ToDoCategoryTableViewController: UITableViewController {
     // MARK: - Table view delegate
 
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section != 2 ? true : false
     }
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textfield.text!
             if categories.contains(category) {
@@ -213,7 +230,7 @@ class ToDoCategoryTableViewController: UITableViewController {
     }
     
     // Editing style.
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.section == 0 {  // Normal categories.
             return .delete
         } else if indexPath.section == 1 {  // Add button.
@@ -224,7 +241,7 @@ class ToDoCategoryTableViewController: UITableViewController {
     }
 
     // When a category is tapped.
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             toDoViewController.displayingCategory = categories[indexPath.row]
             toDoViewController.navigationItem.title = categories[indexPath.row]
@@ -248,7 +265,7 @@ class ToDoCategoryTableViewController: UITableViewController {
     }
 
     // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section == 0 ? true : false
     }
 }

@@ -102,7 +102,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
      }
     
     @objc func categoryButtonTapped() {
-        let toDoCategoryTableViewController = ToDoCategoryTableViewController()
+        let toDoCategoryTableViewController = ToDoCategoryViewController()
         toDoCategoryTableViewController.updateValues(toDoViewController: self)
 
         navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)

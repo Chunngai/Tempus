@@ -319,7 +319,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func categoryButtonTapped() {
-        let toDoCategoryTableViewController = ToDoEditCategoryTableViewController()
+        let toDoCategoryTableViewController = ToDoEditCategoryViewController()
         toDoCategoryTableViewController.updateValues(toDoEditViewController: self)
 
         navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
