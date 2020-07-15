@@ -152,7 +152,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             let categoryIdx = toDoList.getCategoryIdx(category: task.category)
             toDoList[categoryIdx].tasks.append(task)
-        } else if mode == "d" {
+        } else if mode == "d" {  // Delete.
             toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
         }
         

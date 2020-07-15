@@ -108,7 +108,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             make.height.equalTo(UIScreen.main.bounds.height * 0.2)
         }
         
-        // Date Pickers.
+        // Date buttons.
         fromButton.addTarget(self, action: #selector(fromButtonTapped), for: .touchUpInside)
         
         fromButton.setTitleColor(.white, for: .normal)
@@ -145,7 +145,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             make.top.equalTo(contentTextView.snp.bottom).offset(25)
         }
         
-        // Time Picker views.
+        // Date Pickers.
         let datePickerFrame = CGRect(x: UIScreen.main.bounds.width * 0.15, y: UIScreen.main.bounds.height * 0.43, width: UIScreen.main.bounds.width * 0.70, height: UIScreen.main.bounds.height * 0.28)
         
         fromDatePicker = UIDatePicker(frame: datePickerFrame)
