@@ -167,7 +167,9 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelText(task: Task) -> String {
-        if task.isOverdue {
+        if task.isFinished {
+            return ""
+        } else if task.isOverdue {
             return "Overdue"
         } else {
             if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Start provided.
@@ -181,7 +183,9 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelTextColor(task: Task) -> UIColor {
-        if task.isOverdue {
+        if task.isFinished {
+            return .lightText
+        } else if task.isOverdue {
             return .yellow
         } else {
             if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Before start.
