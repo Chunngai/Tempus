@@ -55,7 +55,7 @@ class TabBarViewController: UITabBarController {
             let identifier = "identifier"
             let content = UNMutableNotificationContent()
             content.badge = NSNumber(value: emergentTaskNumber)
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10 * 60, repeats: true)
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             UNUserNotificationCenter.current().add(request) {
                 error in
