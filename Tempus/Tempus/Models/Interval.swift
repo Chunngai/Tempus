@@ -42,7 +42,10 @@ struct Interval: Equatable, Comparable, Codable {
             return lhsStart < rhsStart
         } else if let lhsEnd = lhs.end, let rhsEnd = rhs.end {
             return lhsEnd < rhsEnd
+        } else if lhs.start != nil || lhs.end != nil {
+            return true
+        } else {
+            return false
         }
-        return false
     }
 }

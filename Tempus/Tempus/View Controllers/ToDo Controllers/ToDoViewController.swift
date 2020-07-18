@@ -24,8 +24,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let toDoItem = tabBarController?.tabBar.items![1]
             if self.toDoList.emergentTaskNumber > 0 {
                 toDoItem?.badgeValue = String(self.toDoList.emergentTaskNumber)
+                UIApplication.shared.applicationIconBadgeNumber = self.toDoList.emergentTaskNumber
             } else {
                 toDoItem?.badgeValue = nil
+                UIApplication.shared.applicationIconBadgeNumber = 0
             }
             
             self.toDoTableView?.reloadData()
