@@ -26,6 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tabBarController = TabBarViewController()
         window?.rootViewController = tabBarController
         
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+        }
+        
         return true
     }
 

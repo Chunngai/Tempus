@@ -48,7 +48,18 @@ class TabBarViewController: UITabBarController {
         toDoNavigationViewController = ToDoNavigationViewController(rootViewController: toDoViewController)
         toDoNavigationViewController.tabBarItem.title = "To Do"
         if let emergentTaskNumber = ToDo.loadToDo()?.emergentTaskNumber {
+            // Badge on the tab bar item.
             toDoNavigationViewController.tabBarItem.badgeValue = String(emergentTaskNumber)
+            
+            // Badge on the app icon.
+            let identifier = "identifier"
+            let content = UNMutableNotificationContent()
+            content.badge = NSNumber(value: emergentTaskNumber)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request) {
+                error in
+            }
         }
         self.addChild(toDoNavigationViewController)
     }
