@@ -268,6 +268,12 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section == 0 ? true : false
     }
+    
+    // Supports rearranging.
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let todo = toDoViewController.toDoList.remove(at: sourceIndexPath.row)
+        toDoViewController.toDoList.insert(todo, at: destinationIndexPath.row)
+    }
 }
 
 extension Array where Element == ToDo {

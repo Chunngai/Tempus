@@ -49,7 +49,9 @@ class TabBarViewController: UITabBarController {
         toDoNavigationViewController.tabBarItem.title = "To Do"
         if let emergentTaskNumber = ToDo.loadToDo()?.emergentTaskNumber {
             // Badge on the tab bar item.
-            toDoNavigationViewController.tabBarItem.badgeValue = String(emergentTaskNumber)
+            if emergentTaskNumber > 0 {
+                toDoNavigationViewController.tabBarItem.badgeValue = String(emergentTaskNumber)
+            }
             
             // Badge on the app icon.
             let identifier = "identifier"
