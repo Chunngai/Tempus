@@ -183,28 +183,43 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelTextColor(task: Task) -> UIColor {
-        if task.isFinished {
-            return .lightText
-        } else if task.isOverdue {
-            return .yellow
-        } else {
-            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Before start.
-                if DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                    return .orange
-                } else {  // More than 3 days.
-                    return .lightText
-                }
-            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Before end.
-                if DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
-                    return .red
-                } else if task.dateInterval.start != nil {  // Doing.
-                    return .purple
-                } else {  // More than 3 days.
-                    return .lightText
-                }
-            } else {  // Neither provided.
-                return .lightText
-            }
+//        if task.isFinished {
+//            return .lightText
+//        } else if task.isOverdue {
+//            return .yellow
+//        } else {
+//            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Before start.
+//                if DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
+//                    return .orange
+//                } else {  // More than 3 days.
+//                    return .lightText
+//                }
+//            }
+//            if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Before end.
+//                if DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+//                    return .red
+//                } else if task.dateInterval.start != nil {  // Doing.
+//                    return .purple
+//                } else {  // More than 3 days.
+//                    return .lightText
+//                }
+//            } else {  // Neither provided.
+//                return .lightText
+//            }
+//        }
+        if task.isSoon {
+            return .orange
         }
+        if task.isEmergent {
+            return .red
+        }
+        if task.isDoing {
+            return .purple
+        }
+        if task.isOverdue {
+            return .yellow
+        }
+        
+        return .lightText
     }
 }

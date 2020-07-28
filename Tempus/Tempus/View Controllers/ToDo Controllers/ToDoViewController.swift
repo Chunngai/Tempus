@@ -165,7 +165,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func numberOfSections(in tableView: UITableView) -> Int {
         switch displayingCategory {
-        case "emergent", "unfinished", "finished":
+        case "soon", "doing", "emergent", "overdue", "unfinished", "finished":
             return toDoList.count
         default:
             return 1
@@ -174,8 +174,14 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch displayingCategory {
+        case "soon":
+            return toDoList[section].soonTasks.count
+        case "doing":
+            return toDoList[section].doingTasks.count
         case "emergent":
             return toDoList[section].emergentTasks.count
+        case "overdue":
+            return toDoList[section].overdueTasks.count
         case "unfinished":
             return toDoList[section].unfinishedTasks.count
         case "finished":
@@ -190,8 +196,14 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         var task: Task
         switch displayingCategory {
+        case "soon":
+            task = toDoList[indexPath.section].soonTasks[indexPath.row]
+        case "doing":
+            task = toDoList[indexPath.section].doingTasks[indexPath.row]
         case "emergent":
             task = toDoList[indexPath.section].emergentTasks[indexPath.row]
+        case "overdue":
+            task = toDoList[indexPath.section].overdueTasks[indexPath.row]
         case "unfinished":
             task = toDoList[indexPath.section].unfinishedTasks[indexPath.row]
         case "finished":
@@ -211,7 +223,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         var sectionName: String
         switch displayingCategory {
-        case "emergent", "unfinished", "finished":
+        case "soon", "doing", "emergent", "unfinished", "finished":
             sectionName = toDoList[section].category
         default:
             sectionName = displayingCategory
@@ -224,8 +236,20 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch displayingCategory {
+        case "soon":
+            if toDoList[section].soonTasks.count == 0 {
+                return 0
+            }
+        case "doing":
+            if toDoList[section].doingTasks.count == 0 {
+                return 0
+            }
         case "emergent":
             if toDoList[section].emergentTasks.count == 0 {
+                return 0
+            }
+        case "overdue":
+            if toDoList[section].overdueTasks.count == 0 {
                 return 0
             }
         case "unfinished":
@@ -253,8 +277,20 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         switch displayingCategory {
+        case "soon":
+            if toDoList[section].soonTasks.count == 0 {
+                return 0
+            }
+        case "doing":
+            if toDoList[section].doingTasks.count == 0 {
+                return 0
+            }
         case "emergent":
             if toDoList[section].emergentTasks.count == 0 {
+                return 0
+            }
+        case "overdue":
+            if toDoList[section].overdueTasks.count == 0 {
                 return 0
             }
         case "unfinished":
@@ -276,22 +312,30 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
 }
 
 extension Task {
+    var isSoon: Bool {  // start - current < 3 and due - current > 3
+        if let start = dateInterval.start, Date().currentTimeZone() < start,
+            DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3,
+            !isEmergent  {
+            return true
+        }
+        
+        return false
+    }
+    
+    var isDoing: Bool {
+        if let start = dateInterval.start,
+            let due = dateInterval.end,
+            start <= Date().currentTimeZone(),
+            Date().currentTimeZone() <= due {
+            return true
+        }
+        
+        return false
+    }
+    
     var isEmergent: Bool {
-        if isFinished {
-            return false
-        }
-        
-        if self.isOverdue {
-            return true
-        }
-                
-        if let start = dateInterval.start, Date().currentTimeZone() < start,  // Before start.
-            DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
-            return true
-        }
-        
-        if let due = dateInterval.end, Date().currentTimeZone() < due,  // Before end.
-            DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
+        if let due = dateInterval.end,  // Before end.
+            !isOverdue && DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
             return true
         }
         
@@ -300,6 +344,28 @@ extension Task {
 }
 
 extension ToDo {
+    var soonTasks: [Task] {
+        var soonTasks: [Task] = []
+        for task in self.tasks {
+            if task.isSoon {
+                soonTasks.append(task)
+            }
+        }
+        
+        return soonTasks
+    }
+    
+    var doingTasks: [Task] {
+        var doingTasks: [Task] = []
+        for task in self.tasks {
+            if task.isDoing {
+                doingTasks.append(task)
+            }
+        }
+        
+        return doingTasks
+    }
+    
     var emergentTasks: [Task] {
         var emergentTasks: [Task] = []
         for task in self.tasks {
@@ -309,6 +375,17 @@ extension ToDo {
         }
         
         return emergentTasks
+    }
+    
+    var overdueTasks: [Task] {
+        var overdueTasks: [Task] = []
+        for task in self.tasks {
+            if task.isOverdue {
+                overdueTasks.append(task)
+            }
+        }
+        
+        return overdueTasks
     }
     
     var unfinishedTasks: [Task] {

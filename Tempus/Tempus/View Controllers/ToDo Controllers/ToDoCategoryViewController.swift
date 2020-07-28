@@ -168,7 +168,7 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         } else if section == 1 {  // Add button.
             return 1
         } else {
-            return 3
+            return 6
         }
     }
 
@@ -185,11 +185,17 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
             cell.textfield.isEnabled = false
         } else {
             switch indexPath.row {
-            case 0:  // Emergent tasks
+            case 0:  // Soon.
+                cell.updateValues(text: "Soon", taskNumber: toDoViewController.toDoList.soonTaskNumber)
+            case 1:  // Doing.
+                cell.updateValues(text: "Doing", taskNumber: toDoViewController.toDoList.doingTaskNumber)
+            case 2:  // Emergent.
                 cell.updateValues(text: "Emergent", taskNumber: toDoViewController.toDoList.emergentTaskNumber)
-            case 1:  // All tasks
+            case 3:  // Overdue.
+                cell.updateValues(text: "Overdue", taskNumber: toDoViewController.toDoList.overdueTaskNumber)
+            case 4:  // All.
                 cell.updateValues(text: "Unfinished", taskNumber: toDoViewController.toDoList.unfinishedTaskNumber)
-            case 2:  // Histories
+            case 5:  // Histories.
                 cell.updateValues(text: "Finished", taskNumber: toDoViewController.toDoList.finishedTaskNumber)
             default:
                 break
@@ -248,12 +254,21 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         } else if indexPath.section == 2 {
             switch indexPath.row {
             case 0:
+                toDoViewController.displayingCategory = "soon"
+                toDoViewController.navigationItem.title = "Soon"
+            case 1:
+                toDoViewController.displayingCategory = "doing"
+                toDoViewController.navigationItem.title = "Doing"
+            case 2:
                 toDoViewController.displayingCategory = "emergent"
                 toDoViewController.navigationItem.title = "Emergent"
-            case 1:
+            case 3:
+                toDoViewController.displayingCategory = "overdue"
+                toDoViewController.navigationItem.title = "Overdue"
+            case 4:
                 toDoViewController.displayingCategory = "unfinished"
                 toDoViewController.navigationItem.title = "Unfinished"
-            case 2:
+            case 5:
                 toDoViewController.displayingCategory = "finished"
                 toDoViewController.navigationItem.title = "Finished"
             default:
@@ -277,6 +292,33 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
 }
 
 extension Array where Element == ToDo {
+    var soonTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            count += toDo.soonTasks.count
+        }
+        
+        return count
+    }
+    
+    var doingTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            count += toDo.doingTasks.count
+        }
+        
+        return count
+    }
+    
+    var overdueTaskNumber: Int {
+        var count = 0
+        for toDo in self {
+            count += toDo.overdueTasks.count
+        }
+        
+        return count
+    }
+    
     var unfinishedTaskNumber: Int {
         var count = 0
         for toDo in self {
