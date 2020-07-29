@@ -27,4 +27,12 @@ class ToDoCategoryNavigationViewController: UINavigationController {
             endPoint: CGPoint(x: 1, y: 0.5),
             frame: self.view.bounds)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if let toDoCategoryViewController = viewControllers[0] as? ToDoCategoryViewController {
+            if toDoCategoryViewController.toDoCategoryTableView.isEditing {
+                toDoCategoryViewController.categories = toDoCategoryViewController.originalCategories
+            }
+        }
+    }
 }

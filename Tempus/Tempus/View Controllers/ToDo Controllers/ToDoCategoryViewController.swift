@@ -179,9 +179,6 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
             cell.updateValues(text: categories[indexPath.row], taskNumber: toDoViewController.toDoList[indexPath.row].unfinishedTasks.count)
             cell.textfield.isEnabled = toDoCategoryTableView.isEditing ? true : false
         } else if indexPath.section == 1 {  // Add button.
-            if isEditing {
-                cell.updateValues(text: "Add a new category")
-            }
             cell.textfield.isEnabled = false
         } else {
             switch indexPath.row {
