@@ -10,7 +10,12 @@ import UIKit
 
 class ToDoCategoryNavigationViewController: UINavigationController {
 
-    // Views.
+    // MARK: - Controllers.
+    
+    var
+    toDoViewController: ToDoViewController!
+    // MARK: - Views.
+    
     var gradientLayer = CAGradientLayer()
     
     override func viewDidLoad() {
@@ -30,9 +35,21 @@ class ToDoCategoryNavigationViewController: UINavigationController {
     
     override func viewWillDisappear(_ animated: Bool) {
         if let toDoCategoryViewController = viewControllers[0] as? ToDoCategoryViewController {
+            // Discards the changes.
             if toDoCategoryViewController.toDoCategoryTableView.isEditing {
                 toDoCategoryViewController.categories = toDoCategoryViewController.originalCategories
             }
         }
+        
+        // Checks if the displaying category is in categories + statisticalCategories.
+        // (May not in due to deletion.)
+        let allCategories = toDoViewController.toDoList.categories + toDoViewController.toDoList.statisticalCategories
+        if !allCategories.contains(toDoViewController.displayingCategory) {
+            toDoViewController.displayingCategory = toDoViewController.toDoList.categories[0]
+        }
+    }
+    
+    func updateValues(toDoViewController: ToDoViewController) {
+        self.toDoViewController = toDoViewController
     }
 }

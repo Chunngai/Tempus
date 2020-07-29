@@ -35,8 +35,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     // MARK: - Controllers.
-    var displayingCategory: String = "unfinished" {
+    var displayingCategory: String = "Unfinished" {
         didSet {
+            navigationItem.title = displayingCategory
             toDoTableView?.reloadData()
         }
     }
@@ -107,7 +108,9 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let toDoCategoryTableViewController = ToDoCategoryViewController()
         toDoCategoryTableViewController.updateValues(toDoViewController: self)
 
-        navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
+        let toDoCategoryNavigationViewController = ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController)
+        toDoCategoryNavigationViewController.updateValues(toDoViewController: self)
+        navigationController?.present(toDoCategoryNavigationViewController, animated: true, completion: nil)
     }
     
     @objc func presentAddingView() {
@@ -164,30 +167,22 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        switch displayingCategory {
-        case "soon", "doing", "emergent", "overdue", "unfinished", "finished":
-            return toDoList.count
-        default:
+        if toDoList.categories.contains(displayingCategory) {
             return 1
+        } else if toDoList.statisticalCategories.contains(displayingCategory) {
+            return toDoList.count
+        } else {
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch displayingCategory {
-        case "soon":
-            return toDoList[section].soonTasks.count
-        case "doing":
-            return toDoList[section].doingTasks.count
-        case "emergent":
-            return toDoList[section].emergentTasks.count
-        case "overdue":
-            return toDoList[section].overdueTasks.count
-        case "unfinished":
-            return toDoList[section].unfinishedTasks.count
-        case "finished":
-            return toDoList[section].finishedTasks.count
-        default:
+        if toDoList.categories.contains(displayingCategory) {
             return toDoList[toDoList.getCategoryIdx(category: displayingCategory)].unfinishedTasks.count
+        } else if toDoList.statisticalCategories.contains(displayingCategory) {
+            return toDoList.getStatisticalTasks(displayingCategory, of: section).count
+        } else {
+            return 0
         }
     }
     
@@ -195,21 +190,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let cell = ToDoTableViewCell()
         
         var task: Task
-        switch displayingCategory {
-        case "soon":
-            task = toDoList[indexPath.section].soonTasks[indexPath.row]
-        case "doing":
-            task = toDoList[indexPath.section].doingTasks[indexPath.row]
-        case "emergent":
-            task = toDoList[indexPath.section].emergentTasks[indexPath.row]
-        case "overdue":
-            task = toDoList[indexPath.section].overdueTasks[indexPath.row]
-        case "unfinished":
-            task = toDoList[indexPath.section].unfinishedTasks[indexPath.row]
-        case "finished":
-            task = toDoList[indexPath.section].finishedTasks[indexPath.row]
-        default:
+        if toDoList.categories.contains(displayingCategory) {
             task = toDoList[toDoList.getCategoryIdx(category: displayingCategory)].unfinishedTasks[indexPath.row]
+        } else if toDoList.statisticalCategories.contains(displayingCategory) {
+            task = toDoList.getStatisticalTasks(displayingCategory, of: indexPath.section)[indexPath.row]
+        } else {
+            task = Task()
         }
         cell.updateValues(task: task, toDoViewController: self)
 
@@ -222,11 +208,12 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let headerView = ToDoHeaderView()
         
         var sectionName: String
-        switch displayingCategory {
-        case "soon", "doing", "emergent", "unfinished", "finished":
-            sectionName = toDoList[section].category
-        default:
+        if toDoList.categories.contains(displayingCategory) {
             sectionName = displayingCategory
+        } else if toDoList.statisticalCategories.contains(displayingCategory) {
+            sectionName = toDoList[section].category
+        } else {
+            sectionName = ""
         }
         headerView.updateValues(sectionName: sectionName)
     
@@ -235,38 +222,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch displayingCategory {
-        case "soon":
-            if toDoList[section].soonTasks.count == 0 {
-                return 0
-            }
-        case "doing":
-            if toDoList[section].doingTasks.count == 0 {
-                return 0
-            }
-        case "emergent":
-            if toDoList[section].emergentTasks.count == 0 {
-                return 0
-            }
-        case "overdue":
-            if toDoList[section].overdueTasks.count == 0 {
-                return 0
-            }
-        case "unfinished":
-            if toDoList[section].unfinishedTasks.count == 0 {
-                return 0
-            }
-        case "finished":
-            if toDoList[section].finishedTasks.count == 0 {
-                return 0
-            }
-        default:
-            if toDoList[section].tasks.isEmpty {
-                return 0
-            }
+        if toDoList.categories.contains(displayingCategory),
+            toDoList[section].tasks.isEmpty {
+            return 0
+        } else if toDoList.statisticalCategories.contains(displayingCategory),
+            toDoList.getStatisticalTasks(displayingCategory, of: section).count == 0 {
+            return 0
+        } else {
+            return tableView.sectionHeaderHeight
         }
-        
-        return tableView.sectionHeaderHeight
     }
     
     // For hiding empty categories.
@@ -276,38 +240,15 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     // For hiding empty categories.
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch displayingCategory {
-        case "soon":
-            if toDoList[section].soonTasks.count == 0 {
-                return 0
-            }
-        case "doing":
-            if toDoList[section].doingTasks.count == 0 {
-                return 0
-            }
-        case "emergent":
-            if toDoList[section].emergentTasks.count == 0 {
-                return 0
-            }
-        case "overdue":
-            if toDoList[section].overdueTasks.count == 0 {
-                return 0
-            }
-        case "unfinished":
-            if toDoList[section].unfinishedTasks.count == 0 {
-                return 0
-            }
-        case "finished":
-            if toDoList[section].finishedTasks.count == 0 {
-                return 0
-            }
-        default:
-            if toDoList[section].tasks.isEmpty {
-                return 0
-            }
+        if toDoList.categories.contains(displayingCategory),
+            toDoList[section].tasks.isEmpty {
+            return 0
+        } else if toDoList.statisticalCategories.contains(displayingCategory),
+            toDoList.getStatisticalTasks(displayingCategory, of: section).count == 0 {
+            return 0
+        } else {
+            return tableView.sectionFooterHeight
         }
-        
-        return tableView.sectionFooterHeight
     }
 }
 
@@ -453,5 +394,34 @@ extension Array where Element == ToDo {
         }
         
         return 0
+    }
+    
+    var statisticalCategories: [String] {
+        return ["Soon", "Doing", "Emergent", "Overdue", "Unfinished", "Finished"]
+    }
+    
+    func getStatisticalCategoryIdx(of statisticalCategory: String) -> Int {
+        for i in 0..<self.statisticalCategories.count {
+            if self.statisticalCategories[i] == statisticalCategory {
+                return i
+            }
+        }
+        
+        return 0
+    }
+    
+    func getStatisticalTasks(_ statisticalCategory: String, of categoryIndex: Int) -> [Task] {
+        let toDo = self[categoryIndex]
+        let statisticalCategoryIndex = getStatisticalCategoryIdx(of: statisticalCategory)
+        
+        switch statisticalCategoryIndex {
+        case 0: return toDo.soonTasks
+        case 1: return toDo.doingTasks
+        case 2: return toDo.emergentTasks
+        case 3: return toDo.overdueTasks
+        case 4: return toDo.unfinishedTasks
+        case 5: return toDo.finishedTasks
+        default: return []
+        }
     }
 }
