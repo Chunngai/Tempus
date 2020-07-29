@@ -191,8 +191,12 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
         if mode == "a" {
-            currentIdx = 0
-            categoryButton.setTitle(toDoViewController.toDoList.categories[0], for: .normal)
+            if toDoViewController.toDoList.categories.contains(toDoViewController.displayingCategory) {
+                currentIdx = toDoViewController.toDoList.getCategoryIdx(category: toDoViewController.displayingCategory)
+            } else {
+                currentIdx = 0
+            }
+            categoryButton.setTitle(toDoViewController.toDoList.categories[currentIdx], for: .normal)
         } else {
             currentIdx = toDoViewController.toDoList.getCategoryIdx(category: task.category)
             categoryButton.setTitle(task.category, for: .normal)
