@@ -83,9 +83,11 @@ class ToDoTableViewCell: UITableViewCell {
         let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
         view.addGestureRecognizer(longPressedGestureRecognizer)
         
-        // Taps to toggle finish status.
+        // Double Taps to toggle finish status.
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         view.addGestureRecognizer(tapGestureRecognizer)
+        
+        tapGestureRecognizer.numberOfTapsRequired = 2
     }
     
     func updateValues(task: Task, toDoViewController: ToDoViewController) {
