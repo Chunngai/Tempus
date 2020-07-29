@@ -169,18 +169,29 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelText(task: Task) -> String {
-        if task.isFinished {
-            return ""
+//        if task.isFinished {
+//            return ""
+//        } else if task.isOverdue {
+//            return "Overdue"
+//        } else {
+//            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Start provided.
+//                return DateInterval(start: Date().currentTimeZone(), end: start).formatted(omitZero: true)
+//            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Due provided.
+//                return DateInterval(start: Date().currentTimeZone(), end: due).formatted(omitZero: true)
+//            } else {  // Neither provided.
+//                return ""
+//            }
+//        }
+        if task.isEmergent {
+            return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.end!).formatted(omitZero: true)
+        } else if task.isSoon {
+            return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.start!).formatted(omitZero: true)
+        } else if task.isDoing {
+            return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.end!).formatted(omitZero: true)
         } else if task.isOverdue {
             return "Overdue"
         } else {
-            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Start provided.
-                return DateInterval(start: Date().currentTimeZone(), end: start).formatted(omitZero: true)
-            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Due provided.
-                return DateInterval(start: Date().currentTimeZone(), end: due).formatted(omitZero: true)
-            } else {  // Neither provided.
-                return ""
-            }
+            return ""
         }
     }
     
@@ -209,11 +220,11 @@ class ToDoTableViewCell: UITableViewCell {
 //                return .lightText
 //            }
 //        }
-        if task.isSoon {
-            return .orange
-        }
         if task.isEmergent {
             return .red
+        }
+        if task.isSoon {
+            return .orange
         }
         if task.isDoing {
             return .purple
