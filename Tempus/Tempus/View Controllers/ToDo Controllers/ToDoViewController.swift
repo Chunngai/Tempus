@@ -254,6 +254,10 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 extension Task {
     var isBeforeSoon: Bool {  // start - current >= 3
+        if isFinished {
+            return false
+        }
+        
         if let start = dateInterval.start, Date().currentTimeZone() < start,
             DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! >= 3 {
             return true
@@ -263,6 +267,10 @@ extension Task {
     }
     
     var isSoon: Bool {  // start - current < 3 and due - current > 3
+        if isFinished {
+            return false
+        }
+        
         if let start = dateInterval.start, Date().currentTimeZone() < start,
             DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {
             return true
@@ -272,6 +280,10 @@ extension Task {
     }
     
     var isDoing: Bool {
+        if isFinished {
+            return false
+        }
+        
         if let start = dateInterval.start,
             let due = dateInterval.end,
             start <= Date().currentTimeZone(),
@@ -283,6 +295,10 @@ extension Task {
     }
     
     var isEmergent: Bool {
+        if isFinished {
+            return false
+        }
+        
         if let due = dateInterval.end,
             !isOverdue && DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {
             return true
