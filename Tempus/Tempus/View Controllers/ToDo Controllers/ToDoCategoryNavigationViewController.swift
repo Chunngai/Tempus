@@ -13,7 +13,7 @@ class ToDoCategoryNavigationViewController: UINavigationController {
     // MARK: - Controllers.
     
     var
-    toDoViewController: ToDoViewController!
+    toDoViewController: ToDoViewController?
     // MARK: - Views.
     
     var gradientLayer = CAGradientLayer()
@@ -43,9 +43,11 @@ class ToDoCategoryNavigationViewController: UINavigationController {
         
         // Checks if the displaying category is in categories + statisticalCategories.
         // (May not in due to deletion.)
-        let allCategories = toDoViewController.toDoList.categories + toDoViewController.toDoList.statisticalCategories
-        if !allCategories.contains(toDoViewController.displayingCategory) {
-            toDoViewController.displayingCategory = toDoViewController.toDoList.categories[0]
+        if let toDoViewController = toDoViewController {
+            let allCategories = toDoViewController.toDoList.categories + toDoViewController.toDoList.statisticalCategories
+            if !allCategories.contains(toDoViewController.displayingCategory) {
+                toDoViewController.displayingCategory = toDoViewController.toDoList.categories[0]
+            }
         }
     }
     

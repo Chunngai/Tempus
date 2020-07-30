@@ -61,7 +61,7 @@ class ScheduleDatePickerPopView: UIView {
         todayButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
             
         todayButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(20)
+            make.left.right.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(3)
         }
         
