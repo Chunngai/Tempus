@@ -183,10 +183,13 @@ class ToDoTableViewCell: UITableViewCell {
 //            }
 //        }
         if task.isEmergent {
+            // Remaining time before due.
             return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.end!).formatted(omitZero: true)
-        } else if task.isSoon {
+        } else if task.isBeforeSoon || task.isSoon {
+            // Remaining time before start.
             return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.start!).formatted(omitZero: true)
         } else if task.isDoing {
+            // Remaining time before due.
             return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.end!).formatted(omitZero: true)
         } else if task.isOverdue {
             return "Overdue"
@@ -222,6 +225,9 @@ class ToDoTableViewCell: UITableViewCell {
 //        }
         if task.isEmergent {
             return .red
+        }
+        if task.isBeforeSoon {
+            return .lightText
         }
         if task.isSoon {
             return .orange
