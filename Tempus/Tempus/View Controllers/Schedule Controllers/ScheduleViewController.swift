@@ -36,13 +36,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: - Controllers
     
     var editable: Bool {
-//        print("current: \(Date().currentTimeZone().getComponents([.day]).day!)")
-//        print("changed: \(schedule.date.getComponents([.day]).day!)")
-        let dayOfToday = Date().currentTimeZone().getComponents([.day]).day!
-        let dayOfSchedule = schedule.date.getComponents([.day]).day!
-        return dayOfSchedule == dayOfToday || dayOfSchedule == dayOfToday + 1
-//        return (schedule.date >= Date().currentTimeZone()
-//            || DateInterval(start: schedule.date, end: Date().currentTimeZone()).getComponents([.day]).day! <= 0)
+        let GMT0ScheduleDate = Date(timeInterval: -8 * 3600, since: schedule.date)
+        return Calendar.current.isDateInToday(GMT0ScheduleDate) || Calendar.current.isDateInTomorrow(GMT0ScheduleDate)
     }
     
     // MARK: - Views
@@ -52,9 +47,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     var datePickerView: ScheduleDatePickerPopView!
     
     var committedBarButton: UIBarButtonItem!
-    
-    var advancementArcLayer = CAShapeLayer()
-    
+        
     // MARK: Init
     
     override func viewDidLoad() {
