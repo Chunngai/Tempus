@@ -206,7 +206,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         scheduleEditViewController.updateValues(scheduleViewController: self, task: Task(),
                                                 initStart: initStart, initDuration: initDuration, initEnd: initEnd,
                                                 indexCountedFromOne: nil)
-        navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
+        navigationController?.present(ScheduleEditNavigationController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
     }
     
     func presentEditingView(task: Task) {
@@ -215,7 +215,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         scheduleEditViewController.updateValues(scheduleViewController: self, task: task,
                                                 initStart: task.dateInterval.start!, initDuration: task.dateInterval.duration!, initEnd: task.dateInterval.end!,
                                                 indexCountedFromOne: schedule.tasks.firstIndex(of: task)! + 1)
-        navigationController?.present(ScheduleEditNavigationViewController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
+        navigationController?.present(ScheduleEditNavigationController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
     }
     
     func toggleFinishStatus(task: Task) {

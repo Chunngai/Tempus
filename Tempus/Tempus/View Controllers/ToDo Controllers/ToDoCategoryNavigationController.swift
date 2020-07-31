@@ -8,12 +8,12 @@
 
 import UIKit
 
-class ToDoCategoryNavigationViewController: UINavigationController {
+class ToDoCategoryNavigationController: UINavigationController {
 
     // MARK: - Controllers.
     
-    var
-    toDoViewController: ToDoViewController?
+    var toDoViewController: ToDoViewController?
+    
     // MARK: - Views.
     
     var gradientLayer = CAGradientLayer()

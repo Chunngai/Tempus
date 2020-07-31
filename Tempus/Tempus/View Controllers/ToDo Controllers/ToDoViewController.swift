@@ -108,7 +108,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let toDoCategoryTableViewController = ToDoCategoryViewController()
         toDoCategoryTableViewController.updateValues(toDoViewController: self)
 
-        let toDoCategoryNavigationViewController = ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController)
+        let toDoCategoryNavigationViewController = ToDoCategoryNavigationController(rootViewController: toDoCategoryTableViewController)
         toDoCategoryNavigationViewController.updateValues(toDoViewController: self)
         navigationController?.present(toDoCategoryNavigationViewController, animated: true, completion: nil)
     }
@@ -119,7 +119,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                                             toDoViewController: self,
                                             mode: "a",
                                             oldIdx: nil)
-        navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+        navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
     func presentEditingView(task: Task) {
@@ -135,7 +135,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         toDoEditViewController.updateValues(task: task, toDoViewController: self, mode: "e", oldIdx: oldIdx)
-        navigationController?.present(ToDoEditNavigationViewController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+        navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
     }
     
     func toggleFinishStatus(task: Task) {

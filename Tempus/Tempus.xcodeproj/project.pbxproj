@@ -7,20 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FF3BB36B2426741F0063D851 /* ScheduleEditNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */; };
+		FF3BB36B2426741F0063D851 /* ScheduleEditNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BB36A2426741F0063D851 /* ScheduleEditNavigationController.swift */; };
 		FF3BE36E242F9B86006677A2 /* ToDoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */; };
 		FF3BE372242FA0B5006677A2 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3BE371242FA0B5006677A2 /* ToDo.swift */; };
-		FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */; };
+		FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3CA8192430E1B60054BB49 /* ToDoEditNavigationController.swift */; };
 		FF3CA8202430EAD60054BB49 /* ScheduleEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3CA81F2430EAD60054BB49 /* ScheduleEditViewController.swift */; };
 		FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */; };
+		FF410E7024D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF410E6F24D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift */; };
+		FF410E7424D3E85700EAB900 /* ToDoEditRepetitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF410E7324D3E85700EAB900 /* ToDoEditRepetitionViewController.swift */; };
 		FF42EF7B24B966460067CA3E /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF42EF7824B965D50067CA3E /* SnapKit.framework */; };
 		FF42EF7C24B966460067CA3E /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = FF42EF7824B965D50067CA3E /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FF42EF7E24B9751A0067CA3E /* ToDoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF7D24B9751A0067CA3E /* ToDoHeaderView.swift */; };
 		FF42EF8424B975850067CA3E /* ToDoCategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8324B975850067CA3E /* ToDoCategoryTableViewCell.swift */; };
-		FF42EF8624B975B90067CA3E /* ToDoCategoryNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */; };
+		FF42EF8624B975B90067CA3E /* ToDoCategoryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationController.swift */; };
 		FF42EF8824B97E650067CA3E /* ToDoCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF42EF8724B97E650067CA3E /* ToDoCategoryViewController.swift */; };
 		FF4812D42495841300682A99 /* ToDoEditCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812D32495841300682A99 /* ToDoEditCategoryViewController.swift */; };
-		FF4812DF24958DD100682A99 /* ToDoNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */; };
+		FF4812DF24958DD100682A99 /* ToDoNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812DE24958DD100682A99 /* ToDoNavigationController.swift */; };
 		FF4812E124958DF600682A99 /* ToDoEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4812E024958DF600682A99 /* ToDoEditViewController.swift */; };
 		FF4BAFE7248A959200F536CC /* ScheduleDatePickerPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE6248A959200F536CC /* ScheduleDatePickerPopView.swift */; };
 		FF4BAFE9248A95E800F536CC /* ToDoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4BAFE8248A95E800F536CC /* ToDoTableViewCell.swift */; };
@@ -32,7 +34,7 @@
 		FFBF90C52421127100313C7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFBF90C42421127100313C7D /* Assets.xcassets */; };
 		FFBF90C82421127100313C7D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFBF90C62421127100313C7D /* LaunchScreen.storyboard */; };
 		FFBF90D12421151200313C7D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90D02421151200313C7D /* TabBarViewController.swift */; };
-		FFBF90D42421173600313C7D /* ScheduleNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90D32421173600313C7D /* ScheduleNavigationViewController.swift */; };
+		FFBF90D42421173600313C7D /* ScheduleNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90D32421173600313C7D /* ScheduleNavigationController.swift */; };
 		FFBF90D6242117FC00313C7D /* ScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90D5242117FC00313C7D /* ScheduleViewController.swift */; };
 		FFBF90D82421183A00313C7D /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90D72421183A00313C7D /* ViewExtensions.swift */; };
 		FFBF90DB24211C4C00313C7D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90DA24211C4C00313C7D /* Task.swift */; };
@@ -71,19 +73,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditNavigationViewController.swift; sourceTree = "<group>"; };
+		FF3BB36A2426741F0063D851 /* ScheduleEditNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditNavigationController.swift; sourceTree = "<group>"; };
 		FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoViewController.swift; sourceTree = "<group>"; };
 		FF3BE371242FA0B5006677A2 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
-		FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditNavigationViewController.swift; sourceTree = "<group>"; };
+		FF3CA8192430E1B60054BB49 /* ToDoEditNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditNavigationController.swift; sourceTree = "<group>"; };
 		FF3CA81F2430EAD60054BB49 /* ScheduleEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleEditViewController.swift; sourceTree = "<group>"; };
 		FF3E63D12423C4090006B8FA /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		FF410E6F24D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditRepetitionNavigationController.swift; sourceTree = "<group>"; };
+		FF410E7324D3E85700EAB900 /* ToDoEditRepetitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditRepetitionViewController.swift; sourceTree = "<group>"; };
 		FF42EF7224B965D50067CA3E /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		FF42EF7D24B9751A0067CA3E /* ToDoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoHeaderView.swift; sourceTree = "<group>"; };
 		FF42EF8324B975850067CA3E /* ToDoCategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryTableViewCell.swift; sourceTree = "<group>"; };
-		FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryNavigationViewController.swift; sourceTree = "<group>"; };
+		FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryNavigationController.swift; sourceTree = "<group>"; };
 		FF42EF8724B97E650067CA3E /* ToDoCategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCategoryViewController.swift; sourceTree = "<group>"; };
 		FF4812D32495841300682A99 /* ToDoEditCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditCategoryViewController.swift; sourceTree = "<group>"; };
-		FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoNavigationViewController.swift; sourceTree = "<group>"; };
+		FF4812DE24958DD100682A99 /* ToDoNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoNavigationController.swift; sourceTree = "<group>"; };
 		FF4812E024958DF600682A99 /* ToDoEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoEditViewController.swift; sourceTree = "<group>"; };
 		FF4BAFE6248A959200F536CC /* ScheduleDatePickerPopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleDatePickerPopView.swift; sourceTree = "<group>"; };
 		FF4BAFE8248A95E800F536CC /* ToDoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewCell.swift; sourceTree = "<group>"; };
@@ -97,7 +101,7 @@
 		FFBF90C72421127100313C7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FFBF90C92421127100313C7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FFBF90D02421151200313C7D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		FFBF90D32421173600313C7D /* ScheduleNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleNavigationViewController.swift; sourceTree = "<group>"; };
+		FFBF90D32421173600313C7D /* ScheduleNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleNavigationController.swift; sourceTree = "<group>"; };
 		FFBF90D5242117FC00313C7D /* ScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleViewController.swift; sourceTree = "<group>"; };
 		FFBF90D72421183A00313C7D /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		FFBF90DA24211C4C00313C7D /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -154,9 +158,9 @@
 		FF4BAFEA248A960B00F536CC /* Schedule Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FFBF90D32421173600313C7D /* ScheduleNavigationViewController.swift */,
+				FFBF90D32421173600313C7D /* ScheduleNavigationController.swift */,
 				FFBF90D5242117FC00313C7D /* ScheduleViewController.swift */,
-				FF3BB36A2426741F0063D851 /* ScheduleEditNavigationViewController.swift */,
+				FF3BB36A2426741F0063D851 /* ScheduleEditNavigationController.swift */,
 				FF3CA81F2430EAD60054BB49 /* ScheduleEditViewController.swift */,
 			);
 			path = "Schedule Controllers";
@@ -165,13 +169,15 @@
 		FF4BAFEB248A962700F536CC /* ToDo Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FF4812DE24958DD100682A99 /* ToDoNavigationViewController.swift */,
+				FF4812DE24958DD100682A99 /* ToDoNavigationController.swift */,
 				FF3BE36D242F9B86006677A2 /* ToDoViewController.swift */,
-				FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationViewController.swift */,
+				FF42EF8524B975B90067CA3E /* ToDoCategoryNavigationController.swift */,
 				FF42EF8724B97E650067CA3E /* ToDoCategoryViewController.swift */,
-				FF3CA8192430E1B60054BB49 /* ToDoEditNavigationViewController.swift */,
+				FF3CA8192430E1B60054BB49 /* ToDoEditNavigationController.swift */,
 				FF4812E024958DF600682A99 /* ToDoEditViewController.swift */,
 				FF4812D32495841300682A99 /* ToDoEditCategoryViewController.swift */,
+				FF410E6F24D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift */,
+				FF410E7324D3E85700EAB900 /* ToDoEditRepetitionViewController.swift */,
 			);
 			path = "ToDo Controllers";
 			sourceTree = "<group>";
@@ -347,17 +353,19 @@
 			files = (
 				FF4BAFE9248A95E800F536CC /* ToDoTableViewCell.swift in Sources */,
 				FF4BAFE7248A959200F536CC /* ScheduleDatePickerPopView.swift in Sources */,
-				FF42EF8624B975B90067CA3E /* ToDoCategoryNavigationViewController.swift in Sources */,
+				FF42EF8624B975B90067CA3E /* ToDoCategoryNavigationController.swift in Sources */,
+				FF410E7024D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift in Sources */,
+				FF410E7424D3E85700EAB900 /* ToDoEditRepetitionViewController.swift in Sources */,
 				FFBF90DB24211C4C00313C7D /* Task.swift in Sources */,
 				FF42EF8424B975850067CA3E /* ToDoCategoryTableViewCell.swift in Sources */,
 				FFBF90D12421151200313C7D /* TabBarViewController.swift in Sources */,
 				FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */,
-				FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationViewController.swift in Sources */,
-				FF4812DF24958DD100682A99 /* ToDoNavigationViewController.swift in Sources */,
+				FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationController.swift in Sources */,
+				FF4812DF24958DD100682A99 /* ToDoNavigationController.swift in Sources */,
 				FFBF90D82421183A00313C7D /* ViewExtensions.swift in Sources */,
 				FFBF90DE2421226700313C7D /* Schedule.swift in Sources */,
 				FF42EF7E24B9751A0067CA3E /* ToDoHeaderView.swift in Sources */,
-				FF3BB36B2426741F0063D851 /* ScheduleEditNavigationViewController.swift in Sources */,
+				FF3BB36B2426741F0063D851 /* ScheduleEditNavigationController.swift in Sources */,
 				FFBF90C02421127000313C7D /* ViewController.swift in Sources */,
 				FF3BE372242FA0B5006677A2 /* ToDo.swift in Sources */,
 				FF3BE36E242F9B86006677A2 /* ToDoViewController.swift in Sources */,
@@ -368,7 +376,7 @@
 				FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */,
 				FF3CA8202430EAD60054BB49 /* ScheduleEditViewController.swift in Sources */,
 				FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */,
-				FFBF90D42421173600313C7D /* ScheduleNavigationViewController.swift in Sources */,
+				FFBF90D42421173600313C7D /* ScheduleNavigationController.swift in Sources */,
 				FF4812D42495841300682A99 /* ToDoEditCategoryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

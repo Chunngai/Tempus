@@ -155,7 +155,7 @@ class ScheduleTableViewCell: UITableViewCell {
     
     @objc func viewLongPressed() {
         if let scheduleEditNavigationViewController = scheduleViewController.presentedViewController,
-            scheduleEditNavigationViewController is ScheduleEditNavigationViewController {
+            scheduleEditNavigationViewController is ScheduleEditNavigationController {
             return
         }
         

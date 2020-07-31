@@ -9,7 +9,9 @@
 import UIKit
 
 class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
     // MARK: - Models
+    
     var categories: [String]!
     
     // MARK: - Controllers

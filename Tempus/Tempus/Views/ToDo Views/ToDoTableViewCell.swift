@@ -149,7 +149,7 @@ class ToDoTableViewCell: UITableViewCell {
     
     @objc func viewLongPressed() {
         if let toDoEditNavigationViewController = toDoViewController.presentedViewController,
-            toDoEditNavigationViewController is ToDoEditNavigationViewController {
+            toDoEditNavigationViewController is ToDoEditNavigationController {
             return
         }
         

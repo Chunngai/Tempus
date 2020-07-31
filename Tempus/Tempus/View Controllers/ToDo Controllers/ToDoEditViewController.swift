@@ -44,6 +44,8 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     var fromDatePicker: UIDatePicker!
     var toDatePicker: UIDatePicker!
     
+    var repetitionButton = UIButton()
+    
     var categoryButton = UIButton()
     
     var deleteButton: UIButton!
@@ -185,9 +187,20 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
             toDatePicker.isHidden = true
         }
         
+        // Repetition button.
+        view.addSubview(repetitionButton)
+        repetitionButton.addTarget(self, action: #selector(repetitionButtonTapped), for: .touchUpInside)
+        
+        repetitionButton.setTitle("Never", for: .normal)
+        repetitionButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        
+        repetitionButton.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+            make.bottom.equalToSuperview().inset(100)
+        }
+        
         // Category button.
         view.addSubview(categoryButton)
-        
         categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
         if mode == "a" {
@@ -204,7 +217,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         
         categoryButton.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
+            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
             make.bottom.equalToSuperview().inset(100)
         }
         
@@ -326,11 +339,17 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         return toolBar
     }
     
-    @objc func categoryButtonTapped() {
-        let toDoCategoryTableViewController = ToDoEditCategoryViewController()
-        toDoCategoryTableViewController.updateValues(toDoEditViewController: self)
+    @objc func repetitionButtonTapped() {
+        let toDoRepetitionViewController = ToDoEditRepetitionViewController()
 
-        navigationController?.present(ToDoCategoryNavigationViewController(rootViewController: toDoCategoryTableViewController), animated: true, completion: nil)
+        navigationController?.present(ToDoEditRepetitionNavigationController(rootViewController: toDoRepetitionViewController), animated: true, completion: nil)
+    }
+    
+    @objc func categoryButtonTapped() {
+        let toDoCategoryViewController = ToDoEditCategoryViewController()
+        toDoCategoryViewController.updateValues(toDoEditViewController: self)
+
+        navigationController?.present(ToDoCategoryNavigationController(rootViewController: toDoCategoryViewController), animated: true, completion: nil)
     }
     
     @objc func deleteButtonTapped() {
