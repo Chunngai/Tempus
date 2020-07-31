@@ -46,6 +46,10 @@ struct Task: Equatable, Comparable, Codable {
 
 extension Task {
     var isOverdue: Bool {
+        if isFinished {
+            return false
+        }
+        
         guard let dateIntervalEnd = self.dateInterval.end else {
             return false
         }
