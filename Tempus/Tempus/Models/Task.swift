@@ -13,14 +13,16 @@ struct Task: Equatable, Comparable, Codable {
     var dateInterval: Interval!
     var isFinished: Bool!
     var category: String!
+    var repetition: Repetition!
     
     // MARK: - Initializers
     
-    init(content: String? = "", dateInterval: Interval? = Interval(start: nil, end: nil), isFinished: Bool? = false, category: String? = "") {
+    init(content: String? = "", dateInterval: Interval? = Interval(start: nil, end: nil), isFinished: Bool? = false, category: String? = "", repetition: Repetition? = nil) {
         self.content = content
         self.dateInterval = dateInterval
         self.isFinished = isFinished
         self.category = category
+        self.repetition = repetition
     }
     
     // MARK: - Protocols

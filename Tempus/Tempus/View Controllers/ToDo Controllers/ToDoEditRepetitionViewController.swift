@@ -10,10 +10,16 @@ import UIKit
 
 class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - Controllers
+    
+    var toDoEditViewController: ToDoEditViewController!
+    
+    var isPickerHidden = true
+    
     // MARK: - Views
     
     var toDoEditRepetitionTableView: UITableView!
-    
+        
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -30,6 +36,9 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
         // Title of navigation item.
         navigationItem.title = "Repetition"
     
+        // Bar button items.
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        
         // Table view.
         toDoEditRepetitionTableView = UITableView(frame: CGRect(x: 0,
                                                                 y: navigationController!.navigationBar.frame.height,
@@ -42,12 +51,16 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
         toDoEditRepetitionTableView.delegate = self
                 
         toDoEditRepetitionTableView.backgroundColor = UIColor.sky.withAlphaComponent(0)
+        toDoEditRepetitionTableView.separatorStyle = .none
     }
     
-//    func updateValues(toDoEditViewController: ToDoEditViewController) {
-//        self.toDoEditViewController = toDoEditViewController
-//        self.categories = toDoEditViewController.toDoViewController.toDoList.categories
-//    }
+    func updateValues(toDoEditViewController: ToDoEditViewController) {
+        self.toDoEditViewController = toDoEditViewController
+    }
+    
+    @objc func doneButtonTapped() {
+        
+    }
 
     // MARK: - Table view data source
 
@@ -61,19 +74,19 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
-        if indexPath.row == 0 || indexPath.row == 1 {
+        if indexPath.row == 0 || indexPath.row == 1 {  // Text cell.
             cell = UITableViewCell(style: .default, reuseIdentifier: "toDoRepetitionTableViewCell")
-            cell.textLabel?.textColor = .white
             cell.backgroundColor = UIColor.sky.withAlphaComponent(0)
             cell.selectionStyle = .none
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Never"
+                cell.textLabel?.textColor = .white
             } else {
                 cell.textLabel?.text = "Every Day"
+                cell.textLabel?.textColor = .lightText
             }
-        } else {
-            cell = UITableViewCell()
-//            cell.contentView.addSubview(UIDatePicker())
+        } else {  // Picker cell.
+            cell = ToDoRepetitionPickerTableViewCell()
         }
         
         return cell
@@ -81,8 +94,32 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
     
     // MARK: - Table view delegate
 
-    // When a category is tapped.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if let neverCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 0, section: 0)),
+            let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
+            
+            if indexPath.row == 0 {
+                neverCell.textLabel?.textColor = .white
+                repetitionCell.textLabel?.textColor = .lightText
+                
+                isPickerHidden = true
+            } else if indexPath.row == 1 {
+                neverCell.textLabel?.textColor = .lightText
+                repetitionCell.textLabel?.textColor = .white
+                
+                isPickerHidden = false
+            }
+            // Displays or hides the picker.
+            toDoEditRepetitionTableView.beginUpdates()
+            toDoEditRepetitionTableView.endUpdates()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 2 {
+            return isPickerHidden ? 0 : 220
+        } else {
+            return 44
+        }
     }
 }

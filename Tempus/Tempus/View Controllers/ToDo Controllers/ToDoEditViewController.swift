@@ -341,6 +341,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     
     @objc func repetitionButtonTapped() {
         let toDoRepetitionViewController = ToDoEditRepetitionViewController()
+        toDoRepetitionViewController.updateValues(toDoEditViewController: self)
 
         navigationController?.present(ToDoEditRepetitionNavigationController(rootViewController: toDoRepetitionViewController), animated: true, completion: nil)
     }

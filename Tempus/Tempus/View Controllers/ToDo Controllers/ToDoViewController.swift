@@ -64,7 +64,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Sets the title of the navigation item.
         navigationItem.title = "To Do"
         
-        // Nav item buttons.
+        // Nav bar button items.
         let categoryButton = UIBarButtonItem(title: "☆", style: .plain, target: self, action: #selector(categoryButtonTapped))
         categoryButton.tintColor = .white
         navigationItem.leftBarButtonItem = categoryButton
