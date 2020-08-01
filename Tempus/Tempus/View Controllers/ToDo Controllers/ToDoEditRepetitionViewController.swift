@@ -8,13 +8,20 @@
 
 import UIKit
 
-class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ToDoRepetitionPickerTableViewCellDelegate {
     
     // MARK: - Controllers
     
-    var toDoEditViewController: ToDoEditViewController!
+    var delegate: ToDoEditViewController!
     
     var isPickerHidden = true
+    
+    var repetitionNumber = 1
+    var repetitionInterval = "Day"
+    
+    var repetitionText: String {
+        return "Every \(repetitionNumber) \(repetitionNumber > 1 ? repetitionInterval + "s" : repetitionInterval)"
+    }
     
     // MARK: - Views
     
@@ -54,8 +61,8 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
         toDoEditRepetitionTableView.separatorStyle = .none
     }
     
-    func updateValues(toDoEditViewController: ToDoEditViewController) {
-        self.toDoEditViewController = toDoEditViewController
+    func updateValues(delegate: ToDoEditViewController) {
+        self.delegate = delegate
     }
     
     @objc func doneButtonTapped() {
@@ -82,11 +89,12 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
                 cell.textLabel?.text = "Never"
                 cell.textLabel?.textColor = .white
             } else {
-                cell.textLabel?.text = "Every Day"
+                cell.textLabel?.text = repetitionText
                 cell.textLabel?.textColor = .lightText
             }
         } else {  // Picker cell.
             cell = ToDoRepetitionPickerTableViewCell()
+            (cell as! ToDoRepetitionPickerTableViewCell).updateValues(delegate: self)
         }
         
         return cell
@@ -120,6 +128,15 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
             return isPickerHidden ? 0 : 220
         } else {
             return 44
+        }
+    }
+    
+    // MARK: - Todo repetition picker table view cell delegate
+    func pickerValueChanged(number: Int, interval: String) {
+        repetitionNumber = number
+        repetitionInterval = interval
+        if let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
+            repetitionCell.textLabel?.text = repetitionText
         }
     }
 }

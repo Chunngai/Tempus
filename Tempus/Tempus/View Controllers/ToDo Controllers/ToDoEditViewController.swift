@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ToDoEditViewController: UIViewController, UITextViewDelegate {
+class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCategoryViewControllerDelegate {
     // MARK: - Models
     
     var task: Task!
@@ -341,14 +341,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
     
     @objc func repetitionButtonTapped() {
         let toDoRepetitionViewController = ToDoEditRepetitionViewController()
-        toDoRepetitionViewController.updateValues(toDoEditViewController: self)
+        toDoRepetitionViewController.updateValues(delegate: self)
 
         navigationController?.present(ToDoEditRepetitionNavigationController(rootViewController: toDoRepetitionViewController), animated: true, completion: nil)
     }
     
     @objc func categoryButtonTapped() {
         let toDoCategoryViewController = ToDoEditCategoryViewController()
-        toDoCategoryViewController.updateValues(toDoEditViewController: self)
+        toDoCategoryViewController.updateValues(delegate: self)
 
         navigationController?.present(ToDoCategoryNavigationController(rootViewController: toDoCategoryViewController), animated: true, completion: nil)
     }
@@ -357,6 +357,12 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate {
         self.toDoViewController.editTask(task: self.task, mode: "d", oldIdx: oldIdx)
 
         toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - Todo edit category view controller delegate.
+    func selectCategory(at index: Int) {
+        currentIdx = index
+        dismiss(animated: true, completion: nil)
     }
 }
 

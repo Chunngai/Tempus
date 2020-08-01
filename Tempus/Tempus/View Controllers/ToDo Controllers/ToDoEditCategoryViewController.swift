@@ -16,7 +16,7 @@ class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, U
     
     // MARK: - Controllers
     
-    var toDoEditViewController: ToDoEditViewController!
+    var delegate: ToDoEditViewController!
     
     // MARK: - Views
     
@@ -54,9 +54,9 @@ class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, U
         toDoEditCategoryTableView.backgroundColor = UIColor.sky.withAlphaComponent(0)
     }
     
-    func updateValues(toDoEditViewController: ToDoEditViewController) {
-        self.toDoEditViewController = toDoEditViewController
-        self.categories = toDoEditViewController.toDoViewController.toDoList.categories
+    func updateValues(delegate: ToDoEditViewController) {
+        self.delegate = delegate
+        self.categories = delegate.toDoViewController.toDoList.categories
     }
 
     // MARK: - Table view data source
@@ -82,7 +82,10 @@ class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, U
 
     // When a category is tapped.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        toDoEditViewController.currentIdx = indexPath.row
-        toDoEditViewController.dismiss(animated: true, completion: nil)
+        delegate.selectCategory(at: indexPath.row)
     }
+}
+
+protocol ToDoEditCategoryViewControllerDelegate {
+    func selectCategory(at index: Int)
 }
