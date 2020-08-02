@@ -13,7 +13,7 @@ class ScheduleDatePickerPopView: UIView {
     
     // MARK: - Controllers
     
-    var scheduleViewController: ScheduleViewController!
+    var delegate: ScheduleViewController!
     
     // MARK: - Views
     
@@ -30,10 +30,10 @@ class ScheduleDatePickerPopView: UIView {
         super.init(coder: coder)
     }
 
-    init(datePickerFrame: CGRect, scheduleViewController: ScheduleViewController, date: Date) {
+    init(datePickerFrame: CGRect, delegate: ScheduleViewController, date: Date) {
         super.init(frame: UIScreen.main.bounds)
                 
-        self.scheduleViewController = scheduleViewController
+        self.delegate = delegate
                 
         // The frame is the whole screen.
         self.frame = UIScreen.main.bounds
@@ -104,10 +104,14 @@ class ScheduleDatePickerPopView: UIView {
 
     @objc func todayButtonTapped() {
         datePicker.date = Date()
-        scheduleViewController.changeSchedule()
+        delegate.changeSchedule(date: datePicker.date.currentTimeZone())
     }
     
     @objc func datePickerValueChanged() {
-        scheduleViewController.changeSchedule()
+        delegate.changeSchedule(date: datePicker.date.currentTimeZone())
     }
+}
+
+protocol ScheduleDatePickerPopViewDelegate {
+    func changeSchedule(date: Date)
 }

@@ -9,6 +9,7 @@
 import UIKit
 
 class ScheduleEditViewController: UIViewController, UITextViewDelegate {
+    
     // MARK: - Models
     
     var task: Task!
@@ -19,7 +20,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Controllers
     
-    var scheduleViewController: ScheduleViewController!
+    var delegate: ScheduleViewController!
     
     var indexCountedFromOne: Int?
 
@@ -190,7 +191,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         }
         
         // Disables editing if the task is set before the current day.
-        if !scheduleViewController.editable {
+        if !delegate.editable {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
             
@@ -210,22 +211,22 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func updateValues(scheduleViewController: ScheduleViewController, task: Task, initStart: Date, initDuration: TimeInterval, initEnd: Date, indexCountedFromOne: Int?) {
+    func updateValues(delegate: ScheduleViewController, task: Task, initStart: Date, initDuration: TimeInterval, initEnd: Date, indexCountedFromOne: Int?) {
         self.task = task
         self.initStart = initStart
         self.initDuration = initDuration
         self.initEnd = initEnd
         
-        self.scheduleViewController = scheduleViewController
+        self.delegate = delegate
         self.indexCountedFromOne = indexCountedFromOne
     }
     
     @objc func cancelButtonTapped() {
-        scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
     
     @objc func doneButtonTapped() {
-        scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
     
     func emptyContentAlert() {
@@ -245,9 +246,9 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
         self.task.content = contentTextView.text
         self.task.isFinished = task.isFinished ?? false
 
-        self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: self.indexCountedFromOne)
+        self.delegate.editTask(task: self.task, indexCountedFromOne: self.indexCountedFromOne)
         
-        scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
 
     @objc func finishEditing() {
@@ -322,12 +323,12 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     }
 
     @objc func deleteButtonTapped() {
-        self.scheduleViewController.editTask(task: self.task, indexCountedFromOne: indexCountedFromOne! * -1)
+        self.delegate.editTask(task: self.task, indexCountedFromOne: indexCountedFromOne! * -1)
 
-        scheduleViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
 }
 
-protocol TaskEditingDelegate {
+protocol ScheduleEditViewControllerDelegate {
     func editTask(task: Task, indexCountedFromOne: Int?)
 }

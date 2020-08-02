@@ -10,13 +10,14 @@ import UIKit
 import SnapKit
 
 class ToDoTableViewCell: UITableViewCell {
+    
     // MARK: Models
     
     var task: Task!
     
     // MARK: - Controllers
     
-    var toDoViewController: ToDoViewController!
+    var delegate: ToDoViewController!
         
     // MARK: - Views
     var view = UIView()
@@ -84,15 +85,15 @@ class ToDoTableViewCell: UITableViewCell {
         view.addGestureRecognizer(longPressedGestureRecognizer)
         
         // Double Taps to toggle finish status.
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
         view.addGestureRecognizer(tapGestureRecognizer)
         
         tapGestureRecognizer.numberOfTapsRequired = 2
     }
     
-    func updateValues(task: Task, toDoViewController: ToDoViewController) {
+    func updateValues(task: Task, delegate: ToDoViewController) {
         self.task = task
-        self.toDoViewController = toDoViewController
+        self.delegate = delegate
 
         // Updates the views.
         if task.dateInterval != nil && (task.dateInterval.start != nil || task.dateInterval.end != nil) {  // When start or end provided.
@@ -143,17 +144,17 @@ class ToDoTableViewCell: UITableViewCell {
         contentLabel.text = task.content
     }
     
-    @objc func viewTapped() {
-        toDoViewController.toggleFinishStatus(task: task)
-    }
-    
     @objc func viewLongPressed() {
-        if let toDoEditNavigationViewController = toDoViewController.presentedViewController,
+        if let toDoEditNavigationViewController = delegate.presentedViewController,
             toDoEditNavigationViewController is ToDoEditNavigationController {
             return
         }
         
-        toDoViewController.presentEditingView(task: task)
+        delegate.presentEditingView(task: task)
+    }
+    
+    @objc func viewDoubleTapped() {
+        delegate.toggleFinishStatus(task: task)
     }
     
     func getDateLabelText(dateInterval: Interval) -> String {
@@ -241,4 +242,10 @@ class ToDoTableViewCell: UITableViewCell {
         
         return .lightText
     }
+}
+
+protocol ToDoTableViewCellDelegate {
+    func presentEditingView(task: Task)
+    
+    func toggleFinishStatus(task: Task)
 }

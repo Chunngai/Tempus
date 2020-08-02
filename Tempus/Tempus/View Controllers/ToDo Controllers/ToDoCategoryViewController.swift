@@ -9,20 +9,22 @@
 import UIKit
 
 class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
     // MARK: - Models
     
     var categories: [String] {
         get {
-            return toDoViewController.toDoList.categories
+            return toDoList.categories
         }
         set {
-            toDoViewController.toDoList.categories = newValue
+            delegate.updateCategories(categories: newValue)
         }
     }
     
     // MARK: - Controllers
     
-    var toDoViewController: ToDoViewController!
+    var delegate: ToDoViewController!
+    var toDoList: [ToDo]!
     
     var originalCategories: [String]!
     
@@ -63,8 +65,9 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         toDoCategoryTableView.backgroundColor = UIColor.sky.withAlphaComponent(0)
     }
     
-    func updateValues(toDoViewController: ToDoViewController) {
-        self.toDoViewController = toDoViewController
+    func updateValues(delegate: ToDoViewController) {
+        self.delegate = delegate
+        self.toDoList = delegate.toDoList
         
         originalCategories = categories
     }
@@ -176,13 +179,13 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         let cell = ToDoCategoryTableViewCell()
         
         if indexPath.section == 0 {  // Normal categories.
-            cell.updateValues(text: categories[indexPath.row], taskNumber: toDoViewController.toDoList[indexPath.row].unfinishedTasks.count)
+            cell.updateValues(text: categories[indexPath.row], taskNumber: toDoList[indexPath.row].unfinishedTasks.count)
             cell.textfield.isEnabled = toDoCategoryTableView.isEditing ? true : false
         } else if indexPath.section == 1 {  // Add button.
             cell.textfield.isEnabled = false
         } else {
-            let statisticalCategory = toDoViewController.toDoList.statisticalCategories[indexPath.row]
-            cell.updateValues(text: statisticalCategory, taskNumber: toDoViewController.toDoList.getNumberOf(statisticalTask: statisticalCategory))
+            let statisticalCategory = toDoList.statisticalCategories[indexPath.row]
+            cell.updateValues(text: statisticalCategory, taskNumber: toDoList.getNumberOf(statisticalTask: statisticalCategory))
             cell.textfield.isEnabled = false
         }
         
@@ -201,8 +204,8 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         if editingStyle == .delete {
             let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textfield.text!
             if categories.contains(category) {
-                let idx = toDoViewController.toDoList.getCategoryIdx(category: category)
-                if !toDoViewController.toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
+                let idx = toDoList.getCategoryIdx(category: category)
+                if !toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
                     notEmptyCategoryDeletionAlert()
                     return
                 }
@@ -232,15 +235,13 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     // When a category is tapped.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            toDoViewController.displayingCategory = categories[indexPath.row]
-            toDoViewController.navigationItem.title = categories[indexPath.row]
+            delegate.updateDisplayingCategory(category: categories[indexPath.row])
         } else if indexPath.section == 2 {
-            let statisticalCategory = toDoViewController.toDoList.statisticalCategories[indexPath.row]
-            toDoViewController.displayingCategory = statisticalCategory
-            toDoViewController.navigationItem.title = statisticalCategory
+            let statisticalCategory = toDoList.statisticalCategories[indexPath.row]
+            delegate.updateDisplayingCategory(category: statisticalCategory)
         }
         
-        toDoViewController.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
 
     // Override to support conditional rearranging of the table view.
@@ -250,8 +251,7 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     
     // Supports rearranging.
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let todo = toDoViewController.toDoList.remove(at: sourceIndexPath.row)
-        toDoViewController.toDoList.insert(todo, at: destinationIndexPath.row)
+        delegate.rearrange(oldIndex: sourceIndexPath.row, newIndex: destinationIndexPath.row)
     }
 }
 
@@ -264,4 +264,12 @@ extension Array where Element == ToDo {
         
         return count
     }
+}
+
+protocol ToDoCategoryViewControllerDelegate {
+    func updateCategories(categories: [String])
+    
+    func updateDisplayingCategory(category: String)
+    
+    func rearrange(oldIndex: Int, newIndex: Int)
 }

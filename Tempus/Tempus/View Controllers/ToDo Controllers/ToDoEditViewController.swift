@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 
 class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCategoryViewControllerDelegate {
+    
     // MARK: - Models
     
     var task: Task!
@@ -17,13 +18,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     var oldIdx: (categoryIdx: Int, taskIdx: Int)!
     var currentIdx: Int! {
         didSet {
-            categoryButton.setTitle(toDoViewController.toDoList.categories[self.currentIdx], for: .normal)
+            categoryButton.setTitle(toDoList.categories[self.currentIdx], for: .normal)
         }
     }
     
     // MARK: - Controllers
     
-    var toDoViewController: ToDoViewController!
+    var delegate: ToDoViewController!
+    var toDoList: [ToDo]!
         
     var mode: String!
     
@@ -204,14 +206,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
         if mode == "a" {
-            if toDoViewController.toDoList.categories.contains(toDoViewController.displayingCategory) {
-                currentIdx = toDoViewController.toDoList.getCategoryIdx(category: toDoViewController.displayingCategory)
+            if toDoList.categories.contains(delegate.displayingCategory) {
+                currentIdx = toDoList.getCategoryIdx(category: delegate.displayingCategory)
             } else {
                 currentIdx = 0
             }
-            categoryButton.setTitle(toDoViewController.toDoList.categories[currentIdx], for: .normal)
+            categoryButton.setTitle(toDoList.categories[currentIdx], for: .normal)
         } else {
-            currentIdx = toDoViewController.toDoList.getCategoryIdx(category: task.category)
+            currentIdx = toDoList.getCategoryIdx(category: task.category)
             categoryButton.setTitle(task.category, for: .normal)
         }
         categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
@@ -239,13 +241,14 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
     }
     
-    func updateValues(task: Task, toDoViewController: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
+    func updateValues(task: Task, delegate: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
         self.task = task
         if task.dateInterval == nil {
             self.task.dateInterval = Interval(start: Date().currentTimeZone(), duration: 3600)
         }
         
-        self.toDoViewController = toDoViewController
+        self.delegate = delegate
+        self.toDoList = delegate.toDoList
 
         self.mode = mode
         self.oldIdx = oldIdx
@@ -294,7 +297,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     }
     
     @objc func cancelButtonTapped() {
-        toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
     
     func emptyContentAlert() {
@@ -314,11 +317,11 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         self.task.dateInterval = Interval(start: fromButton.title(for: .normal) == unsetString ? nil : fromDatePicker.date.currentTimeZone(),
                                           end: toButton.title(for: .normal) == unsetString ? nil : toDatePicker.date.currentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
-        self.task.category = toDoViewController.toDoList.categories[currentIdx]
+        self.task.category = toDoList.categories[currentIdx]
 
-        self.toDoViewController.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
+        delegate.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 
-        toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
 
     @objc func finishEditing() {
@@ -354,12 +357,13 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     }
     
     @objc func deleteButtonTapped() {
-        self.toDoViewController.editTask(task: self.task, mode: "d", oldIdx: oldIdx)
+        delegate.editTask(task: self.task, mode: "d", oldIdx: oldIdx)
 
-        toDoViewController.navigationController?.dismiss(animated: true, completion: nil)
+        delegate.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Todo edit category view controller delegate.
+    
     func selectCategory(at index: Int) {
         currentIdx = index
         dismiss(animated: true, completion: nil)
@@ -370,4 +374,8 @@ extension UIButton {
     func setDateTimeTitle(date: Date) {
         self.setTitle("\(date.formattedDate())\n\(date.formattedTime())", for: .normal)
     }
+}
+
+protocol ToDoEditViewControllerDelegate {
+    func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?)
 }

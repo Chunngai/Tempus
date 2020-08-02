@@ -10,13 +10,14 @@ import UIKit
 import SnapKit
 
 class ScheduleTableViewCell: UITableViewCell {
+    
     // MARK: - Models
     
     var task: Task!
     
     // MARK: - Controllers
     
-    var scheduleViewController: ScheduleViewController!
+    var delegate: ScheduleViewController!
     
     // MARK: - Views
     
@@ -114,9 +115,9 @@ class ScheduleTableViewCell: UITableViewCell {
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    func updateValues(task: Task, scheduleViewController: ScheduleViewController) {
+    func updateValues(task: Task, delegate: ScheduleViewController) {
         self.task = task
-        self.scheduleViewController = scheduleViewController
+        self.delegate = delegate
         
         // Updates the views.
         let timeLabelText: String
@@ -154,19 +155,26 @@ class ScheduleTableViewCell: UITableViewCell {
     }
     
     @objc func viewLongPressed() {
-        if let scheduleEditNavigationViewController = scheduleViewController.presentedViewController,
+        if let scheduleEditNavigationViewController = delegate.presentedViewController,
             scheduleEditNavigationViewController is ScheduleEditNavigationController {
             return
         }
         
-        scheduleViewController.presentEditingView(task: task)
+        delegate.presentEditingView(task: task)
     }
     
     @objc func viewTapped() {
-        if !scheduleViewController.editable {
+        if !delegate.editable {
             return
         }
         
-        scheduleViewController.toggleFinishStatus(task: task)
+        delegate.toggleFinishStatus(task: task)
     }
+}
+
+
+protocol ScheduleTableViewCellDelegate {
+    func presentEditingView(task: Task)
+    
+    func toggleFinishStatus(task: Task)
 }

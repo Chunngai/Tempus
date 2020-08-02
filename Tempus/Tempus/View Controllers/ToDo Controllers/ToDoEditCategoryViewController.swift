@@ -56,7 +56,7 @@ class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, U
     
     func updateValues(delegate: ToDoEditViewController) {
         self.delegate = delegate
-        self.categories = delegate.toDoViewController.toDoList.categories
+        self.categories = delegate.delegate.toDoList.categories
     }
 
     // MARK: - Table view data source

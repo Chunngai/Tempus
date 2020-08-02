@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TaskEditingDelegate {
+class ScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ScheduleEditViewControllerDelegate, ScheduleDatePickerPopViewDelegate, ScheduleTableViewCellDelegate {
+    
     // MARK: - Models
     
     var schedule: Schedule! {
@@ -103,7 +104,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
                                                                         y: navigationController!.navigationBar.bounds.height,
                                                                         width: UIScreen.main.bounds.width / 1.3,
                                                                         height: UIScreen.main.bounds.height / 3),
-                                                scheduleViewController: self,
+                                                   delegate: self,
                                                 date: schedule.date)
         UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
@@ -167,20 +168,6 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
-    func changeSchedule() {
-        Schedule.saveSchedule(schedule)
-        
-        // Gets the schedule of the selected date.
-        let selectedDate = datePickerView.datePicker.date.currentTimeZone()
-        schedule = Schedule.loadSchedule(date: selectedDate)!
-
-        // Reloads the table.
-        scheduleTableView.reloadData()
-        
-        // Sees if it is editable.
-        verifyEditability()
-    }
-    
     @objc func presentAddingView() {
         // Gets initStart, initDuration and initEnd.
         var initStart: Date
@@ -203,53 +190,10 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         
         // Presents a schedule view controller.
         let scheduleEditViewController = ScheduleEditViewController()
-        scheduleEditViewController.updateValues(scheduleViewController: self, task: Task(),
+        scheduleEditViewController.updateValues(delegate: self, task: Task(),
                                                 initStart: initStart, initDuration: initDuration, initEnd: initEnd,
                                                 indexCountedFromOne: nil)
         navigationController?.present(ScheduleEditNavigationController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
-    }
-    
-    func presentEditingView(task: Task) {
-        // Presents a schedule view controller.
-        let scheduleEditViewController = ScheduleEditViewController()
-        scheduleEditViewController.updateValues(scheduleViewController: self, task: task,
-                                                initStart: task.dateInterval.start!, initDuration: task.dateInterval.duration!, initEnd: task.dateInterval.end!,
-                                                indexCountedFromOne: schedule.tasks.firstIndex(of: task)! + 1)
-        navigationController?.present(ScheduleEditNavigationController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
-    }
-    
-    func toggleFinishStatus(task: Task) {
-        if let taskIndex = schedule.tasks.firstIndex(of: task) {
-            // Gets the cell tapped.
-            var toggledTask = schedule.tasks[taskIndex]
-            toggledTask.isFinished.toggle()
-                        
-            // Updates the task corresponding to the cell.
-            let indexPath = IndexPath(row: taskIndex, section: 0)
-            let cell = scheduleTableView!.cellForRow(at: indexPath) as! ScheduleTableViewCell
-            cell.updateValues(task: toggledTask, scheduleViewController: self)
-            
-            // Rearranges the cell.
-            schedule.tasks[taskIndex].isFinished.toggle()
-            if let TaskNewIndex = schedule.tasks.firstIndex(of: toggledTask) {
-                let newIndexPath = IndexPath(row: TaskNewIndex, section: 0)
-                scheduleTableView.moveRow(at: indexPath, to: newIndexPath)
-            }
-        }
-    }
-    
-    func editTask(task: Task, indexCountedFromOne: Int?) {
-        if let index = indexCountedFromOne {
-            if index > 0 {  // Update.
-                schedule.tasks[index - 1] = task
-            } else {  // Deletion.
-                schedule.tasks.remove(at: index * -1 - 1)
-            }
-        } else {  // Insertion.
-            schedule.tasks.append(task)
-        }
-        
-        scheduleTableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -270,7 +214,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         task = Task(content: task.content, dateInterval: Interval(start: task.dateInterval.start, end: task.dateInterval.end), isFinished: task.isFinished)
         schedule.tasks[indexPath.row] = task
         
-        cell.updateValues(task: task, scheduleViewController: self)
+        cell.updateValues(task: task, delegate: self)
         
         return cell
     }
@@ -279,6 +223,69 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return nil
+    }
+    
+    // MARK: - Schedule date picker pop view delegate
+    
+    func changeSchedule(date: Date) {
+        Schedule.saveSchedule(schedule)
+        
+        // Gets the schedule of the selected date.
+        let selectedDate = date
+        schedule = Schedule.loadSchedule(date: selectedDate)!
+
+        // Reloads the table.
+        scheduleTableView.reloadData()
+        
+        // Sees if it is editable.
+        verifyEditability()
+    }
+    
+    // MARK: - Schedule table view cell delegate
+    
+    func presentEditingView(task: Task) {
+        // Presents a schedule view controller.
+        let scheduleEditViewController = ScheduleEditViewController()
+        scheduleEditViewController.updateValues(delegate: self, task: task,
+                                                initStart: task.dateInterval.start!, initDuration: task.dateInterval.duration!, initEnd: task.dateInterval.end!,
+                                                indexCountedFromOne: schedule.tasks.firstIndex(of: task)! + 1)
+        navigationController?.present(ScheduleEditNavigationController(rootViewController: scheduleEditViewController), animated: true, completion: nil)
+    }
+    
+    func toggleFinishStatus(task: Task) {
+        if let taskIndex = schedule.tasks.firstIndex(of: task) {
+            // Gets the cell tapped.
+            var toggledTask = schedule.tasks[taskIndex]
+            toggledTask.isFinished.toggle()
+                        
+            // Updates the task corresponding to the cell.
+            let indexPath = IndexPath(row: taskIndex, section: 0)
+            let cell = scheduleTableView!.cellForRow(at: indexPath) as! ScheduleTableViewCell
+            cell.updateValues(task: toggledTask, delegate: self)
+            
+            // Rearranges the cell.
+            schedule.tasks[taskIndex].isFinished.toggle()
+            if let TaskNewIndex = schedule.tasks.firstIndex(of: toggledTask) {
+                let newIndexPath = IndexPath(row: TaskNewIndex, section: 0)
+                scheduleTableView.moveRow(at: indexPath, to: newIndexPath)
+            }
+        }
+    }
+    
+    // MARK: - Schedule edit view controller delegate
+    
+    func editTask(task: Task, indexCountedFromOne: Int?) {
+        if let index = indexCountedFromOne {
+            if index > 0 {  // Update.
+                schedule.tasks[index - 1] = task
+            } else {  // Deletion.
+                schedule.tasks.remove(at: index * -1 - 1)
+            }
+        } else {  // Insertion.
+            schedule.tasks.append(task)
+        }
+        
+        scheduleTableView.reloadData()
     }
 }
 

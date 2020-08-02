@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ToDoTableViewCellDelegate, ToDoCategoryNavigationControllerDelegate, ToDoCategoryViewControllerDelegate, ToDoEditViewControllerDelegate {
+    
     // MARK: - Models
     
     var toDoList: [ToDo]! {
@@ -106,62 +107,20 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func categoryButtonTapped() {
         let toDoCategoryTableViewController = ToDoCategoryViewController()
-        toDoCategoryTableViewController.updateValues(toDoViewController: self)
+        toDoCategoryTableViewController.updateValues(delegate: self)
 
         let toDoCategoryNavigationViewController = ToDoCategoryNavigationController(rootViewController: toDoCategoryTableViewController)
-        toDoCategoryNavigationViewController.updateValues(toDoViewController: self)
+        toDoCategoryNavigationViewController.updateValues(delegate: self)
         navigationController?.present(toDoCategoryNavigationViewController, animated: true, completion: nil)
     }
     
     @objc func presentAddingView() {
         let toDoEditViewController = ToDoEditViewController()
         toDoEditViewController.updateValues(task: Task(content: nil, dateInterval: Interval(start: Date().currentTimeZone(), duration: 3600)),
-                                            toDoViewController: self,
+                                            delegate: self,
                                             mode: "a",
                                             oldIdx: nil)
         navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
-    }
-    
-    func presentEditingView(task: Task) {
-        let toDoEditViewController = ToDoEditViewController()
-        
-        var oldIdx: (Int, Int)?
-        for clsIndex in 0..<toDoList.count {
-            for taskIndex in 0..<toDoList[clsIndex].tasks.count {
-                if toDoList[clsIndex].tasks[taskIndex] == task {
-                    oldIdx = (clsIndex, taskIndex)
-                }
-            }
-        }
-        
-        toDoEditViewController.updateValues(task: task, toDoViewController: self, mode: "e", oldIdx: oldIdx)
-        navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
-    }
-    
-    func toggleFinishStatus(task: Task) {
-        for i in 0..<toDoList.count {
-            if let idx = toDoList[i].tasks.firstIndex(of: task) {
-                toDoList[i].tasks[idx].isFinished.toggle()
-                
-                break
-            }
-        }
-    }
-    
-    func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
-        if mode == "a" {  // Append.
-            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
-            toDoList[categoryIdx].tasks.append(task)
-        } else if mode == "e" {  // Update.
-            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)  // Removes the old one.
-            
-            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
-            toDoList[categoryIdx].tasks.append(task)
-        } else if mode == "d" {  // Delete.
-            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
-        }
-        
-        toDoTableView?.reloadData()
     }
     
     // MARK: - Table view data source
@@ -197,7 +156,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             task = Task()
         }
-        cell.updateValues(task: task, toDoViewController: self)
+        cell.updateValues(task: task, delegate: self)
 
         return cell
     }
@@ -249,6 +208,74 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             return tableView.sectionFooterHeight
         }
+    }
+    
+    // MARK: - Todo table view cell delegate
+    
+    func presentEditingView(task: Task) {
+        let toDoEditViewController = ToDoEditViewController()
+        
+        var oldIdx: (Int, Int)?
+        for clsIndex in 0..<toDoList.count {
+            for taskIndex in 0..<toDoList[clsIndex].tasks.count {
+                if toDoList[clsIndex].tasks[taskIndex] == task {
+                    oldIdx = (clsIndex, taskIndex)
+                }
+            }
+        }
+        
+        toDoEditViewController.updateValues(task: task, delegate: self, mode: "e", oldIdx: oldIdx)
+        navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+    }
+    
+    func toggleFinishStatus(task: Task) {
+        for i in 0..<toDoList.count {
+            if let idx = toDoList[i].tasks.firstIndex(of: task) {
+                toDoList[i].tasks[idx].isFinished.toggle()
+                
+                break
+            }
+        }
+    }
+    
+    // MARK: -  Todo category navigation controller delegate
+    
+    func resetDisplayingCategory() {
+        displayingCategory = toDoList.categories[0]
+    }
+    
+    // MARK: - Todo category view controller delegate
+    
+    func updateCategories(categories: [String]) {
+        toDoList.categories = categories
+    }
+    
+    func updateDisplayingCategory(category: String) {
+        displayingCategory = category
+        navigationItem.title = category
+    }
+    
+    func rearrange(oldIndex: Int, newIndex: Int) {
+        let todo = toDoList.remove(at: oldIndex)
+        toDoList.insert(todo, at: newIndex)
+    }
+    
+    // MARK: - Todo edit view controller delegate
+    
+    func editTask(task: Task, mode: String, oldIdx: (categoryIdx: Int, taskIdx: Int)?) {
+        if mode == "a" {  // Append.
+            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
+            toDoList[categoryIdx].tasks.append(task)
+        } else if mode == "e" {  // Update.
+            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)  // Removes the old one.
+            
+            let categoryIdx = toDoList.getCategoryIdx(category: task.category)
+            toDoList[categoryIdx].tasks.append(task)
+        } else if mode == "d" {  // Delete.
+            toDoList[oldIdx!.categoryIdx].tasks.remove(at: oldIdx!.taskIdx)
+        }
+        
+        toDoTableView?.reloadData()
     }
 }
 

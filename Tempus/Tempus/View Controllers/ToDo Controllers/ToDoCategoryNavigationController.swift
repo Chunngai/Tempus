@@ -12,7 +12,7 @@ class ToDoCategoryNavigationController: UINavigationController {
 
     // MARK: - Controllers.
     
-    var toDoViewController: ToDoViewController?
+    var delegate_: ToDoViewController?
     
     // MARK: - Views.
     
@@ -43,15 +43,19 @@ class ToDoCategoryNavigationController: UINavigationController {
         
         // Checks if the displaying category is in categories + statisticalCategories.
         // (May not in due to deletion.)
-        if let toDoViewController = toDoViewController {
-            let allCategories = toDoViewController.toDoList.categories + toDoViewController.toDoList.statisticalCategories
-            if !allCategories.contains(toDoViewController.displayingCategory) {
-                toDoViewController.displayingCategory = toDoViewController.toDoList.categories[0]
+        if let delegate_ = delegate_ {
+            let allCategories = delegate_.toDoList.categories + delegate_.toDoList.statisticalCategories
+            if !allCategories.contains(delegate_.displayingCategory) {
+                delegate_.resetDisplayingCategory()
             }
         }
     }
     
-    func updateValues(toDoViewController: ToDoViewController) {
-        self.toDoViewController = toDoViewController
+    func updateValues(delegate: ToDoViewController) {
+        self.delegate_ = delegate
     }
+}
+
+protocol ToDoCategoryNavigationControllerDelegate {
+    func resetDisplayingCategory()
 }

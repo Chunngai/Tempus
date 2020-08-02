@@ -10,7 +10,8 @@ import UIKit
 
 class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    // Controllers.
+    // MARK: - Controllers
+    
     var delegate: ToDoEditRepetitionViewController!
     
     var selectedRepetitionNumberIdx = 0
