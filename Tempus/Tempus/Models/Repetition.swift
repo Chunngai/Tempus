@@ -12,6 +12,9 @@ struct Repetition: Codable {
     var repetitionInterval: RepetitionInterval
     var lastDate: Date
     var repeatTueDate: Date
+    
+    static var numbers = [1..<366, 1..<53, 1..<13]
+    static var intervals = ["Day", "Week", "Month"]
 
     // MARK: - Initializers
 

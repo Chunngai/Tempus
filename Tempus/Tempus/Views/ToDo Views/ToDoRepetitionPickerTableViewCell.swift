@@ -13,9 +13,6 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     // Controllers.
     var delegate: ToDoEditRepetitionViewController!
     
-    var repetitionNumbers = [1..<366, 1..<53, 1..<13]
-    var repetitionIntervals = ["Day", "Week", "Month"]
-    
     var selectedRepetitionNumberIdx = 0
     var selectedRepetitionIntervalIdx = 0
     
@@ -79,9 +76,9 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {  // Numbers.
-            return repetitionNumbers[selectedRepetitionIntervalIdx].max()!
+            return Repetition.numbers[selectedRepetitionIntervalIdx].max()!
         } else {  // Intervals.
-            return repetitionIntervals.count
+            return Repetition.intervals.count
         }
     }
     
@@ -91,7 +88,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         if component == 0 {  // Numbers.
             return String(row + 1)
         } else {  // Intervals.
-            var title = repetitionIntervals[row]
+            var title = Repetition.intervals[row]
             if selectedRepetitionNumberIdx > 0 {
                 title += "s"
             }
@@ -114,7 +111,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         }
         
         // Update the text on the delegate.
-        delegate.pickerValueChanged(number: selectedRepetitionNumberIdx + 1, interval: repetitionIntervals[selectedRepetitionIntervalIdx])
+        delegate.pickerValueChanged(number: selectedRepetitionNumberIdx + 1, interval: Repetition.intervals[selectedRepetitionIntervalIdx])
     }
 }
 
