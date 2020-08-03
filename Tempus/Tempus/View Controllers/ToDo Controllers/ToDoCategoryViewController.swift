@@ -21,10 +21,11 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
+    var toDoList: [ToDo]!
+    
     // MARK: - Controllers
     
     var delegate: ToDoViewController!
-    var toDoList: [ToDo]!
     
     var originalCategories: [String]!
     

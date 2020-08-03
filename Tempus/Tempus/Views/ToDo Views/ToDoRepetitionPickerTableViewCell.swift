@@ -14,8 +14,23 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     
     var delegate: ToDoEditRepetitionViewController!
     
-    var selectedRepetitionNumberIdx = 0
-    var selectedRepetitionIntervalIdx = 0
+    var repetition: Repetition!
+    var selectedRepetitionNumberIdx: Int {
+        get {
+            return repetition.number - 1
+        }
+        set {
+            repetition.updateRepetitionInterval(number: newValue + 1, intervalIdx: selectedRepetitionIntervalIdx)
+        }
+    }
+    var selectedRepetitionIntervalIdx: Int {
+        get {
+            return repetition.intervalIdx
+        }
+        set {
+            repetition.updateRepetitionInterval(number: repetition.number, intervalIdx: newValue)
+        }
+    }
     
     // MARK: - Views
     
@@ -54,9 +69,6 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         pickerView.dataSource = self
         pickerView.delegate = self
         
-        pickerView.selectRow(0, inComponent: 0, animated: true)
-        pickerView.selectRow(0, inComponent: 1, animated: true)
-        
         pickerView.setValue(UIColor.white, forKeyPath: "textColor")
         
         pickerView.snp.makeConstraints { (make) in
@@ -65,8 +77,13 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         }
     }
     
-    func updateValues(delegate: ToDoEditRepetitionViewController) {
+    func updateValues(delegate: ToDoEditRepetitionViewController, repetition: Repetition) {
         self.delegate = delegate
+        
+        self.repetition = repetition
+        
+        pickerView.selectRow(selectedRepetitionNumberIdx, inComponent: 0, animated: true)
+        pickerView.selectRow(selectedRepetitionIntervalIdx, inComponent: 1, animated: true)
     }
     
     // MARK: - Picker view data source
@@ -111,11 +128,11 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
             pickerView.reloadComponent(0)
         }
         
-        // Update the text on the delegate.
-        delegate.pickerValueChanged(number: selectedRepetitionNumberIdx + 1, interval: Repetition.intervals[selectedRepetitionIntervalIdx])
+        // Updates the repetition of the delegate.
+        delegate.pickerValueChanged(repetition: repetition)
     }
 }
 
 protocol ToDoRepetitionPickerTableViewCellDelegate {
-    func pickerValueChanged(number: Int, interval: String)
+    func pickerValueChanged(repetition: Repetition)
 }

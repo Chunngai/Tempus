@@ -20,6 +20,7 @@ class ToDoTableViewCell: UITableViewCell {
     var delegate: ToDoViewController!
         
     // MARK: - Views
+    
     var view = UIView()
     var dateLabel: UILabel!
     var remainingTimeLabel: UILabel!

@@ -9,23 +9,26 @@
 import UIKit
 import SnapKit
 
-class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCategoryViewControllerDelegate {
+class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCategoryViewControllerDelegate, ToDoEditRepetitionViewControllerDelegate {
     
     // MARK: - Models
     
     var task: Task!
     
-    var oldIdx: (categoryIdx: Int, taskIdx: Int)!
+    var oldIdx: (categoryIdx: Int, taskIdx: Int)?
     var currentIdx: Int! {
         didSet {
             categoryButton.setTitle(toDoList.categories[self.currentIdx], for: .normal)
         }
     }
     
+    var repetition: Repetition?
+    
+    var toDoList: [ToDo]!
+    
     // MARK: - Controllers
     
     var delegate: ToDoViewController!
-    var toDoList: [ToDo]!
         
     var mode: String!
     
@@ -193,8 +196,8 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         view.addSubview(repetitionButton)
         repetitionButton.addTarget(self, action: #selector(repetitionButtonTapped), for: .touchUpInside)
         
-        repetitionButton.setTitle("Never", for: .normal)
         repetitionButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        repetitionButton.setTitle(Repetition.formatted(repetition: task.repetition), for: .normal)
         
         repetitionButton.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
@@ -246,6 +249,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         if task.dateInterval == nil {
             self.task.dateInterval = Interval(start: Date().currentTimeZone(), duration: 3600)
         }
+        self.repetition = task.repetition
         
         self.delegate = delegate
         self.toDoList = delegate.toDoList
@@ -318,6 +322,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
                                           end: toButton.title(for: .normal) == unsetString ? nil : toDatePicker.date.currentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
         self.task.category = toDoList.categories[currentIdx]
+        self.task.repetition = repetition
 
         delegate.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 
@@ -344,7 +349,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     
     @objc func repetitionButtonTapped() {
         let toDoRepetitionViewController = ToDoEditRepetitionViewController()
-        toDoRepetitionViewController.updateValues(delegate: self)
+        toDoRepetitionViewController.updateValues(delegate: self, repetition: repetition)
 
         navigationController?.present(ToDoEditRepetitionNavigationController(rootViewController: toDoRepetitionViewController), animated: true, completion: nil)
     }
@@ -367,6 +372,13 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     func selectCategory(at index: Int) {
         currentIdx = index
         dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: - To do edit repetition view controller delegate
+    
+    func updateRepetition(repetition: Repetition?) {
+        self.repetition = repetition
+        repetitionButton.setTitle(Repetition.formatted(repetition: repetition), for: .normal)
     }
 }
 

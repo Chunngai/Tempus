@@ -13,13 +13,47 @@ struct Repetition: Codable {
     var lastDate: Date
     var repeatTueDate: Date
     
+    var number: Int {
+        switch repetitionInterval {
+        case .day(number: let number):
+            return number
+        case .week(number: let number):
+            return number
+        case .month(number: let number):
+            return number
+        }
+    }
+    
+    var intervalIdx: Int {
+        switch repetitionInterval {
+        case .day(number: _):
+            return 0
+        case .week(number: _):
+            return 1
+        case .month(number: _):
+            return 2
+        }
+    }
+    
     static var numbers = [1..<366, 1..<53, 1..<13]
     static var intervals = ["Day", "Week", "Month"]
 
     // MARK: - Initializers
 
-    init(repetitionInterval: RepetitionInterval = .week(number: 1), lastDate: Date = Date().currentTimeZone(), repeatTueDate: Date = Date().currentTimeZone()) {
+    init(repetitionInterval: RepetitionInterval = .week(number: 1), lastDate: Date = Date().currentTimeZone(), repeatTueDate: Date = Date(timeInterval: 7 * 3600, since: Date().currentTimeZone())) {
         self.repetitionInterval = repetitionInterval
+        self.lastDate = lastDate
+        self.repeatTueDate = repeatTueDate
+    }
+    
+    init(repetition: (number: Int, intervalIdx: Int), lastDate: Date = Date().currentTimeZone(), repeatTueDate: Date = Date(timeInterval: 7 * 3600, since: Date().currentTimeZone())) {
+        if repetition.intervalIdx == 0 {
+            self.repetitionInterval = .day(number: repetition.number)
+        } else if repetition.intervalIdx == 1 {
+            self.repetitionInterval = .week(number: repetition.number)
+        } else {
+            self.repetitionInterval = .month(number: repetition.number)
+        }
         self.lastDate = lastDate
         self.repeatTueDate = repeatTueDate
     }
@@ -81,6 +115,52 @@ struct Repetition: Codable {
 
     func next(_ value: Int, _ component: Calendar.Component) -> Date {
         return Calendar.current.date(byAdding: component, value: value, to: lastDate)!
+    }
+    
+//    func formatted() -> String {
+//        var text = "Every "
+//        var number_: Int
+//        
+//        switch repetitionInterval {
+//        case .day(number: let number):
+//            text += "\(number) Day"
+//            number_ = number
+//        case .week(number: let number):
+//            text += "\(number) Week"
+//            number_ = number
+//        case .month(number: let number):
+//            text += "\(number) Month"
+//            number_ = number
+//        }
+//        
+//        if number_ > 1 {
+//            text += "s"
+//        }
+//        
+//        return text
+//    }
+    
+    mutating func updateRepetitionInterval(number: Int, intervalIdx: Int) {
+        if intervalIdx == 0 {
+            self.repetitionInterval = .day(number: number)
+        } else if intervalIdx == 1 {
+            self.repetitionInterval = .week(number: number)
+        } else {
+            self.repetitionInterval = .month(number: number)
+        }
+    }
+    
+    static func formatted(repetition: Repetition?) -> String {
+        if repetition == nil {
+            return "Never"
+        }
+        
+        var text = "Every \(repetition!.number) \(intervals[repetition!.intervalIdx])"
+        if repetition!.number > 1 {
+            text += "s"
+        }
+        
+        return text
     }
 }
 
