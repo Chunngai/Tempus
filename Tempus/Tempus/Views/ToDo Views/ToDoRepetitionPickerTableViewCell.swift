@@ -10,26 +10,25 @@ import UIKit
 
 class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
 
+    // MARK: - Models
+    
+    var repetition: Repetition!
+    var repetitionNumberIdx: Int {
+        return repetition.number - 1
+    }
+    var repetitionIntervalIdx: Int {
+        return repetition.intervalIdx
+    }
+    
     // MARK: - Controllers
     
     var delegate: ToDoEditRepetitionViewController!
     
-    var repetition: Repetition!
-    var selectedRepetitionNumberIdx: Int {
-        get {
-            return repetition.number - 1
-        }
-        set {
-            repetition.updateRepetitionInterval(number: newValue + 1, intervalIdx: selectedRepetitionIntervalIdx)
-        }
+    var selectedNumberIdx: Int {
+        return pickerView.selectedRow(inComponent: 0)
     }
-    var selectedRepetitionIntervalIdx: Int {
-        get {
-            return repetition.intervalIdx
-        }
-        set {
-            repetition.updateRepetitionInterval(number: repetition.number, intervalIdx: newValue)
-        }
+    var selectedIntervalIdx: Int {
+        return pickerView.selectedRow(inComponent: 1)
     }
     
     // MARK: - Views
@@ -82,8 +81,8 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         
         self.repetition = repetition
         
-        pickerView.selectRow(selectedRepetitionNumberIdx, inComponent: 0, animated: true)
-        pickerView.selectRow(selectedRepetitionIntervalIdx, inComponent: 1, animated: true)
+        pickerView.selectRow(repetitionNumberIdx, inComponent: 0, animated: true)
+        pickerView.selectRow(repetitionIntervalIdx, inComponent: 1, animated: true)
     }
     
     // MARK: - Picker view data source
@@ -94,7 +93,11 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 0 {  // Numbers.
-            return Repetition.numbers[selectedRepetitionIntervalIdx].max()!
+            if pickerView.numberOfComponents == 2 {  // Sometimes it's 1.
+                return Repetition.numbers[selectedIntervalIdx].max()!
+            } else {
+                return 1
+            }
         } else {  // Intervals.
             return Repetition.intervals.count
         }
@@ -107,7 +110,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
             return String(row + 1)
         } else {  // Intervals.
             var title = Repetition.intervals[row]
-            if selectedRepetitionNumberIdx > 0 {
+            if selectedNumberIdx > 0 {
                 title += "s"
             }
             
@@ -116,17 +119,16 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 0 {  // The number is changed.
-            // If the number is greater than 1, adds an "s" at the end of the interval text.
-            selectedRepetitionNumberIdx = row
-            pickerView.reloadComponent(1)
+        // Updates the picker view.
+        pickerView.reloadAllComponents()
+        
+        // If the current selected number is greater than the valid number of the current interval, makes the selected number be the max valid one.
+        if selectedNumberIdx > pickerView.numberOfRows(inComponent: 0) - 1 {
+            pickerView.selectRow(pickerView.numberOfRows(inComponent: 0) - 1, inComponent: 0, animated: true)
         }
         
-        if component == 1 {  // The interval is changed.
-            // Changes the number range.
-            selectedRepetitionIntervalIdx = row
-            pickerView.reloadComponent(0)
-        }
+        // Updates the repetition.
+        repetition.updateRepetitionInterval(number: selectedNumberIdx + 1, intervalIdx: selectedIntervalIdx)
         
         // Updates the repetition of the delegate.
         delegate.pickerValueChanged(repetition: repetition)

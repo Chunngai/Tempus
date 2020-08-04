@@ -198,9 +198,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         
         repetitionButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         repetitionButton.setTitle(Repetition.formatted(repetition: task.repetition), for: .normal)
-        
+                
         repetitionButton.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
             make.bottom.equalToSuperview().inset(100)
         }
         
@@ -208,6 +208,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         view.addSubview(categoryButton)
         categoryButton.addTarget(self, action: #selector(categoryButtonTapped), for: .touchUpInside)
         
+        categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         if mode == "a" {
             if toDoList.categories.contains(delegate.displayingCategory) {
                 currentIdx = toDoList.getCategoryIdx(category: delegate.displayingCategory)
@@ -219,10 +220,9 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
             currentIdx = toDoList.getCategoryIdx(category: task.category)
             categoryButton.setTitle(task.category, for: .normal)
         }
-        categoryButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
-        
+                
         categoryButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.30)
+            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
             make.bottom.equalToSuperview().inset(100)
         }
         
