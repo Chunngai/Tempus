@@ -311,9 +311,12 @@ extension Task {
             return false
         }
         
-        if let start = dateInterval.start,
-            let due = dateInterval.end,
-            start <= Date().currentTimeZone(),
+        if let start = dateInterval.start, let due = dateInterval.end,
+            start <= Date().currentTimeZone(), Date().currentTimeZone() <= due {
+            return true
+        }
+        
+        if dateInterval.start == nil, let due = dateInterval.end,
             Date().currentTimeZone() <= due {
             return true
         }
