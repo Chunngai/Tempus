@@ -22,10 +22,14 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             ToDo.saveToDo(self.toDoList!)
             
             // Badge.
+            let emergentTaskNumber = toDoList.getNumberOf(statisticalTask: "Emergent")
+            let overdueTaskNumber = toDoList.getNumberOf(statisticalTask: "Overdue")
+            let badgeNumber = emergentTaskNumber + overdueTaskNumber
+            
             let toDoItem = tabBarController?.tabBar.items![1]
-            if self.toDoList.emergentTaskNumber > 0 {
-                toDoItem?.badgeValue = String(self.toDoList.emergentTaskNumber)
-                UIApplication.shared.applicationIconBadgeNumber = self.toDoList.emergentTaskNumber
+            if badgeNumber > 0 {
+                toDoItem?.badgeValue = String(badgeNumber)
+                UIApplication.shared.applicationIconBadgeNumber = badgeNumber
             } else {
                 toDoItem?.badgeValue = nil
                 UIApplication.shared.applicationIconBadgeNumber = 0
@@ -407,15 +411,6 @@ extension ToDo {
 }
 
 extension Array where Element == ToDo {
-    var emergentTaskNumber: Int {
-        var count = 0
-        for toDo in self {
-            count += toDo.emergentTasks.count
-        }
-        
-        return count
-    }
-    
     var categories: [String] {
         get {
             // Gets all categories from the todo list.
