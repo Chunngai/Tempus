@@ -99,6 +99,8 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         
         pickerView.selectRow(repetitionNumberIdx, inComponent: 0, animated: true)
         pickerView.selectRow(repetitionIntervalIdx, inComponent: 1, animated: true)
+        
+        datePicker.date = repetition.repeatTueDate
     }
     
     func updateDisplayingPicker(side: String) {

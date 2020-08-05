@@ -21,7 +21,9 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    var toDoList: [ToDo]!
+    var toDoList: [ToDo]! {
+        return delegate.toDoList
+    }
     
     // MARK: - Controllers
     
@@ -68,7 +70,6 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     
     func updateValues(delegate: ToDoViewController) {
         self.delegate = delegate
-        self.toDoList = delegate.toDoList
         
         originalCategories = categories
     }

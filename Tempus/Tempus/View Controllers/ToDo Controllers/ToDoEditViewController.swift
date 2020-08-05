@@ -197,10 +197,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         repetitionButton.addTarget(self, action: #selector(repetitionButtonTapped), for: .touchUpInside)
         
         repetitionButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
-        repetitionButton.setTitle(Repetition.formatted(repetition: task.repetition), for: .normal)
+        repetitionButton.setTitle("\(Repetition.formatted(repetition: repetition)) \(repetition != nil ? repetition!.formattedRepeatTilDate : "")", for: .normal)
                 
         repetitionButton.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.12)
             make.bottom.equalToSuperview().inset(100)
         }
         
@@ -222,7 +222,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         }
                 
         categoryButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.20)
+            make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.12)
             make.bottom.equalToSuperview().inset(100)
         }
         
@@ -326,7 +326,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         if var repetition = repetition, let start = self.task.dateInterval.start {
             repetition.lastDate = start
             
-            if let due = self.task.dateInterval.end, repetition.next() < due {
+            if let due = self.task.dateInterval.end, due < repetition.next() {
                 self.task.repetition = repetition
                 self.task.repetition.lastDate = start
             }
@@ -388,7 +388,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     
     func updateRepetition(repetition: Repetition?) {
         self.repetition = repetition
-        repetitionButton.setTitle(Repetition.formatted(repetition: repetition), for: .normal)
+        repetitionButton.setTitle("\(Repetition.formatted(repetition: repetition)) \(repetition != nil ? repetition!.formattedRepeatTilDate : "")", for: .normal)
     }
 }
 
