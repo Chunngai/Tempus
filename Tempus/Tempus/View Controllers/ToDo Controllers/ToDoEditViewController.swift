@@ -322,7 +322,17 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
                                           end: toButton.title(for: .normal) == unsetString ? nil : toDatePicker.date.currentTimeZone())
         self.task.isFinished = self.task.isFinished != nil ? self.task.isFinished : false
         self.task.category = toDoList.categories[currentIdx]
-        self.task.repetition = repetition
+        
+        if var repetition = repetition, let start = self.task.dateInterval.start {
+            repetition.lastDate = start
+            
+            if let due = self.task.dateInterval.end, repetition.next() < due {
+                self.task.repetition = repetition
+                self.task.repetition.lastDate = start
+            }
+        } else {
+            self.task.repetition = nil
+        }
 
         delegate.editTask(task: self.task, mode: mode, oldIdx: oldIdx)
 

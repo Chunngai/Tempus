@@ -33,7 +33,8 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     
     // MARK: - Views
     
-    var pickerView: UIPickerView!
+    var pickerView = UIPickerView()
+    var datePicker = UIDatePicker()
     
     // MARK: - Initializers
     
@@ -62,7 +63,6 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         selectionStyle = .none
         
         // Picker.
-        pickerView = UIPickerView()
         contentView.addSubview(pickerView)
 
         pickerView.dataSource = self
@@ -71,7 +71,23 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         pickerView.setValue(UIColor.white, forKeyPath: "textColor")
         
         pickerView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().offset(UIScreen.main.bounds.width * 0.02)
+            make.left.equalToSuperview().offset(UIScreen.main.bounds.width * 0.02)
+            make.right.equalToSuperview().offset(-UIScreen.main.bounds.width * 0.02)
+            make.height.equalToSuperview()
+        }
+        
+        // Date picker.
+        contentView.addSubview(datePicker)
+        
+        datePicker.setValue(UIColor.white, forKey: "textColor")
+        datePicker.datePickerMode = .date
+        datePicker.minimumDate = Date()
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        datePicker.isHidden = true
+        
+        datePicker.snp.makeConstraints { (make) in
+            make.left.equalToSuperview().offset(UIScreen.main.bounds.width * 0.02)
+            make.right.equalToSuperview().offset(-UIScreen.main.bounds.width * 0.02)
             make.height.equalToSuperview()
         }
     }
@@ -83,6 +99,24 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         
         pickerView.selectRow(repetitionNumberIdx, inComponent: 0, animated: true)
         pickerView.selectRow(repetitionIntervalIdx, inComponent: 1, animated: true)
+    }
+    
+    func updateDisplayingPicker(side: String) {
+        if side == "L" {
+            pickerView.isHidden = false
+            datePicker.isHidden = true
+        } else {
+            pickerView.isHidden = true
+            datePicker.isHidden = false
+        }
+    }
+    
+    @objc func datePickerValueChanged() {
+        // Updates the repetition.
+        repetition.updateRepetitionRepeatTueDate(repeatTilDate: datePicker.date.currentTimeZone())
+        
+        // Updates the repetition of the delegate.
+        delegate.datePickerValueChanged(repetition: repetition)
     }
     
     // MARK: - Picker view data source
@@ -136,5 +170,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
 }
 
 protocol ToDoRepetitionPickerTableViewCellDelegate {
+    func datePickerValueChanged(repetition: Repetition)
+    
     func pickerValueChanged(repetition: Repetition)
 }

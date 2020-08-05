@@ -8,29 +8,37 @@
 
 import UIKit
 
-class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ToDoRepetitionPickerTableViewCellDelegate {
+class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ToDoRepetitionPickerTableViewCellDelegate, ToDoRepetitionTextTableViewCellDelegate {
     
     // MARK: - Models
     
     var repetition: Repetition? {
         didSet {
-            if let neverCell = toDoEditRepetitionTableView?.cellForRow(at: IndexPath(row: 0, section: 0)),
-                let repetitionCell = toDoEditRepetitionTableView?.cellForRow(at: IndexPath(row: 1, section: 0)) {
+            if let neverCell = toDoEditRepetitionTableView?.cellForRow(at: IndexPath(row: 0, section: 0)) as? ToDoRepetitionTextTableViewCell,
+                let repetitionCell = toDoEditRepetitionTableView?.cellForRow(at: IndexPath(row: 1, section: 0)) as? ToDoRepetitionTextTableViewCell {
         
                 isPickerHidden = repetition == nil ? true : false
-                neverCell.textLabel?.textColor = repetition == nil ? .white : .lightText
-                repetitionCell.textLabel?.textColor = repetition == nil ? .lightText : .white
+                neverCell.setButtonColor(color: neverCellTextColor)
+                repetitionCell.setButtonColor(color: repetitionCellTextColor)
             }
         }
     }
     
-    let defaultRepetition = Repetition(repetition: (number: 1, intervalIdx: 0))
+    let defaultRepetition = Repetition(repetition: (number: 1, intervalIdx: 0), repeatTueDate: Date().currentTimeZone())
     
     // MARK: - Controllers
     
     var delegate: ToDoEditViewController!
     
     var isPickerHidden = true
+    var side: String = "L"
+    
+    var neverCellTextColor: UIColor {
+        return repetition == nil ? .white : .lightText
+    }
+    var repetitionCellTextColor: UIColor {
+        return repetition == nil ? .lightText : .white
+    }
     
     // MARK: - Views
     
@@ -74,7 +82,6 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
         self.delegate = delegate
         
         self.repetition = repetition
-        isPickerHidden = repetition == nil ? true : false
     }
     
     @objc func doneButtonTapped() {
@@ -94,24 +101,25 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
+        let tmpRepetition = repetition != nil ? repetition : defaultRepetition
+
         if indexPath.row != 2 {  // Text cell.
-            cell = UITableViewCell(style: .default, reuseIdentifier: "toDoRepetitionTableViewCell")
-            cell.backgroundColor = UIColor.sky.withAlphaComponent(0)
-            cell.selectionStyle = .none
+            let cell = ToDoRepetitionTextTableViewCell()
+            
             if indexPath.row == 0 {
-                cell.textLabel?.text = "Never"
-                cell.textLabel?.textColor = repetition == nil ? .white : .lightText
+                cell.updateValues(delegate: self, row: indexPath.row, leftText: "Never", rightText: "", color: neverCellTextColor)
             } else {
-                cell.textLabel?.text = Repetition.formatted(repetition: repetition != nil ? repetition : defaultRepetition)
-                cell.textLabel?.textColor = repetition == nil ? .lightText : .white
+                cell.updateValues(delegate: self, row: indexPath.row, leftText: Repetition.formatted(repetition: tmpRepetition),
+                                  rightText: tmpRepetition!.formattedRepeatTilDate, color: repetitionCellTextColor)
             }
+            
+            return cell
         } else {  // Picker cell.
-            cell = ToDoRepetitionPickerTableViewCell()
-            (cell as! ToDoRepetitionPickerTableViewCell).updateValues(delegate: self, repetition: repetition != nil ? repetition! : defaultRepetition)
+            let cell = ToDoRepetitionPickerTableViewCell()
+            cell.updateValues(delegate: self, repetition: tmpRepetition!)
+            
+            return cell
         }
-        
-        return cell
     }
     
     // MARK: - Table view delegate
@@ -138,12 +146,30 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
         }
     }
     
+    // MARK: - Todo repetition text table view cell delegate
+    
+    func cellTapped(row: Int, side: String) {
+        if let cell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ToDoRepetitionPickerTableViewCell {
+            cell.updateDisplayingPicker(side: side)
+        }
+        
+        let indexPath = IndexPath(row: row, section: 0)
+        tableView(toDoEditRepetitionTableView, didSelectRowAt: indexPath)
+    }
+    
     // MARK: - Todo repetition picker table view cell delegate
+    
+    func datePickerValueChanged(repetition: Repetition) {
+        self.repetition = repetition
+        if let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ToDoRepetitionTextTableViewCell {
+            repetitionCell.rightButton.setTitle(repetition.formattedRepeatTilDate, for: .normal)
+        }
+    }
     
     func pickerValueChanged(repetition: Repetition) {
         self.repetition = repetition
-        if let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) {
-            repetitionCell.textLabel?.text = Repetition.formatted(repetition: repetition)
+        if let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ToDoRepetitionTextTableViewCell {
+            repetitionCell.leftButton.setTitle(Repetition.formatted(repetition: repetition), for: .normal)
         }
     }
 }
