@@ -25,6 +25,18 @@ struct Task: Equatable, Comparable, Codable {
         self.repetition = repetition
     }
     
+    // MARK: - Customized funcs
+    
+    mutating func nextRepetition() {
+        dateInterval = Interval(start: repetition.next(), duration: dateInterval.duration!)
+        
+        if repetition.repeatTueDate < dateInterval.end! {
+            isFinished = true
+        } else {
+            repetition.lastDate = repetition.next()
+        }
+    }
+    
     // MARK: - Protocols
     
     static func == (lhs: Task, rhs: Task) -> Bool {

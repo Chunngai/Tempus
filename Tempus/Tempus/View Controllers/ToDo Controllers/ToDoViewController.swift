@@ -235,7 +235,11 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func toggleFinishStatus(task: Task) {
         for i in 0..<toDoList.count {
             if let idx = toDoList[i].tasks.firstIndex(of: task) {
-                toDoList[i].tasks[idx].isFinished.toggle()
+                if toDoList[i].tasks[idx].repetition != nil && !toDoList[i].tasks[idx].isFinished {
+                    toDoList[i].tasks[idx].nextRepetition()
+                } else {
+                    toDoList[i].tasks[idx].isFinished.toggle()
+                }
                 
                 break
             }
