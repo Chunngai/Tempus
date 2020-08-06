@@ -17,10 +17,34 @@ class ScheduleDatePickerPopView: UIView {
     
     // MARK: - Views
         
-    var contentView: UIView!
+    var contentView: UIView = {
+        let view = UIView()
+
+        view.layer.cornerRadius = 10
+        view.layer.masksToBounds = true
+        
+        return view
+    }()
     
-    var todayButton = UIButton()
-    var datePicker = UIDatePicker()
+    var todayButton: UIButton = {
+        let button = UIButton()
+        
+        button.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
+        button.setTitle("Today", for: .normal)
+        button.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        
+        return button
+    }()
+    var datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
+        datePicker.datePickerMode = .date
+        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
+        
+        return datePicker
+    }()
     
     // MARK: - Initializers
     
@@ -28,32 +52,27 @@ class ScheduleDatePickerPopView: UIView {
         super.init(coder: coder)
     }
 
-    init(datePickerFrame: CGRect, delegate: ScheduleViewController, date: Date) {
+    init(datePickerFrame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
                 
-        self.delegate = delegate
-                
+        updateInitialViews(datePickerFrame: datePickerFrame)
+    }
+    
+    // MARK: - Customized initializers
+    
+    func updateInitialViews(datePickerFrame: CGRect) {
         // The frame is the whole screen.
         self.frame = UIScreen.main.bounds
         self.backgroundColor = UIColor.black.withAlphaComponent(0.1)
         
         // Content view.
-        contentView = UIView(frame: datePickerFrame)
         addSubview(contentView)
-        
-        contentView.layer.cornerRadius = 10
-        contentView.layer.masksToBounds = true
-        
+        contentView.frame = datePickerFrame
         contentView.addGradientLayer(endPoint: CGPoint(x: 1, y: 0),
                                      frame: contentView.bounds)
         
         // Today button.
         contentView.addSubview(todayButton)
-        todayButton.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
-        
-        todayButton.setTitle("Today", for: .normal)
-        todayButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
-            
         todayButton.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(3)
@@ -61,17 +80,16 @@ class ScheduleDatePickerPopView: UIView {
         
         // Date picker.
         contentView.addSubview(datePicker)
-        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-
-        datePicker.setValue(UIColor.white, forKeyPath: "textColor")
-        datePicker.date = date
-        datePicker.datePickerMode = .date
-        datePicker.maximumDate = Date(timeInterval: 24 * 3600, since: Date())
-                        
         datePicker.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(20)
             make.top.equalTo(todayButton).inset(35)
         }
+    }
+    
+    func updateValues(delegate: ScheduleViewController) {
+        self.delegate = delegate
+        
+        datePicker.date = delegate.schedule.date
     }
     
     // MARK: - UIView funcs
@@ -95,7 +113,7 @@ class ScheduleDatePickerPopView: UIView {
     }
     
     // MARK: - Customized funcs
-
+    
     @objc func todayButtonTapped() {
         datePicker.date = Date()
         delegate.changeSchedule(date: datePicker.date.currentTimeZone())

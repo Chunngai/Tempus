@@ -103,9 +103,8 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
         datePickerView = ScheduleDatePickerPopView(datePickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
                                                                         y: navigationController!.navigationBar.bounds.height,
                                                                         width: UIScreen.main.bounds.width / 1.3,
-                                                                        height: UIScreen.main.bounds.height / 3),
-                                                   delegate: self,
-                                                date: schedule.date)
+                                                                        height: UIScreen.main.bounds.height / 3))
+        datePickerView.updateValues(delegate: self)
         UIApplication.shared.windows.last?.addSubview(datePickerView)
     }
     

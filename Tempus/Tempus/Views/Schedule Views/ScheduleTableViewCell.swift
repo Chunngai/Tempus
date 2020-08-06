@@ -68,7 +68,7 @@ class ScheduleTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // MARK: - Customized funcs
+    // MARK: - Customized initializers
     
     func updateInitialViews() {
         self.selectionStyle = .none
@@ -120,16 +120,17 @@ class ScheduleTableViewCell: UITableViewCell {
         self.delegate = delegate
         
         // Updates the views.
+        
         let timeLabelText: String
         let durationLabelText: String
-        if task.dateInterval.start != nil && task.dateInterval.end != nil {  // Start and end provided.
-            timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"
-            durationLabelText = "\(task.dateInterval.duration!.formattedDuration())"
+        if let dateInterval = task.dateInterval,
+            let start = dateInterval.start, let duration = dateInterval.duration, let end = dateInterval.end {  // Start and end provided.
+            timeLabelText = "\(start.formattedTime()) - \(end.formattedTime())"
+            durationLabelText = "\(duration.formattedDuration())"
         } else {  // Start and end not provided.
             timeLabelText = "--:-- - --:--"
             durationLabelText = "--"
         }
-        
         let contentLabelText = task.content!
         
         // Config text attrs according to the finish status.
@@ -153,6 +154,8 @@ class ScheduleTableViewCell: UITableViewCell {
             contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
         }
     }
+    
+    // MARK: - Customized funcs
     
     @objc func viewLongPressed() {
         if let scheduleEditNavigationViewController = delegate.presentedViewController,
