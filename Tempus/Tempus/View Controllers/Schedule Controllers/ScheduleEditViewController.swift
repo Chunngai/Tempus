@@ -25,9 +25,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     var indexCountedFromOne: Int?
 
     // MARK: -  Views
-    
-    var gradientLayer = CAGradientLayer()
-    
+        
     var contentTextView: UITextView!
 
     var startButton: UIButton!
@@ -56,12 +54,7 @@ class ScheduleEditViewController: UIViewController, UITextViewDelegate {
     func updateInitialViews() {
         view.backgroundColor = UIColor.sky.withAlphaComponent(0.3)
         
-        view.addGradientLayer(gradientLayer: gradientLayer,
-            colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-            locations: [0.0, 1.0],
-            startPoint: CGPoint(x: 0, y: 1),
-            endPoint: CGPoint(x: 1, y: 0.5),
-            frame: self.view.bounds)
+        view.addGradientLayer(frame: self.view.bounds)
         
         // Title of navigation item.
         navigationItem.title = "Detail"

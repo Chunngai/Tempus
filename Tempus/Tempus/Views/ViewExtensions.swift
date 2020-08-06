@@ -31,7 +31,13 @@ extension UIColor {
 }
 
 extension UIView {
-    func addGradientLayer(gradientLayer: CAGradientLayer, colors: [CGColor], locations: [NSNumber], startPoint: CGPoint, endPoint: CGPoint, frame: CGRect) {
+    func addGradientLayer(gradientLayer: CAGradientLayer = CAGradientLayer(),
+                          colors: [CGColor] = [UIColor.aqua.cgColor, UIColor.sky.cgColor],
+                          locations: [NSNumber] = [0.0, 1.0],
+                          startPoint: CGPoint = CGPoint(x: 0, y: 1),
+                          endPoint: CGPoint = CGPoint(x: 1, y: 0.5),
+                          frame: CGRect) {
+        
         self.layer.insertSublayer(gradientLayer, at: 0)
         
         gradientLayer.frame = frame

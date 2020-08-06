@@ -18,10 +18,6 @@ class TabBarViewController: UITabBarController {
     var toDoNavigationViewController: ToDoNavigationController!
     var toDoViewController = ToDoViewController()
     
-    // MARK: - Views
-    
-    var gradientLayer: CAGradientLayer = CAGradientLayer()
-    
     // MARK: Init
     
     override func viewDidLoad() {
@@ -33,11 +29,7 @@ class TabBarViewController: UITabBarController {
         tabBar.setTransparent()
         
         // Creates a gradient layer.
-        self.view.addGradientLayer(gradientLayer: gradientLayer,
-                                   colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-                                   locations: [0.0, 1.0],
-                                   startPoint: CGPoint(x: 0, y: 1),
-                                   endPoint: CGPoint(x: 1, y: 0),
+        self.view.addGradientLayer(endPoint: CGPoint(x: 1, y: 0),
                                    frame: self.view.bounds)
         
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.

@@ -16,9 +16,7 @@ class ScheduleDatePickerPopView: UIView {
     var delegate: ScheduleViewController!
     
     // MARK: - Views
-    
-    var gradientLayer = CAGradientLayer()
-    
+        
     var contentView: UIView!
     
     var todayButton = UIButton()
@@ -46,11 +44,7 @@ class ScheduleDatePickerPopView: UIView {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
         
-        contentView.addGradientLayer(gradientLayer: gradientLayer,
-                                     colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-                                     locations: [0.0, 1.0],
-                                     startPoint: CGPoint(x: 0, y: 1),
-                                     endPoint: CGPoint(x: 1, y: 0),
+        contentView.addGradientLayer(endPoint: CGPoint(x: 1, y: 0),
                                      frame: contentView.bounds)
         
         // Today button.

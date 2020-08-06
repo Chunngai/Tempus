@@ -74,11 +74,7 @@ class ToDoTableViewCell: UITableViewCell {
         contentLabel.textColor = .white
         
         // Gradient layer.
-        view.addGradientLayer(gradientLayer: gradientLayer,
-                              colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-                              locations: [0.0, 1.0],
-                              startPoint: CGPoint(x: 0, y: 1),
-                              endPoint: CGPoint(x: 1, y: 1),
+        view.addGradientLayer(endPoint: CGPoint(x: 1, y: 1),
                               frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         
         // Long press to edit.

@@ -21,13 +21,33 @@ class ScheduleTableViewCell: UITableViewCell {
     
     // MARK: - Views
     
-    var view = UIView()
-    var timeLabel = UILabel()
-    var durationLabel = UILabel()
-    var contentLabel = UILabel()
+    var view: UIView = {
+        let view = UIView()
         
-    var gradientLayer = CAGradientLayer()
-    
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.addGradientLayer(endPoint: CGPoint(x: 1, y: 1),
+                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        
+        return view
+    }()
+    var timeLabel = UILabel()
+    var durationLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textAlignment = .right
+        
+        return label
+    }()
+    var contentLabel: UILabel = {
+        let label = UILabel()
+        
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        
+        return label
+    }()
+        
     // MARK: - Initializers
     
     override func awakeFromNib() {
@@ -56,10 +76,6 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // A view for placing contents.
         contentView.addSubview(view)
-        
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalToSuperview()
@@ -68,7 +84,6 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // Time label.
         view.addSubview(timeLabel)
-                
         timeLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalToSuperview().offset(15)
@@ -77,9 +92,6 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // Duration label.
         view.addSubview(durationLabel)
-        
-        durationLabel.textAlignment = .right
-        
         durationLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalTo(timeLabel.snp.top)
@@ -88,23 +100,11 @@ class ScheduleTableViewCell: UITableViewCell {
         
         // Content label.
         view.addSubview(contentLabel)
-        
-        contentLabel.numberOfLines = 0
-        contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        
         contentLabel.snp.makeConstraints { (make) in
             make.left.right.equalTo(view).inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalTo(timeLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(15)
         }
-        
-        // Gradient layer.
-        view.addGradientLayer(gradientLayer: gradientLayer,
-                              colors: [UIColor.aqua.cgColor, UIColor.sky.cgColor],
-                              locations: [0.0, 1.0],
-                              startPoint: CGPoint(x: 0, y: 1),
-                              endPoint: CGPoint(x: 1, y: 1),
-                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         
         // Long press to edit.
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
