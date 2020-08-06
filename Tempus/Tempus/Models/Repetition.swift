@@ -122,29 +122,6 @@ struct Repetition: Codable {
         return Calendar.current.date(byAdding: component, value: value, to: lastDate)!
     }
     
-//    func formatted() -> String {
-//        var text = "Every "
-//        var number_: Int
-//        
-//        switch repetitionInterval {
-//        case .day(number: let number):
-//            text += "\(number) Day"
-//            number_ = number
-//        case .week(number: let number):
-//            text += "\(number) Week"
-//            number_ = number
-//        case .month(number: let number):
-//            text += "\(number) Month"
-//            number_ = number
-//        }
-//        
-//        if number_ > 1 {
-//            text += "s"
-//        }
-//        
-//        return text
-//    }
-    
     mutating func updateRepetitionInterval(number: Int, intervalIdx: Int) {
         if intervalIdx == 0 {
             self.repetitionInterval = .day(number: number)

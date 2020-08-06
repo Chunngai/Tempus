@@ -33,6 +33,7 @@ struct ToDo: Codable {
 
     static func saveToDo(_ toDo: [ToDo]) {
         let archiveURL = DocumentsDirectory.appendingPathComponent("todo").appendingPathExtension("plist")
+        
         let propertyListEncoder = PropertyListEncoder()
         let codedToDo = try? propertyListEncoder.encode(toDo)
         try? codedToDo?.write(to: archiveURL, options: .noFileProtection)

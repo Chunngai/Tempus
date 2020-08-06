@@ -31,11 +31,18 @@ class ScheduleTableViewCell: UITableViewCell {
         
         return view
     }()
-    var timeLabel = UILabel()
+    var timeLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .lightText
+        
+        return label
+    }()
     var durationLabel: UILabel = {
         let label = UILabel()
         
         label.textAlignment = .right
+        label.textColor = .lightText
         
         return label
     }()
@@ -118,41 +125,26 @@ class ScheduleTableViewCell: UITableViewCell {
     func updateValues(task: Task, delegate: ScheduleViewController) {
         self.task = task
         self.delegate = delegate
-        
-        // Updates the views.
-        
-        let timeLabelText: String
-        let durationLabelText: String
-        if let dateInterval = task.dateInterval,
-            let start = dateInterval.start, let duration = dateInterval.duration, let end = dateInterval.end {  // Start and end provided.
-            timeLabelText = "\(start.formattedTime()) - \(end.formattedTime())"
-            durationLabelText = "\(duration.formattedDuration())"
-        } else {  // Start and end not provided.
-            timeLabelText = "--:-- - --:--"
-            durationLabelText = "--"
-        }
+                
+        let timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"
+        let durationLabelText = "\(task.dateInterval.duration!.formattedDuration())"
         let contentLabelText = task.content!
         
         // Config text attrs according to the finish status.
         var textAttrs: [NSAttributedString.Key: Any] = [:]
         if task.isFinished {
-            textAttrs[.foregroundColor] = UIColor.lightText
-            textAttrs[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
-            textAttrs[.strikethroughColor] = UIColor.lightText
+            textAttrs = [.foregroundColor: UIColor.lightText,
+                         .strikethroughStyle: NSUnderlineStyle.single.rawValue]
             
-            timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
-            durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
+            contentLabel.textColor = .lightGray
         } else {
-            textAttrs[.strikethroughStyle] = nil
-            textAttrs[.strikethroughColor] = nil
-
-            textAttrs[.foregroundColor] = UIColor.lightText
-            timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
-            durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
-            textAttrs[.foregroundColor] = UIColor.white
-            contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
+            textAttrs = [:]
+            
+            contentLabel.textColor = .white
         }
+        timeLabel.attributedText = NSAttributedString(string: timeLabelText, attributes: textAttrs)
+        durationLabel.attributedText = NSAttributedString(string: durationLabelText, attributes: textAttrs)
+        contentLabel.attributedText = NSAttributedString(string: contentLabelText, attributes: textAttrs)
     }
     
     // MARK: - Customized funcs
