@@ -103,7 +103,7 @@ class ToDoTableViewCell: UITableViewCell {
             
             view.addSubview(dateLabel)
             
-            dateLabel.text = getDateLabelText(dateInterval: task.dateInterval)
+            dateLabel.text = getDateLabelText(task: task)
             dateLabel.textColor = .lightText
             
             dateLabel.snp.makeConstraints { (make) in
@@ -158,9 +158,15 @@ class ToDoTableViewCell: UITableViewCell {
         delegate.toggleFinishStatus(task: task)
     }
     
-    func getDateLabelText(dateInterval: Interval) -> String {
+    func getDateLabelText(task: Task) -> String {
+        let dateInterval = task.dateInterval!
+        
         if let dateIntervalStart = dateInterval.start, let dateIntervalEnd = dateInterval.end {
-            return "\(dateIntervalStart.formattedDateAndTime(omitZero: true)) - \(dateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
+            var text = "\(dateIntervalStart.formattedDateAndTime(omitZero: true)) - \(dateIntervalEnd.formattedDateAndTime(omitZero: true, withWeekday: true))"
+            if task.repetition != nil {
+                text += " ↻"
+            }
+            return text
         } else if dateInterval.start != nil  {
             return "\(dateInterval.start!.formattedDateAndTime(omitZero: true)) -"
         } else if dateInterval.end != nil {

@@ -80,7 +80,7 @@ extension Date {
         
         var formattedString = dateFormatter.string(from: self)
         if withWeekday {
-            formattedString += " (\(self.shortWeekdaySymbol))"
+            formattedString += " \(self.shortWeekdaySymbol)"
         }
         if !(omitZero && self.getComponents([.hour]).hour! == 0 && self.getComponents([.minute]).minute! == 0) {
             formattedString += " " + timeFormatter.string(from: self)
