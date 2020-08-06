@@ -242,6 +242,20 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
+        
+        // If the task is finished, it cannot be edited.
+        if task.isFinished {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+            
+            contentTextView.isEditable = false
+            
+            fromButton.isEnabled = false
+            toButton.isEnabled = false
+            
+            repetitionButton.isEnabled = false
+            categoryButton.isEnabled = false
+        }
     }
     
     func updateValues(task: Task, delegate: ToDoViewController, mode: String, oldIdx: (Int, Int)?) {
@@ -375,6 +389,10 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         delegate.editTask(task: self.task, mode: "d", oldIdx: oldIdx)
 
         delegate.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func doneButtonTapped() {
+        delegate.dismiss(animated: true, completion:  nil)
     }
     
     // MARK: - Todo edit category view controller delegate.
