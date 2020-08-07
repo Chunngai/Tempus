@@ -124,6 +124,7 @@ class ScheduleTableViewCell: UITableViewCell {
     
     func updateValues(task: Task, delegate: ScheduleViewController) {
         self.task = task
+        
         self.delegate = delegate
                 
         let timeLabelText = "\(task.dateInterval.start!.formattedTime()) - \(task.dateInterval.end!.formattedTime())"

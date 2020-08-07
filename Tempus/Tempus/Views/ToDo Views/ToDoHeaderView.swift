@@ -12,8 +12,21 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Views
     
-    var view = UIView()
-    var sectionNameLabel = UILabel()
+    var view: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = UIColor.aqua.withAlphaComponent(0)
+
+        return view
+    }()
+    var sectionNameLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .lightText
+        label.textAlignment = .right
+        
+        return label
+    }()
     
     // MARK: - Initializers
     
@@ -27,14 +40,11 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         updateViews()
     }
     
-    // MARK: - Customized funcs
+    // MARK: - Customized initializers
     
     func updateViews() {
         // A view for placing contents.
         contentView.addSubview(view)
-        
-        view.backgroundColor = UIColor.aqua.withAlphaComponent(0)
-        
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().offset(0)
             make.top.equalToSuperview().inset(10)
@@ -42,10 +52,6 @@ class ToDoHeaderView: UITableViewHeaderFooterView {
         
         // Section name label.
         view.addSubview(sectionNameLabel)
-        
-        sectionNameLabel.textColor = .lightText
-        sectionNameLabel.textAlignment = .right
-        
         sectionNameLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.bottom.equalToSuperview().inset(-5)

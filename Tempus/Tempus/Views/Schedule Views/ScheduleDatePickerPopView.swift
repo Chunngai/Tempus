@@ -29,7 +29,6 @@ class ScheduleDatePickerPopView: UIView {
     var todayButton: UIButton = {
         let button = UIButton()
         
-        button.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
         button.setTitle("Today", for: .normal)
         button.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         
@@ -73,6 +72,7 @@ class ScheduleDatePickerPopView: UIView {
         
         // Today button.
         contentView.addSubview(todayButton)
+        todayButton.addTarget(self, action: #selector(todayButtonTapped), for: .touchUpInside)
         todayButton.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(3)

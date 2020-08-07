@@ -116,7 +116,7 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
             return cell
         } else {  // Picker cell.
             let cell = ToDoRepetitionPickerTableViewCell()
-            cell.updateValues(delegate: self, repetition: tmpRepetition!)
+            cell.updateValues(repetition: tmpRepetition!, delegate: self)
             
             return cell
         }

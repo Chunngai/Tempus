@@ -12,8 +12,20 @@ class ToDoCategoryTableViewCell: UITableViewCell {
     
     // MARK: Views
     
-    var textfield = UITextField()
-    var taskNumberLabel = UILabel()
+    var textField: UITextField = {
+        let textField = UITextField()
+        
+        textField.textColor = .white
+
+        return textField
+    }()
+    var taskNumberLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .white
+
+        return label
+    }()
     
     // MARK: - Initializers
     
@@ -35,18 +47,15 @@ class ToDoCategoryTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // MARK: - Customized funcs
+    // MARK: - Customized initializers
     
     func updateInitialViews() {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
         selectionStyle = .none
         
         // Text field.
-        contentView.addSubview(textfield)
-        
-        textfield.textColor = .white
-        
-        textfield.snp.makeConstraints { (make) in
+        contentView.addSubview(textField)
+        textField.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(15)
             make.width.equalTo(UIScreen.main.bounds.width * 0.8)  // Without it new categories cannnot be editted.
@@ -54,17 +63,14 @@ class ToDoCategoryTableViewCell: UITableViewCell {
         
         // Task number.
         contentView.addSubview(taskNumberLabel)
-        
-        taskNumberLabel.textColor = .white
-        
         taskNumberLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(20)
-            make.top.equalTo(textfield.snp.top)
+            make.top.equalTo(textField.snp.top)
         }
     }
     
     func updateValues(text: String, taskNumber: Int? = nil) {
-        textfield.text = text
+        textField.text = text
         
         if let taskNumber = taskNumber {
             taskNumberLabel.text = String(taskNumber)

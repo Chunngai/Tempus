@@ -17,8 +17,20 @@ class ToDoRepetitionTextTableViewCell: UITableViewCell {
     
     // MARK: - Views
     
-    var leftButton = UIButton()
-    var rightButton = UIButton()
+    var leftButton: UIButton = {
+        let button = UIButton()
+        
+        button.contentHorizontalAlignment = .left
+        
+        return button
+    }()
+    var rightButton: UIButton = {
+        let button = UIButton()
+        
+        button.contentHorizontalAlignment = .right
+        
+        return button
+    }()
     
     // MARK: - Initializers
     
@@ -40,7 +52,7 @@ class ToDoRepetitionTextTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // MARK: - Customized funcs
+    // MARK: - Customized initializers
     
     func updateInitialViews() {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
@@ -49,9 +61,6 @@ class ToDoRepetitionTextTableViewCell: UITableViewCell {
         // Left buttons.
         contentView.addSubview(leftButton)
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
-        
-        leftButton.contentHorizontalAlignment = .left
-        
         leftButton.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(UIScreen.main.bounds.width * 0.05)
             make.width.equalToSuperview().multipliedBy(0.45)
@@ -60,9 +69,6 @@ class ToDoRepetitionTextTableViewCell: UITableViewCell {
         // Right buttons.
         contentView.addSubview(rightButton)
         rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
-        
-        rightButton.contentHorizontalAlignment = .right
-        
         rightButton.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.05)
             make.width.equalToSuperview().multipliedBy(0.45)
@@ -77,6 +83,8 @@ class ToDoRepetitionTextTableViewCell: UITableViewCell {
         rightButton.setTitle(rightText, for: .normal)
         setButtonColor(color: color)
     }
+    
+    // MARK: - Customized funcs
     
     func setButtonColor(color: UIColor) {
         leftButton.setTitleColor(color, for: .normal)

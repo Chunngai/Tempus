@@ -21,13 +21,40 @@ class ToDoTableViewCell: UITableViewCell {
         
     // MARK: - Views
     
-    var view = UIView()
-    var dateLabel: UILabel!
-    var remainingTimeLabel: UILabel!
-    var contentLabel = UILabel()
-    
-    var gradientLayer = CAGradientLayer()
-    
+    var view: UIView = {
+        let view = UIView()
+        
+        view.layer.cornerRadius = 8
+        view.layer.masksToBounds = true
+        view.addGradientLayer(endPoint: CGPoint(x: 1, y: 1),
+                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        
+        return view
+    }()
+    var dateLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .lightText
+        
+        return label
+    }()
+    var remainingTimeLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textAlignment = .right
+        
+        return label
+    }()
+    var contentLabel: UILabel = {
+        let label = UILabel()
+        
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.textColor = .white
+        
+        return label
+    }()
+        
     // MARK: - Initializers
     
     override func awakeFromNib() {
@@ -48,7 +75,7 @@ class ToDoTableViewCell: UITableViewCell {
         updateInitialViews()
     }
     
-    // MARK: - Customized funcs
+    // MARK: - Customized initializers
     
     func updateInitialViews() {
         self.selectionStyle = .none
@@ -56,10 +83,6 @@ class ToDoTableViewCell: UITableViewCell {
         
         // A view for placing contents.
         contentView.addSubview(view)
-        
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        
         view.snp.makeConstraints { (make) in
             make.left.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
             make.top.equalToSuperview()
@@ -69,14 +92,6 @@ class ToDoTableViewCell: UITableViewCell {
         // Content label.
         view.addSubview(contentLabel)
         
-        contentLabel.numberOfLines = 0
-        contentLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        contentLabel.textColor = .white
-        
-        // Gradient layer.
-        view.addGradientLayer(endPoint: CGPoint(x: 1, y: 1),
-                              frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-        
         // Long press to edit.
         let longPressedGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed))
         view.addGestureRecognizer(longPressedGestureRecognizer)
@@ -84,24 +99,20 @@ class ToDoTableViewCell: UITableViewCell {
         // Double Taps to toggle finish status.
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTapped))
         view.addGestureRecognizer(tapGestureRecognizer)
-        
         tapGestureRecognizer.numberOfTapsRequired = 2
     }
     
     func updateValues(task: Task, delegate: ToDoViewController) {
         self.task = task
+        
         self.delegate = delegate
 
         // Updates the views.
+        
         if task.dateInterval != nil && (task.dateInterval.start != nil || task.dateInterval.end != nil) {  // When start or end provided.
             // Date label.
-            dateLabel = UILabel()
-            
             view.addSubview(dateLabel)
-            
             dateLabel.text = getDateLabelText(task: task)
-            dateLabel.textColor = .lightText
-            
             dateLabel.snp.makeConstraints { (make) in
                 make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalToSuperview().offset(15)
@@ -109,14 +120,9 @@ class ToDoTableViewCell: UITableViewCell {
             }
             
             // Remaining time label.
-            remainingTimeLabel = UILabel()
-            
             view.addSubview(remainingTimeLabel)
-            
-            remainingTimeLabel.textAlignment = .right
             remainingTimeLabel.text = getRemainingTimeLabelText(task: task)
             remainingTimeLabel.textColor = getRemainingTimeLabelTextColor(task: task)
-        
             remainingTimeLabel.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(UIScreen.main.bounds.width * 0.03)
                 make.top.equalTo(dateLabel.snp.top)
@@ -140,6 +146,8 @@ class ToDoTableViewCell: UITableViewCell {
         // Content label.
         contentLabel.text = task.content
     }
+    
+    // MARK: - Customized funcs
     
     @objc func viewLongPressed() {
         if let toDoEditNavigationViewController = delegate.presentedViewController,
@@ -173,19 +181,6 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelText(task: Task) -> String {
-//        if task.isFinished {
-//            return ""
-//        } else if task.isOverdue {
-//            return "Overdue"
-//        } else {
-//            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Start provided.
-//                return DateInterval(start: Date().currentTimeZone(), end: start).formatted(omitZero: true)
-//            } else if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Due provided.
-//                return DateInterval(start: Date().currentTimeZone(), end: due).formatted(omitZero: true)
-//            } else {  // Neither provided.
-//                return ""
-//            }
-//        }
         if task.isEmergent {
             // Remaining time before due.
             return DateInterval(start: Date().currentTimeZone(), end: task.dateInterval.end!).formatted(omitZero: true)
@@ -203,30 +198,6 @@ class ToDoTableViewCell: UITableViewCell {
     }
     
     func getRemainingTimeLabelTextColor(task: Task) -> UIColor {
-//        if task.isFinished {
-//            return .lightText
-//        } else if task.isOverdue {
-//            return .yellow
-//        } else {
-//            if let start = task.dateInterval.start, Date().currentTimeZone() < start {  // Before start.
-//                if DateInterval(start: Date().currentTimeZone(), end: start).getComponents([.day]).day! < 3 {  // Less than 3 days.
-//                    return .orange
-//                } else {  // More than 3 days.
-//                    return .lightText
-//                }
-//            }
-//            if let due = task.dateInterval.end, Date().currentTimeZone() < due {  // Before end.
-//                if DateInterval(start: Date().currentTimeZone(), end: due).getComponents([.day]).day! < 3 {  // Less than 3 days.
-//                    return .red
-//                } else if task.dateInterval.start != nil {  // Doing.
-//                    return .purple
-//                } else {  // More than 3 days.
-//                    return .lightText
-//                }
-//            } else {  // Neither provided.
-//                return .lightText
-//            }
-//        }
         if task.isEmergent {
             return .red
         }

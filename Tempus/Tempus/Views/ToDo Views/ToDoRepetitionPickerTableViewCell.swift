@@ -24,6 +24,14 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
     
     var delegate: ToDoEditRepetitionViewController!
     
+    // MARK: - Views
+    
+    var pickerView: UIPickerView = {
+        let pickerView = UIPickerView()
+        pickerView.setValue(UIColor.white, forKeyPath: "textColor")
+        
+        return pickerView
+    }()
     var selectedNumberIdx: Int {
         return pickerView.selectedRow(inComponent: 0)
     }
@@ -31,10 +39,16 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         return pickerView.selectedRow(inComponent: 1)
     }
     
-    // MARK: - Views
-    
-    var pickerView = UIPickerView()
-    var datePicker = UIDatePicker()
+    var datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        
+        datePicker.setValue(UIColor.white, forKey: "textColor")
+        datePicker.datePickerMode = .date
+        datePicker.minimumDate = Date()
+        datePicker.isHidden = true
+        
+        return datePicker
+    }()
     
     // MARK: - Initializers
     
@@ -56,7 +70,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         updateInitialViews()
     }
     
-    // Customized funcs
+    // Customized initializers
     
     func updateInitialViews() {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
@@ -64,12 +78,8 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         
         // Picker.
         contentView.addSubview(pickerView)
-
         pickerView.dataSource = self
         pickerView.delegate = self
-        
-        pickerView.setValue(UIColor.white, forKeyPath: "textColor")
-        
         pickerView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(UIScreen.main.bounds.width * 0.02)
             make.right.equalToSuperview().offset(-UIScreen.main.bounds.width * 0.02)
@@ -78,13 +88,7 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         
         // Date picker.
         contentView.addSubview(datePicker)
-        
-        datePicker.setValue(UIColor.white, forKey: "textColor")
-        datePicker.datePickerMode = .date
-        datePicker.minimumDate = Date()
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
-        datePicker.isHidden = true
-        
         datePicker.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(UIScreen.main.bounds.width * 0.02)
             make.right.equalToSuperview().offset(-UIScreen.main.bounds.width * 0.02)
@@ -92,16 +96,18 @@ class ToDoRepetitionPickerTableViewCell: UITableViewCell, UIPickerViewDataSource
         }
     }
     
-    func updateValues(delegate: ToDoEditRepetitionViewController, repetition: Repetition) {
-        self.delegate = delegate
-        
+    func updateValues(repetition: Repetition, delegate: ToDoEditRepetitionViewController) {
         self.repetition = repetition
         
+        self.delegate = delegate
+                
         pickerView.selectRow(repetitionNumberIdx, inComponent: 0, animated: true)
         pickerView.selectRow(repetitionIntervalIdx, inComponent: 1, animated: true)
         
         datePicker.date = repetition.repeatTueDate
     }
+    
+    // MARK: - Customized funcs
     
     func updateDisplayingPicker(side: String) {
         if side == "L" {

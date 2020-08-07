@@ -73,7 +73,7 @@ class ToDoEditCategoryViewController: UIViewController, UITableViewDataSource, U
         let cell = ToDoCategoryTableViewCell()
         
         cell.updateValues(text: categories[indexPath.row])
-        cell.textfield.isEnabled = false
+        cell.textField.isEnabled = false
         
         return cell
     }

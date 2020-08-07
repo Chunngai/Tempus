@@ -110,7 +110,7 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     @objc func doneButtonTapped() {
         for i in 0..<categories.count {
             if let cell = (toDoCategoryTableView.cellForRow(at: IndexPath(row: i, section: 0))) as? ToDoCategoryTableViewCell {
-                let category = cell.textfield.text!
+                let category = cell.textField.text!
                 
                 // Sees if the category name is not empty.
                 if category.trimmingCharacters(in: CharacterSet(charactersIn: " ")) == "" || category.isEmpty {
@@ -182,13 +182,13 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
         
         if indexPath.section == 0 {  // Normal categories.
             cell.updateValues(text: categories[indexPath.row], taskNumber: toDoList[indexPath.row].unfinishedTasks.count)
-            cell.textfield.isEnabled = toDoCategoryTableView.isEditing ? true : false
+            cell.textField.isEnabled = toDoCategoryTableView.isEditing ? true : false
         } else if indexPath.section == 1 {  // Add button.
-            cell.textfield.isEnabled = false
+            cell.textField.isEnabled = false
         } else {
             let statisticalCategory = toDoList.statisticalCategories[indexPath.row]
             cell.updateValues(text: statisticalCategory, taskNumber: toDoList.getNumberOf(statisticalTask: statisticalCategory))
-            cell.textfield.isEnabled = false
+            cell.textField.isEnabled = false
         }
         
         return cell
@@ -204,7 +204,7 @@ class ToDoCategoryViewController: UIViewController, UITableViewDataSource, UITab
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textfield.text!
+            let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textField.text!
             if categories.contains(category) {
                 let idx = toDoList.getCategoryIdx(category: category)
                 if !toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
