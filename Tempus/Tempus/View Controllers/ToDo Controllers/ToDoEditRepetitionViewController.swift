@@ -109,7 +109,7 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
             if indexPath.row == 0 {
                 cell.updateValues(delegate: self, row: indexPath.row, leftText: "Never", rightText: "", color: neverCellTextColor)
             } else {
-                cell.updateValues(delegate: self, row: indexPath.row, leftText: Repetition.formatted(repetition: tmpRepetition),
+                cell.updateValues(delegate: self, row: indexPath.row, leftText: tmpRepetition!.formattedRepetitionInterval,
                                   rightText: tmpRepetition!.formattedRepeatTilDate, color: repetitionCellTextColor)
             }
             
@@ -169,7 +169,7 @@ class ToDoEditRepetitionViewController: UIViewController, UITableViewDataSource,
     func pickerValueChanged(repetition: Repetition) {
         self.repetition = repetition
         if let repetitionCell = toDoEditRepetitionTableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? ToDoRepetitionTextTableViewCell {
-            repetitionCell.leftButton.setTitle(Repetition.formatted(repetition: repetition), for: .normal)
+            repetitionCell.leftButton.setTitle(repetition.formattedRepetitionInterval, for: .normal)
         }
     }
 }

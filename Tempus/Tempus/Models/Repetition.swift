@@ -35,13 +35,8 @@ struct Repetition: Codable {
         }
     }
     
-    var formattedRepeatTilDate: String {
-        return "Til \(repeatTueDate.formattedLongDate())"
-    }
-    
     static var numbers = [1..<366, 1..<53, 1..<13]
     static var intervals = ["Day", "Week", "Month"]
-    static var shortIntervals = ["D", "W", "Mo"]
 
     // MARK: - Initializers
 
@@ -134,19 +129,6 @@ struct Repetition: Codable {
     
     mutating func updateRepetitionRepeatTueDate(repeatTilDate: Date) {
         self.repeatTueDate = repeatTilDate
-    }
-    
-    static func formatted(repetition: Repetition?) -> String {
-        if repetition == nil {
-            return "Never"
-        }
-        
-        var text = "Every \(repetition!.number) \(shortIntervals[repetition!.intervalIdx])"
-        if repetition!.number > 1 {
-            text += "s"
-        }
-        
-        return text
     }
 }
 

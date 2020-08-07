@@ -48,6 +48,13 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     var toDatePicker: UIDatePicker!
     
     var repetitionButton = UIButton()
+    var repetitionButtonTitle: String {
+        if let repetition = repetition {
+            return repetition.formattedShortText
+        } else {
+            return "Never"
+        }
+    }
     
     var categoryButton = UIButton()
     
@@ -190,7 +197,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
         repetitionButton.addTarget(self, action: #selector(repetitionButtonTapped), for: .touchUpInside)
         
         repetitionButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
-        repetitionButton.setTitle("\(Repetition.formatted(repetition: repetition)) \(repetition != nil ? repetition!.formattedRepeatTilDate : "")", for: .normal)
+        repetitionButton.setTitle(repetitionButtonTitle, for: .normal)
                 
         repetitionButton.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width * 0.12)
@@ -399,7 +406,7 @@ class ToDoEditViewController: UIViewController, UITextViewDelegate, ToDoEditCate
     
     func updateRepetition(repetition: Repetition?) {
         self.repetition = repetition
-        repetitionButton.setTitle("\(Repetition.formatted(repetition: repetition)) \(repetition != nil ? repetition!.formattedRepeatTilDate : "")", for: .normal)
+        repetitionButton.setTitle(repetitionButtonTitle, for: .normal)
     }
 }
 

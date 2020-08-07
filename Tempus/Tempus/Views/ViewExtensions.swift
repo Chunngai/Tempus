@@ -67,9 +67,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func formattedLongDate(separator: String = "/") -> String {
+    func formattedYearAndDateAndTime(separator: String = "/", shortForm: Bool = false) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy\(separator)MM\(separator)dd"
+        if shortForm {
+            dateFormatter.dateFormat = "yy\(separator)MM\(separator)dd"
+        } else {
+            dateFormatter.dateFormat = "yyyy\(separator)MM\(separator)dd"
+        }
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
         
         return dateFormatter.string(from: self)
@@ -154,5 +158,65 @@ extension TimeInterval {
         }
         
         return formattedString
+    }
+}
+
+extension Repetition {
+    var formattedRepetitionInterval: String {
+        var text = "Every "
+        var number_: Int
+        
+        switch repetitionInterval {
+        case .day(number: let number):
+            text += "\(number) Day"
+            number_ = number
+        case .week(number: let number):
+            text += "\(number) Week"
+            number_ = number
+        case .month(number: let number):
+            text += "\(number) Month"
+            number_ = number
+        }
+        
+        if number_ > 1 {
+            text += "s"
+        }
+        
+        return text
+    }
+    
+    var formattedShortRepetitionInterval: String {
+        var text = "E "
+        var number_: Int
+        
+        switch repetitionInterval {
+        case .day(number: let number):
+            text += "\(number) D"
+            number_ = number
+        case .week(number: let number):
+            text += "\(number) W"
+            number_ = number
+        case .month(number: let number):
+            text += "\(number) Mo"
+            number_ = number
+        }
+        
+        if number_ > 1 {
+            text += "s"
+        }
+        
+        return text
+    }
+    
+    var formattedRepeatTilDate: String {
+        return "Til \(repeatTueDate.formattedYearAndDateAndTime(shortForm: true))"
+    }
+    
+    var formattedText: String {
+        return "\(formattedRepetitionInterval) \(formattedRepeatTilDate)"
+    }
+    
+    var formattedShortText: String {
+        return "\(formattedShortRepetitionInterval) \(formattedRepeatTilDate)"
     }
 }

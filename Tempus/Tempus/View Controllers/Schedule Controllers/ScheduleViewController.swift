@@ -116,7 +116,7 @@ class ScheduleViewController: UIViewController, UITableViewDataSource, UITableVi
                 let htmlText = string
                 
                 // Gets the value of data-count.
-                let pattern = "data-count=\"(\\d+)\" data-date=\"\(self.schedule.date.formattedLongDate(separator: "-"))\""
+                let pattern = "data-count=\"(\\d+)\" data-date=\"\(self.schedule.date.formattedYearAndDateAndTime(separator: "-"))\""
                 let regex = try? NSRegularExpression(pattern: pattern, options: [])
                 let res = regex?.firstMatch(in: htmlText, options: [], range: NSRange(location: 0, length: htmlText.count))
                 
