@@ -26,7 +26,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let overdueTaskNumber = toDoList.getNumberOf(statisticalTask: "Overdue")
             let badgeNumber = emergentTaskNumber + overdueTaskNumber
             
-            let toDoItem = tabBarController?.tabBar.items![1]
+            let toDoItem = tabBarController?.tabBar.items![2]
             if badgeNumber > 0 {
                 toDoItem?.badgeValue = String(badgeNumber)
                 UIApplication.shared.applicationIconBadgeNumber = badgeNumber

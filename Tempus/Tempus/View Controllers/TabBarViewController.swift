@@ -12,17 +12,26 @@ class TabBarViewController: UITabBarController {
     
     // MARK: - Controllers
     
-    var scheduleNavigationViewController: ScheduleNavigationController!
+    var courseNavigationController: CourseNavigationController!
+    var courseViewController = CourseViewController()
+    
+    var scheduleNavigationController: ScheduleNavigationController!
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
     
-    var toDoNavigationViewController: ToDoNavigationController!
+    var toDoNavigationController: ToDoNavigationController!
     var toDoViewController = ToDoViewController()
     
     // MARK: Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                        
+        
+        updateViews()
+        
+        updateControllers()
+    }
+    
+    func updateViews() {
         // Color of the bar.
         tabBar.tintColor = .white
         tabBar.unselectedItemTintColor = .lightText
@@ -31,16 +40,23 @@ class TabBarViewController: UITabBarController {
         // Creates a gradient layer.
         self.view.addGradientLayer(endPoint: CGPoint(x: 1, y: 0),
                                    frame: self.view.bounds)
+    }
+    
+    func updateControllers() {
+        // Creates a navigation controller for courses, whose root controller is a course view controller.
+        courseNavigationController = CourseNavigationController(rootViewController: courseViewController)
+        courseNavigationController.tabBarItem.title = "Course"
+        self.addChild(courseNavigationController)
         
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
-        scheduleNavigationViewController = ScheduleNavigationController(rootViewController: scheduleViewController)
-        scheduleNavigationViewController.tabBarItem.title = "Schedule"
-        self.addChild(scheduleNavigationViewController)
+        scheduleNavigationController = ScheduleNavigationController(rootViewController: scheduleViewController)
+        scheduleNavigationController.tabBarItem.title = "Schedule"
+        self.addChild(scheduleNavigationController)
         
         // Creates a navigation controller for todos, whose root controller is a todo view controller.
-        toDoNavigationViewController = ToDoNavigationController(rootViewController: toDoViewController)
-        toDoNavigationViewController.tabBarItem.title = "To Do"
-        self.addChild(toDoNavigationViewController)
+        toDoNavigationController = ToDoNavigationController(rootViewController: toDoViewController)
+        toDoNavigationController.tabBarItem.title = "To Do"
+        self.addChild(toDoNavigationController)
 
         // Badges.
         if let emergentTaskNumber = ToDo.loadToDo()?.getNumberOf(statisticalTask: "Emergent"),
@@ -49,7 +65,7 @@ class TabBarViewController: UITabBarController {
 
             // Badge on the tab bar item.
             if badgeNumber > 0 {
-                toDoNavigationViewController.tabBarItem.badgeValue = String(badgeNumber)
+                toDoNavigationController.tabBarItem.badgeValue = String(badgeNumber)
             }
             
             // Badge on the app icon.

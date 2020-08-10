@@ -20,8 +20,5 @@ class ToDoNavigationController: UINavigationController {
         navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         navigationBar.setTransparent()
-        
-        // Customizes the tab bar.
-        tabBarItem.title = "To Do"
     }
 }

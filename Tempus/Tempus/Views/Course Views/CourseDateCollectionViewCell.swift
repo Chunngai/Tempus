@@ -10,4 +10,68 @@ import UIKit
 
 class CourseDateCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Views
+    
+    var rightBorder: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .lightText
+        
+        return view
+    }()
+    var bottomBorder: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .lightText
+        
+        return view
+    }()
+    
+    var dateLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .white
+        
+        return label
+    }()
+    
+    // MARK: - Init
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        updateViews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: Customized init
+    
+    func updateViews() {
+        contentView.addSubview(rightBorder)
+        rightBorder.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.width.equalTo(0.5)
+        }
+        
+        contentView.addSubview(bottomBorder)
+        bottomBorder.snp.makeConstraints { (make) in
+            make.leading.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(0.5)
+        }
+        
+        contentView.addSubview(dateLabel)
+        dateLabel.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        }
+    }
 }
