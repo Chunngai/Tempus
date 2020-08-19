@@ -12,11 +12,11 @@ class TabBarViewController: UITabBarController {
     
     // MARK: - Controllers
     
-    var courseNavigationController: CourseNavigationController!
-    var courseViewController = CourseViewController()
-    
     var scheduleNavigationController: ScheduleNavigationController!
     var scheduleViewController: ScheduleViewController = ScheduleViewController()
+    
+    var courseNavigationController: CourseNavigationController!
+    var courseViewController = CourseViewController()
     
     var toDoNavigationController: ToDoNavigationController!
     var toDoViewController = ToDoViewController()
@@ -43,15 +43,15 @@ class TabBarViewController: UITabBarController {
     }
     
     func updateControllers() {
-        // Creates a navigation controller for courses, whose root controller is a course view controller.
-        courseNavigationController = CourseNavigationController(rootViewController: courseViewController)
-        courseNavigationController.tabBarItem.title = "Course"
-        self.addChild(courseNavigationController)
-        
         // Creates a navigation controller for schedule, whose root controller is a schedule view controller.
         scheduleNavigationController = ScheduleNavigationController(rootViewController: scheduleViewController)
         scheduleNavigationController.tabBarItem.title = "Schedule"
         self.addChild(scheduleNavigationController)
+        
+        // Creates a navigation controller for courses, whose root controller is a course view controller.
+        courseNavigationController = CourseNavigationController(rootViewController: courseViewController)
+        courseNavigationController.tabBarItem.title = "Course"
+        self.addChild(courseNavigationController)
         
         // Creates a navigation controller for todos, whose root controller is a todo view controller.
         toDoNavigationController = ToDoNavigationController(rootViewController: toDoViewController)

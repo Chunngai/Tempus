@@ -85,11 +85,22 @@ class CourseViewController: UIViewController {
         return collectionView
     }()
     let COURSE_COLLECTION_VIEW_TAG = 1
+    let sectionIdxWidth = UIScreen.main.bounds.width / 8
     
     var courseCellSize: CGSize!
     var courseCellColor: UIColor {
         return UIColor.sky
     }
+    
+    var line: CAShapeLayer = {
+        let line = CAShapeLayer()
+        
+        line.strokeColor = UIColor.white.cgColor
+        line.lineWidth = 0.5
+        line.lineJoin = CAShapeLayerLineJoin.round
+        
+        return line
+    }()
     
     // MARK: Init
     
@@ -105,6 +116,8 @@ class CourseViewController: UIViewController {
         for section in sections {
             drawCourse(section)
         }
+        
+        drawLine()
     }
     
     // MARK: Customized init
@@ -123,7 +136,7 @@ class CourseViewController: UIViewController {
         let courseView: UIView = {
             let view = UIView(
                 frame: CGRect(
-                    x: CGFloat(30) + CGFloat(section.weekday - 1) * courseCellSize.width,
+                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width,
                     y: CGFloat(section.start - 1) * courseCellSize.height,
                     width: courseCellSize.width,
                     height: courseCellSize.height * CGFloat(section.end - section.start + 1)
@@ -155,6 +168,43 @@ class CourseViewController: UIViewController {
 //        self.view.insertSubview(courseView, aboveSubview: courseCollectionView)
         courseCollectionView.addSubview(courseView)
     }
+    
+    func drawLine() {
+        func getLoc() -> CGFloat {
+            let current = Date().currentTimeZone()
+            
+            // Having class.
+            for elem in Section.time {
+                if elem.value.start <= current && current <= elem.value.end {
+                    let secondsFromStart = DateInterval(
+                        start: elem.value.start,
+                        end: current
+                        ).getComponents([.second]).second!
+                    
+                    return CGFloat(secondsFromStart) / courseCellSize.height + (CGFloat(elem.key - 1) * courseCellSize.height)
+                }
+            }
+            
+            // Not having class.
+            for i in 1...(Section.time.count - 1) {
+                let elem = Section.time[i]!
+                let nextElem = Section.time[i + 1]!
+                
+                if elem.end <= current && current <= nextElem.start {
+                    return (CGFloat(i) * courseCellSize.height)
+                }
+            }
+            
+            return 0
+        }
+        
+        let linePath = UIBezierPath()
+        linePath.move(to: CGPoint(x: 0, y: getLoc()))
+        linePath.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: getLoc()))
+        line.path = linePath.cgPath
+        
+        courseCollectionView.layer.addSublayer(line)
+    }
 }
 
 extension CourseViewController: UICollectionViewDataSource, UICollectionViewDelegate {
@@ -167,7 +217,7 @@ extension CourseViewController: UICollectionViewDataSource, UICollectionViewDele
         case DATE_COLLECTION_VIEW_TAG:
             return shortWeekdaySymbolsStartingFromMonday.count + 1
         case COURSE_COLLECTION_VIEW_TAG:
-            return (shortWeekdaySymbolsStartingFromMonday.count + 1) * 15
+            return (shortWeekdaySymbolsStartingFromMonday.count + 1) * Section.sectionNumber
         default:
             return 0
         }
@@ -182,14 +232,22 @@ extension CourseViewController: UICollectionViewDataSource, UICollectionViewDele
             
             return cell
         case COURSE_COLLECTION_VIEW_TAG:
-            if indexPath.row % 8 == 0 {
+            if indexPath.row % 8 == 0 {  // Section idx.
+                let idx = Int(indexPath.row / (shortWeekdaySymbolsStartingFromMonday.count + 1) + 1)
+                
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "courseDateCollectionViewCell", for: indexPath) as! CourseDateCollectionViewCell
-                cell.dateLabel.text = "\(indexPath.row / (shortWeekdaySymbolsStartingFromMonday.count + 1) + 1)"
+                
+                cell.dateLabel.text = "\(idx)"
+                cell.startTimeLabel.text = Section.time[idx]?.start.formattedTime()
+                
                 return cell
-            } else {
+            } else {  // Course.
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "courseCourseCollectionViewCell", for: indexPath) as! CourseCourseCollectionViewCell
+                
                 cell.courseLabel.text = ""
+                
                 return cell
+                
             }
         default:
             return UICollectionViewCell()
@@ -206,16 +264,16 @@ extension CourseViewController: UICollectionViewDelegateFlowLayout {
         switch collectionView.tag {
         case DATE_COLLECTION_VIEW_TAG:
             if indexPath.row == 0 {
-                return CGSize(width: 30, height: 30)
-            }else {
-                return CGSize(width: (SCREEN_WIDTH - 30) / 7, height: 30)
+                return CGSize(width: sectionIdxWidth, height: 30)
+            } else {
+                return CGSize(width: (SCREEN_WIDTH - CGFloat(sectionIdxWidth)) / 7, height: 30)
             }
         case COURSE_COLLECTION_VIEW_TAG:
-            let rowHeight = CGFloat((SCREEN_HEIGHT - 64 - 30) / 15)
-            if indexPath.row % 8 == 0 {
-                return CGSize(width: 30, height: rowHeight)
-            }else {
-                courseCellSize =  CGSize(width: (SCREEN_WIDTH - 30) / 7, height: rowHeight)
+            let courseCellRowHeight = CGFloat(SCREEN_HEIGHT * 0.9 / CGFloat(Section.sectionNumber))
+            if indexPath.row % 8 == 0 {  // Section idx.
+                return CGSize(width: CGFloat(sectionIdxWidth), height: courseCellRowHeight)
+            } else {  // Course.
+                courseCellSize =  CGSize(width: (SCREEN_WIDTH - sectionIdxWidth) / 7, height: courseCellRowHeight)
                 return courseCellSize
             }
         default:

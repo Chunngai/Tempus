@@ -27,6 +27,16 @@ class CourseDateCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    var startTimeLabel: UILabel = {
+        let label = UILabel()
+        
+        label.textColor = .lightText
+        label.font = UIFont.systemFont(ofSize: 12)
+//        label.text = "08:00"
+        
+        return label
+    }()
+    
     var dateLabel: UILabel = {
         let label = UILabel()
         
@@ -52,20 +62,26 @@ class CourseDateCollectionViewCell: UICollectionViewCell {
     // MARK: Customized init
     
     func updateViews() {
-        contentView.addSubview(rightBorder)
-        rightBorder.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.width.equalTo(0.5)
-        }
+//        contentView.addSubview(rightBorder)
+//        rightBorder.snp.makeConstraints { (make) in
+//            make.top.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.trailing.equalToSuperview()
+//            make.width.equalTo(0.5)
+//        }
+//
+//        contentView.addSubview(bottomBorder)
+//        bottomBorder.snp.makeConstraints { (make) in
+//            make.leading.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.trailing.equalToSuperview()
+//            make.height.equalTo(0.5)
+//        }
         
-        contentView.addSubview(bottomBorder)
-        bottomBorder.snp.makeConstraints { (make) in
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(0.5)
+        contentView.addSubview(startTimeLabel)
+        startTimeLabel.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(contentView.bounds.height * 0.01)
+            make.centerX.equalToSuperview()
         }
         
         contentView.addSubview(dateLabel)
