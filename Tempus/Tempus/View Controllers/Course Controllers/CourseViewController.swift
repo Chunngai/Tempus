@@ -114,7 +114,7 @@ class CourseViewController: UIViewController {
                 
                 layout.scrollDirection = .vertical
                 layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                layout.minimumLineSpacing = -1
+                layout.minimumLineSpacing = 0
                 layout.minimumInteritemSpacing = 0
                 
                 return layout
@@ -133,9 +133,6 @@ class CourseViewController: UIViewController {
     let sectionIdxWidth = UIScreen.main.bounds.width / 8
     
     var courseCellSize: CGSize!
-    var courseCellColor: UIColor {
-        return UIColor.sky
-    }
     
     var timeLine: CAShapeLayer = {
         let line = CAShapeLayer()
@@ -194,17 +191,17 @@ class CourseViewController: UIViewController {
         let courseView: UIView = {
             let view = UIView(
                 frame: CGRect(
-                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width + 1,
-                    y: CGFloat(section.start - 1) * courseCellSize.height + 1,
-                    width: courseCellSize.width - 2,
-                    height: courseCellSize.height * CGFloat(section.end - section.start + 1) - 2
+                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width,
+                    y: CGFloat(section.start - 1) * courseCellSize.height,
+                    width: courseCellSize.width,
+                    height: courseCellSize.height * CGFloat(section.end - section.start + 1)
                 )
             )
             
             view.alpha = 0.8
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
-            view.backgroundColor = courseCellColor
+            view.backgroundColor = .sky
             
             return view
         }()
@@ -355,19 +352,13 @@ extension CourseViewController: UICollectionViewDelegateFlowLayout {
         
         switch collectionView.tag {
         case DATE_COLLECTION_VIEW_TAG:
-            if indexPath.row == 0 {
-                return CGSize(width: sectionIdxWidth, height: dateCollectionHeight)
-            } else {
-                return CGSize(width: (SCREEN_WIDTH - CGFloat(sectionIdxWidth)) / 7, height: dateCollectionHeight)
-            }
+            return CGSize(width: sectionIdxWidth, height: dateCollectionHeight)
         case COURSE_COLLECTION_VIEW_TAG:
             let courseCellRowHeight = CGFloat(SCREEN_HEIGHT * 0.9 / CGFloat(Section.sectionNumber))
-            if indexPath.row % 8 == 0 {  // Section idx.
-                return CGSize(width: CGFloat(sectionIdxWidth), height: courseCellRowHeight)
-            } else {  // Course.
-                courseCellSize =  CGSize(width: (SCREEN_WIDTH - sectionIdxWidth) / 7, height: courseCellRowHeight)
-                return courseCellSize
-            }
+            
+            courseCellSize =  CGSize(width: (SCREEN_WIDTH - sectionIdxWidth) / 7, height: courseCellRowHeight)
+            
+            return courseCellSize
         default:
             return CGSize(width: 0, height: 0)
         }
