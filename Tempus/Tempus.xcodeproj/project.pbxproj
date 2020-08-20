@@ -34,6 +34,7 @@
 		FF5028D924E14338000A74E6 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5028D824E14338000A74E6 /* Course.swift */; };
 		FF511FC024D526B40088F79D /* Repetition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF511FBF24D526B40088F79D /* Repetition.swift */; };
 		FF511FC624D534F50088F79D /* ToDoRepetitionPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF511FC524D534F50088F79D /* ToDoRepetitionPickerTableViewCell.swift */; };
+		FF9E18C724EE42C50083D97E /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9E18C624EE42C50083D97E /* Section.swift */; };
 		FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC1DE824926C6200C81ACD /* Interval.swift */; };
 		FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BB2421127000313C7D /* AppDelegate.swift */; };
 		FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BD2421127000313C7D /* SceneDelegate.swift */; };
@@ -107,6 +108,7 @@
 		FF5028D824E14338000A74E6 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		FF511FBF24D526B40088F79D /* Repetition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repetition.swift; sourceTree = "<group>"; };
 		FF511FC524D534F50088F79D /* ToDoRepetitionPickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoRepetitionPickerTableViewCell.swift; sourceTree = "<group>"; };
+		FF9E18C624EE42C50083D97E /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		FFBC1DE824926C6200C81ACD /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		FFBF90B82421127000313C7D /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFBF90BB2421127000313C7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				FFBF90DD2421226700313C7D /* Schedule.swift */,
 				FF3BE371242FA0B5006677A2 /* ToDo.swift */,
 				FF5028D824E14338000A74E6 /* Course.swift */,
+				FF9E18C624EE42C50083D97E /* Section.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -400,6 +403,7 @@
 				FF410E7024D3E78100EAB900 /* ToDoEditRepetitionNavigationController.swift in Sources */,
 				FF410E7424D3E85700EAB900 /* ToDoEditRepetitionViewController.swift in Sources */,
 				FFBF90DB24211C4C00313C7D /* Task.swift in Sources */,
+				FF9E18C724EE42C50083D97E /* Section.swift in Sources */,
 				FF42EF8424B975850067CA3E /* ToDoCategoryTableViewCell.swift in Sources */,
 				FFBF90D12421151200313C7D /* TabBarViewController.swift in Sources */,
 				FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */,

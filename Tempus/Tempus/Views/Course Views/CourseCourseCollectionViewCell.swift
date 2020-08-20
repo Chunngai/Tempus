@@ -12,13 +12,13 @@ class CourseCourseCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Views
     
-    var courseLabel: UILabel = {
-        let label = UILabel()
-        
-        label.textColor = .white
-        
-        return label
-    }()
+//    var courseLabel: UILabel = {
+//        let label = UILabel()
+//        
+//        label.textColor = .white
+//        
+//        return label
+//    }()
     
     // MARK: - Init
     
@@ -37,10 +37,10 @@ class CourseCourseCollectionViewCell: UICollectionViewCell {
     // MARK: - Customized funcs
     
     func updateViews() {        
-        contentView.addSubview(courseLabel)
-        courseLabel.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
+//        contentView.addSubview(courseLabel)
+//        courseLabel.snp.makeConstraints { (make) in
+//            make.centerX.equalToSuperview()
+//            make.centerY.equalToSuperview()
+//        }
     }
 }

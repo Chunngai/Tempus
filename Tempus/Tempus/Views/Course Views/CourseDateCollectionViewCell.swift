@@ -32,7 +32,6 @@ class CourseDateCollectionViewCell: UICollectionViewCell {
         
         label.textColor = .lightText
         label.font = UIFont.systemFont(ofSize: 12)
-//        label.text = "08:00"
         
         return label
     }()
@@ -41,6 +40,7 @@ class CourseDateCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         
         label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 12)
         
         return label
     }()

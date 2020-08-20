@@ -12,20 +12,60 @@ class CourseViewController: UIViewController {
 
     // MARK: Models
     
-    var sections = [
-        Section(course: Course(name: "C++", instructor: "Ms Zhou"), weekday: 1, start: 1, end: 2, classroom: "教103"),
-        Section(course: Course(name: "Java", instructor: "Mr Luo"), weekday: 3, start: 3, end: 4, classroom: "实507")
-    ]
+    var courses = Courses(
+        courses: [
+            Course(name: "中国近代史纲要", sections: [
+                Section(weekday: 1, start: 1, end: 2, classroom: "南E205")
+            ], instructor: "朱月白"),
+            
+            Course(name: "C++语言程序设计", sections: [
+                Section(weekday: 1, start: 3, end: 5, classroom: "南E301"),
+                Section(weekday: 3, start: 1, end: 2, classroom: "南E301")
+            ], instructor: "周咏梅"),
+            
+            Course(name: "综合英语（4）", sections: [
+                Section(weekday: 1, start: 8, end: 9, classroom: "南A401"),
+                Section(weekday: 2, start: 1, end: 2, classroom: "南G206")
+            ], instructor: "王斐"),
+            
+            Course(name: "高等数学", sections: [
+                Section(weekday: 2, start: 3, end: 4, classroom: "南实C103"),
+                Section(weekday: 3, start: 3, end: 4, classroom: "南G404"),
+                Section(weekday: 5, start: 8, end: 9, classroom: "南A301")
+            ], instructor: "钟兴富"),
+            
+            Course(name: "线性代数", sections: [
+                Section(weekday: 2, start: 9, end: 11, classroom: "南E501")
+            ], instructor: "李键红"),
+            
+            Course(name: "体育（1）（网球）", sections: [
+                Section(weekday: 3, start: 10, end: 11, classroom: "南网球场1号")
+            ], instructor: "郑少苹"),
+            
+            Course(name: "思想道德修养与法律基础", sections: [
+                Section(weekday: 4, start: 1, end: 2, classroom: "南E404")
+            ], instructor: "刘云甫"),
+            
+            Course(name: "基础ESP（1）", sections: [
+                Section(weekday: 4, start: 3, end: 4, classroom: "南G404")
+            ], instructor: "刘会英"),
+            
+            Course(name: "计算机科学导论", sections: [
+                Section(weekday: 5, start: 1, end: 2, classroom: "南F203")
+            ], instructor: "丘心颖"),
+        ],
+        semester: (1, 1))
     
     // MARK: Views
-
+    
+    var dateCollectionHeight = CGFloat(50)
     lazy var dateCollectionView: UICollectionView = {
         var collectionView = UICollectionView(
             frame: CGRect(
                 x: 0,
                 y: navigationController!.navigationBar.frame.maxY + navigationController!.navigationBar.frame.height,
                 width: view.frame.width,
-                height: 30
+                height: dateCollectionHeight
             ),
             collectionViewLayout: {
                 let flowLayout = UICollectionViewFlowLayout()
@@ -55,14 +95,19 @@ class CourseViewController: UIViewController {
         
         return symbols
     }
+    var shortMonthSymbolOfCurrentDay: String {
+        let currentMonth = Date().currentTimeZone().getComponents([.month]).month!
+        
+        return Calendar.current.shortMonthSymbols[currentMonth - 1]
+    }
     
     lazy var courseCollectionView: UICollectionView = {
         var collectionView = UICollectionView(
             frame: CGRect(
                 x: 0,
-                y: navigationController!.navigationBar.frame.maxY + navigationController!.navigationBar.frame.height + 30,
+                y: navigationController!.navigationBar.frame.maxY + navigationController!.navigationBar.frame.height + dateCollectionHeight,
                 width: view.frame.width,
-                height: view.frame.height - navigationController!.navigationBar.frame.maxY - navigationController!.navigationBar.frame.height - tabBarController!.tabBar.frame.height - 30
+                height: view.frame.height - navigationController!.navigationBar.frame.maxY - navigationController!.navigationBar.frame.height - tabBarController!.tabBar.frame.height - dateCollectionHeight
             ),
             collectionViewLayout: {
                 let layout = UICollectionViewFlowLayout()
@@ -92,10 +137,20 @@ class CourseViewController: UIViewController {
         return UIColor.sky
     }
     
-    var line: CAShapeLayer = {
+    var timeLine: CAShapeLayer = {
         let line = CAShapeLayer()
         
-        line.strokeColor = UIColor.white.cgColor
+        line.strokeColor = UIColor.lightText.cgColor
+        line.lineWidth = 0.5
+        line.lineJoin = CAShapeLayerLineJoin.round
+        
+        return line
+    }()
+    
+    var weekdayLine: CAShapeLayer = {
+        let line = CAShapeLayer()
+        
+        line.strokeColor = UIColor.lightText.cgColor
         line.lineWidth = 0.5
         line.lineJoin = CAShapeLayerLineJoin.round
         
@@ -113,11 +168,14 @@ class CourseViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        for section in sections {
-            drawCourse(section)
+        for course in courses.courses {
+            for section in course.sections {
+                drawCourse(course: course, section: section)
+            }
         }
         
-        drawLine()
+        drawCurrentTimeLine()
+        drawCurrentWeekdayLine()
     }
     
     // MARK: Customized init
@@ -132,44 +190,43 @@ class CourseViewController: UIViewController {
     
     // MARK: - Customized funcs
     
-    func drawCourse(_ section: Section) {
+    func drawCourse(course: Course, section: Section) {
         let courseView: UIView = {
             let view = UIView(
                 frame: CGRect(
-                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width,
-                    y: CGFloat(section.start - 1) * courseCellSize.height,
-                    width: courseCellSize.width,
-                    height: courseCellSize.height * CGFloat(section.end - section.start + 1)
+                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width + 1,
+                    y: CGFloat(section.start - 1) * courseCellSize.height + 1,
+                    width: courseCellSize.width - 2,
+                    height: courseCellSize.height * CGFloat(section.end - section.start + 1) - 2
                 )
             )
             
             view.alpha = 0.8
+            view.layer.cornerRadius = 10
+            view.layer.masksToBounds = true
+            view.backgroundColor = courseCellColor
             
             return view
         }()
 
         let courseInfoLabel: UILabel = {
-            let label = UILabel(frame: CGRect(x: 0, y: 2, width: courseView.frame.size.width - 2, height: courseView.frame.size.height))
+            let label = UILabel(frame: CGRect(x: 3, y: 3, width: courseView.frame.size.width - 6, height: courseView.frame.size.height - 6))
             
-            label.numberOfLines = 5
-            label.font = UIFont.systemFont(ofSize: 12)
+            label.text = "\(course.name!)\n@\n\(section.classroom!)"
+            label.numberOfLines = 6
+            label.font = UIFont.systemFont(ofSize: 10)
             label.textAlignment = .left
             label.textColor = UIColor.white
-            label.text = "\(section.course.name!)\n@\(section.classroom!)"
-            label.tag = self.sections.firstIndex(of: section)!
-            label.layer.cornerRadius = 10
-            label.layer.masksToBounds = true
-            label.backgroundColor = courseCellColor
+//            label.tag = self.sections.firstIndex(of: section)!
             
             return label
         }()
         courseView.addSubview(courseInfoLabel)
         
-//        self.view.insertSubview(courseView, aboveSubview: courseCollectionView)
         courseCollectionView.addSubview(courseView)
     }
     
-    func drawLine() {
+    func drawCurrentTimeLine() {
         func getLoc() -> CGFloat {
             let current = Date().currentTimeZone()
             
@@ -201,9 +258,39 @@ class CourseViewController: UIViewController {
         let linePath = UIBezierPath()
         linePath.move(to: CGPoint(x: 0, y: getLoc()))
         linePath.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: getLoc()))
-        line.path = linePath.cgPath
+        timeLine.path = linePath.cgPath
         
-        courseCollectionView.layer.addSublayer(line)
+        courseCollectionView.layer.addSublayer(timeLine)
+    }
+    
+    func drawCurrentWeekdayLine() {
+        func getLoc() -> CGFloat {
+            var weekday = Date().currentTimeZone().getComponents([.weekday]).weekday!
+            if weekday != 1 {
+                weekday = weekday - 1
+            } else {
+                weekday = 7
+            }
+            
+            return courseCellSize.width + courseCellSize.width * CGFloat((weekday - 1)) + courseCellSize.width * 0.5
+        }
+        
+        let linePath = UIBezierPath()
+        linePath.move(to: CGPoint(x: getLoc(), y: 0))
+        linePath.addLine(to: CGPoint(x: getLoc(), y: courseCellSize.height * CGFloat(Section.sectionNumber)))
+        weekdayLine.path = linePath.cgPath
+        
+        courseCollectionView.layer.addSublayer(weekdayLine)
+    }
+    
+    func dateOfWeekday(_ weekday: Int) -> String {
+        let currentWeekDay = Date().currentTimeZone().getComponents([.weekday]).weekday!
+        
+        let mondayOfCurrentWeek = Calendar.current.date(byAdding: .day, value: -currentWeekDay + 2, to: Date().currentTimeZone())!
+        
+        let date = Calendar.current.date(byAdding: .day, value: weekday, to: mondayOfCurrentWeek)!
+        
+        return String(date.getComponents([.day]).day!)
     }
 }
 
@@ -228,7 +315,12 @@ extension CourseViewController: UICollectionViewDataSource, UICollectionViewDele
         case DATE_COLLECTION_VIEW_TAG:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "courseDateCollectionViewCell", for: indexPath) as! CourseDateCollectionViewCell
             
-            cell.dateLabel.text = indexPath.row != 0 ? shortWeekdaySymbolsStartingFromMonday[indexPath.row - 1] : ""
+            if indexPath.row != 0 {
+                cell.startTimeLabel.text = dateOfWeekday(indexPath.row - 1)
+                cell.dateLabel.text = shortWeekdaySymbolsStartingFromMonday[indexPath.row - 1]
+            } else {
+                cell.startTimeLabel.text = shortMonthSymbolOfCurrentDay
+            }
             
             return cell
         case COURSE_COLLECTION_VIEW_TAG:
@@ -237,14 +329,14 @@ extension CourseViewController: UICollectionViewDataSource, UICollectionViewDele
                 
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "courseDateCollectionViewCell", for: indexPath) as! CourseDateCollectionViewCell
                 
-                cell.dateLabel.text = "\(idx)"
                 cell.startTimeLabel.text = Section.time[idx]?.start.formattedTime()
+                cell.dateLabel.text = "\(idx)"
                 
                 return cell
             } else {  // Course.
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "courseCourseCollectionViewCell", for: indexPath) as! CourseCourseCollectionViewCell
                 
-                cell.courseLabel.text = ""
+//                cell.courseLabel.text = ""
                 
                 return cell
                 
@@ -264,9 +356,9 @@ extension CourseViewController: UICollectionViewDelegateFlowLayout {
         switch collectionView.tag {
         case DATE_COLLECTION_VIEW_TAG:
             if indexPath.row == 0 {
-                return CGSize(width: sectionIdxWidth, height: 30)
+                return CGSize(width: sectionIdxWidth, height: dateCollectionHeight)
             } else {
-                return CGSize(width: (SCREEN_WIDTH - CGFloat(sectionIdxWidth)) / 7, height: 30)
+                return CGSize(width: (SCREEN_WIDTH - CGFloat(sectionIdxWidth)) / 7, height: dateCollectionHeight)
             }
         case COURSE_COLLECTION_VIEW_TAG:
             let courseCellRowHeight = CGFloat(SCREEN_HEIGHT * 0.9 / CGFloat(Section.sectionNumber))
