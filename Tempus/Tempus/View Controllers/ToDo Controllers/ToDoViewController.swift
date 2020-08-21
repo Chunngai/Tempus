@@ -21,19 +21,7 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             ToDo.saveToDo(self.toDoList!)
             
-            // Badge.
-            let emergentTaskNumber = toDoList.getNumberOf(statisticalTask: "Emergent")
-            let overdueTaskNumber = toDoList.getNumberOf(statisticalTask: "Overdue")
-            let badgeNumber = emergentTaskNumber + overdueTaskNumber
-            
-            let toDoItem = tabBarController?.tabBar.items![2]
-            if badgeNumber > 0 {
-                toDoItem?.badgeValue = String(badgeNumber)
-                UIApplication.shared.applicationIconBadgeNumber = badgeNumber
-            } else {
-                toDoItem?.badgeValue = nil
-                UIApplication.shared.applicationIconBadgeNumber = 0
-            }
+            updateBadges()
             
             self.toDoTableView?.reloadData()
         }
@@ -125,6 +113,21 @@ class ToDoViewController: UIViewController, UITableViewDataSource, UITableViewDe
                                             mode: "a",
                                             oldIdx: nil)
         navigationController?.present(ToDoEditNavigationController(rootViewController: toDoEditViewController), animated: true, completion: nil)
+    }
+    
+    func updateBadges() {
+        let emergentTaskNumber = toDoList.getNumberOf(statisticalTask: "Emergent")
+        let overdueTaskNumber = toDoList.getNumberOf(statisticalTask: "Overdue")
+        let badgeNumber = emergentTaskNumber + overdueTaskNumber
+        
+        let toDoItem = tabBarController?.tabBar.items![2]
+        if badgeNumber > 0 {
+            toDoItem?.badgeValue = String(badgeNumber)
+            UIApplication.shared.applicationIconBadgeNumber = badgeNumber
+        } else {
+            toDoItem?.badgeValue = nil
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
     }
     
     // MARK: - Table view data source

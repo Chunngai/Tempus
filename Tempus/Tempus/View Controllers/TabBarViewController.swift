@@ -58,25 +58,25 @@ class TabBarViewController: UITabBarController {
         toDoNavigationController.tabBarItem.title = "To Do"
         self.addChild(toDoNavigationController)
 
-        // Badges.
-        if let emergentTaskNumber = ToDo.loadToDo()?.getNumberOf(statisticalTask: "Emergent"),
-            let overdueTaskNumber = ToDo.loadToDo()?.getNumberOf(statisticalTask: "Overdue") {
-            let badgeNumber = emergentTaskNumber + overdueTaskNumber
-
-            // Badge on the tab bar item.
-            if badgeNumber > 0 {
-                toDoNavigationController.tabBarItem.badgeValue = String(badgeNumber)
-            }
-            
-            // Badge on the app icon.
-            let identifier = "identifier"
-            let content = UNMutableNotificationContent()
-            content.badge = NSNumber(value: badgeNumber)
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10 * 60, repeats: true)
-            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-            UNUserNotificationCenter.current().add(request) {
-                error in
-            }
-        }
+//        // Badges.
+//        if let emergentTaskNumber = ToDo.loadToDo()?.getNumberOf(statisticalTask: "Emergent"),
+//            let overdueTaskNumber = ToDo.loadToDo()?.getNumberOf(statisticalTask: "Overdue") {
+//            let badgeNumber = emergentTaskNumber + overdueTaskNumber
+//
+//            // Badge on the tab bar item.
+//            if badgeNumber > 0 {
+//                toDoNavigationController.tabBarItem.badgeValue = String(badgeNumber)
+//            }
+//
+//            // Badge on the app icon.
+//            let identifier = "identifier"
+//            let content = UNMutableNotificationContent()
+//            content.badge = NSNumber(value: badgeNumber)
+//            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10 * 60, repeats: true)
+//            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+//            UNUserNotificationCenter.current().add(request) {
+//                error in
+//            }
+//        }
     }
 }
