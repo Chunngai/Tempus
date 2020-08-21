@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Section: Equatable {
+struct Section: Equatable, Codable {
     var weekday: Int!
     var start: Int!
     var end: Int!

@@ -8,53 +8,59 @@
 
 import UIKit
 
-class CourseViewController: UIViewController {
-
+class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegate {
     // MARK: Models
     
-    var courses = Courses(
-        courses: [
-            Course(name: "中国近代史纲要", sections: [
-                Section(weekday: 1, start: 1, end: 2, classroom: "南E205")
-            ], instructor: "朱月白"),
-            
-            Course(name: "C++语言程序设计", sections: [
-                Section(weekday: 1, start: 3, end: 5, classroom: "南E301"),
-                Section(weekday: 3, start: 1, end: 2, classroom: "南E301")
-            ], instructor: "周咏梅"),
-            
-            Course(name: "综合英语（4）", sections: [
-                Section(weekday: 1, start: 8, end: 9, classroom: "南A401"),
-                Section(weekday: 2, start: 1, end: 2, classroom: "南G206")
-            ], instructor: "王斐"),
-            
-            Course(name: "高等数学", sections: [
-                Section(weekday: 2, start: 3, end: 4, classroom: "南实C103"),
-                Section(weekday: 3, start: 3, end: 4, classroom: "南G404"),
-                Section(weekday: 5, start: 8, end: 9, classroom: "南A301")
-            ], instructor: "钟兴富"),
-            
-            Course(name: "线性代数", sections: [
-                Section(weekday: 2, start: 9, end: 11, classroom: "南E501")
-            ], instructor: "李键红"),
-            
-            Course(name: "体育（1）（网球）", sections: [
-                Section(weekday: 3, start: 10, end: 11, classroom: "南网球场1号")
-            ], instructor: "郑少苹"),
-            
-            Course(name: "思想道德修养与法律基础", sections: [
-                Section(weekday: 4, start: 1, end: 2, classroom: "南E404")
-            ], instructor: "刘云甫"),
-            
-            Course(name: "基础ESP（1）", sections: [
-                Section(weekday: 4, start: 3, end: 4, classroom: "南G404")
-            ], instructor: "刘会英"),
-            
-            Course(name: "计算机科学导论", sections: [
-                Section(weekday: 5, start: 1, end: 2, classroom: "南F203")
-            ], instructor: "丘心颖"),
-        ],
-        semester: (1, 1))
+//    var courses = Courses(
+//        courses: [
+//            Course(name: "中国近代史纲要", sections: [
+//                Section(weekday: 1, start: 1, end: 2, classroom: "南E205")
+//            ], instructor: "朱月白"),
+//
+//            Course(name: "C++语言程序设计", sections: [
+//                Section(weekday: 1, start: 3, end: 5, classroom: "南E301"),
+//                Section(weekday: 3, start: 1, end: 2, classroom: "南E301")
+//            ], instructor: "周咏梅"),
+//
+//            Course(name: "综合英语（4）", sections: [
+//                Section(weekday: 1, start: 8, end: 9, classroom: "南A401"),
+//                Section(weekday: 2, start: 1, end: 2, classroom: "南G206")
+//            ], instructor: "王斐"),
+//
+//            Course(name: "高等数学", sections: [
+//                Section(weekday: 2, start: 3, end: 4, classroom: "南实C103"),
+//                Section(weekday: 3, start: 3, end: 4, classroom: "南G404"),
+//                Section(weekday: 5, start: 8, end: 9, classroom: "南A301")
+//            ], instructor: "钟兴富"),
+//
+//            Course(name: "线性代数", sections: [
+//                Section(weekday: 2, start: 9, end: 11, classroom: "南E501")
+//            ], instructor: "李键红"),
+//
+//            Course(name: "体育（1）（网球）", sections: [
+//                Section(weekday: 3, start: 10, end: 11, classroom: "南网球场1号")
+//            ], instructor: "郑少苹"),
+//
+//            Course(name: "思想道德修养与法律基础", sections: [
+//                Section(weekday: 4, start: 1, end: 2, classroom: "南E404")
+//            ], instructor: "刘云甫"),
+//
+//            Course(name: "基础ESP（1）", sections: [
+//                Section(weekday: 4, start: 3, end: 4, classroom: "南G404")
+//            ], instructor: "刘会英"),
+//
+//            Course(name: "计算机科学导论", sections: [
+//                Section(weekday: 5, start: 1, end: 2, classroom: "南F203")
+//            ], instructor: "丘心颖"),
+//        ],
+//        semester: (grade: 1, half: 1))
+    
+    var courses: Courses! {
+        didSet {
+            // Saves to disk.
+            Courses.saveCourses(self.courses)
+        }
+    }
     
     // MARK: Views
     
@@ -154,12 +160,69 @@ class CourseViewController: UIViewController {
         return line
     }()
     
+    var semesterPickerView: CourseSemesterPickerPopView!
+    
     // MARK: Init
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         updateViews()
+        
+//        courses = Courses(
+//            courses: [
+//                Course(name: "中国近代史纲要", sections: [
+//                    Section(weekday: 1, start: 1, end: 2, classroom: "南E205")
+//                ], instructor: "朱月白"),
+//
+//                Course(name: "C++语言程序设计", sections: [
+//                    Section(weekday: 1, start: 3, end: 5, classroom: "南E301"),
+//                    Section(weekday: 3, start: 1, end: 2, classroom: "南E301")
+//                ], instructor: "周咏梅"),
+//
+//                Course(name: "综合英语（4）", sections: [
+//                    Section(weekday: 1, start: 8, end: 9, classroom: "南A401"),
+//                    Section(weekday: 2, start: 1, end: 2, classroom: "南G206")
+//                ], instructor: "王斐"),
+//
+//                Course(name: "高等数学", sections: [
+//                    Section(weekday: 2, start: 3, end: 4, classroom: "南实C103"),
+//                    Section(weekday: 3, start: 3, end: 4, classroom: "南G404"),
+//                    Section(weekday: 5, start: 8, end: 9, classroom: "南A301")
+//                ], instructor: "钟兴富"),
+//
+//                Course(name: "线性代数", sections: [
+//                    Section(weekday: 2, start: 9, end: 11, classroom: "南E501")
+//                ], instructor: "李键红"),
+//
+//                Course(name: "体育（1）（网球）", sections: [
+//                    Section(weekday: 3, start: 10, end: 11, classroom: "南网球场1号")
+//                ], instructor: "郑少苹"),
+//
+//                Course(name: "思想道德修养与法律基础", sections: [
+//                    Section(weekday: 4, start: 1, end: 2, classroom: "南E404")
+//                ], instructor: "刘云甫"),
+//
+//                Course(name: "基础ESP（1）", sections: [
+//                    Section(weekday: 4, start: 3, end: 4, classroom: "南G404")
+//                ], instructor: "刘会英"),
+//
+//                Course(name: "计算机科学导论", sections: [
+//                    Section(weekday: 5, start: 1, end: 2, classroom: "南F203")
+//                ], instructor: "丘心颖"),
+//            ],
+//            semester: (grade: 1, half: 1), isCurrent: true)
+        
+//        courses = Courses(courses: [Course(name: "course", sections: [Section(weekday: 1, start: 1, end: 2, classroom: "T 203")], instructor: "Instructor")], semester: (grade: 1, half: 1), isCurrent: true)
+        for1: for grade in 1...4 {
+            for half in [1, 2] {
+                let courses_ = Courses.loadCourses(semester: (grade: grade, half: half))!
+                if courses_.isCurrent {
+                    courses = courses_
+                    break for1
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -180,6 +243,11 @@ class CourseViewController: UIViewController {
     func updateViews() {
         navigationItem.title = "Course"
         
+        // Bar buttons.
+        let semesterBarButton = UIBarButtonItem(title: "Semester", style: .plain, target: self, action: #selector(semesterBarButtonTapped_))
+        semesterBarButton.tintColor = .white
+        navigationItem.leftBarButtonItem = semesterBarButton
+        
         // Collection Views.
         view.addSubview(dateCollectionView)
         view.addSubview(courseCollectionView)
@@ -187,21 +255,34 @@ class CourseViewController: UIViewController {
     
     // MARK: - Customized funcs
     
+    @objc func semesterBarButtonTapped_() {
+        semesterPickerView = CourseSemesterPickerPopView(
+            semesterPickerFrame: CGRect(x: UIScreen.main.bounds.width * 0.03,
+                                    y: navigationController!.navigationBar.bounds.height
+                                        + navigationController!.navigationBar.bounds.maxY,
+                                    width: UIScreen.main.bounds.width * 0.75,
+                                    height: UIScreen.main.bounds.height * 0.2)
+        )
+        semesterPickerView.updateValues(delegate: self)
+        UIApplication.shared.windows.last?.addSubview(semesterPickerView)
+    }
+    
     func drawCourse(course: Course, section: Section) {
         let courseView: UIView = {
             let view = UIView(
                 frame: CGRect(
-                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width,
-                    y: CGFloat(section.start - 1) * courseCellSize.height,
-                    width: courseCellSize.width,
-                    height: courseCellSize.height * CGFloat(section.end - section.start + 1)
+                    x: CGFloat(sectionIdxWidth) + CGFloat(section.weekday - 1) * courseCellSize.width + 1,
+                    y: CGFloat(section.start - 1) * courseCellSize.height + 1,
+                    width: courseCellSize.width - 2,
+                    height: courseCellSize.height * CGFloat(section.end - section.start + 1) - 2
                 )
             )
             
             view.alpha = 0.8
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
-            view.backgroundColor = .sky
+            view.backgroundColor = UIColor.sky.withAlphaComponent(0.6)
+            view.tag = 1
             
             return view
         }()
@@ -211,7 +292,7 @@ class CourseViewController: UIViewController {
             
             label.text = "\(course.name!)\n@\n\(section.classroom!)"
             label.numberOfLines = 6
-            label.font = UIFont.systemFont(ofSize: 10)
+            label.font = UIFont.boldSystemFont(ofSize: 10)
             label.textAlignment = .left
             label.textColor = UIColor.white
 //            label.tag = self.sections.firstIndex(of: section)!
@@ -288,6 +369,30 @@ class CourseViewController: UIViewController {
         let date = Calendar.current.date(byAdding: .day, value: weekday, to: mondayOfCurrentWeek)!
         
         return String(date.getComponents([.day]).day!)
+    }
+    
+    // MARK: - Course semester picker pop view delegate
+    
+    func changeSemester(semester: (grade: Int, half: Int)) {
+        // Saves the current courses.
+        Courses.saveCourses(courses)
+        
+        // Loads the courses given a semester.
+        courses = Courses.loadCourses(semester: semester)
+        courses.isCurrent = true
+
+        // Draws new courses.
+        for view in courseCollectionView.subviews {
+            if view.tag == 1  {  // Course view.
+                view.removeFromSuperview()
+            }
+        }
+    
+        for course in courses.courses {
+            for section in course.sections {
+                drawCourse(course: course, section: section)
+            }
+        }
     }
 }
 
