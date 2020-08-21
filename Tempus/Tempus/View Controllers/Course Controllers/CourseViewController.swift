@@ -305,7 +305,7 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
     }
     
     func drawCurrentTimeLine() {
-        func getLoc() -> CGFloat {
+        func getLoc() -> CGFloat? {
             let current = Date().currentTimeZone()
             
             // Having class.
@@ -330,15 +330,17 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
                 }
             }
             
-            return 0
+            return nil
         }
         
-        let linePath = UIBezierPath()
-        linePath.move(to: CGPoint(x: 0, y: getLoc()))
-        linePath.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: getLoc()))
-        timeLine.path = linePath.cgPath
-        
-        courseCollectionView.layer.addSublayer(timeLine)
+        if let loc = getLoc() {
+            let linePath = UIBezierPath()
+            linePath.move(to: CGPoint(x: sectionIdxWidth, y: loc))
+            linePath.addLine(to: CGPoint(x: UIScreen.main.bounds.width, y: loc))
+            
+            timeLine.path = linePath.cgPath
+            courseCollectionView.layer.addSublayer(timeLine)
+        }
     }
     
     func drawCurrentWeekdayLine() {
