@@ -248,6 +248,10 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         semesterBarButton.tintColor = .white
         navigationItem.leftBarButtonItem = semesterBarButton
         
+        let addBarButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(presentAddingView))
+        addBarButton.tintColor = .white
+        navigationItem.rightBarButtonItem = addBarButton
+        
         // Collection Views.
         view.addSubview(dateCollectionView)
         view.addSubview(courseCollectionView)
@@ -267,6 +271,12 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         UIApplication.shared.windows.last?.addSubview(semesterPickerView)
     }
     
+    @objc func presentAddingView() {
+        let courseEditViewController = CourseEditViewController()
+        courseEditViewController.updateValues(delegate: self)
+        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+    }
+    
     func drawCourse(course: Course, section: Section) {
         let courseView: UIView = {
             let view = UIView(
@@ -278,6 +288,7 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
                 )
             )
             
+            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed)))
             view.alpha = 0.8
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
@@ -302,6 +313,12 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         courseView.addSubview(courseInfoLabel)
         
         courseCollectionView.addSubview(courseView)
+    }
+    
+    @objc func viewLongPressed() {
+        let courseEditViewController = CourseEditViewController()
+        courseEditViewController.updateValues(delegate: self)
+        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
     }
     
     func drawCurrentTimeLine() {

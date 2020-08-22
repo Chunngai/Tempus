@@ -10,9 +10,9 @@ import Foundation
 
 struct Course: Equatable, Codable {
     var name: String!
-    var sections: [Section]!
     var instructor: String!
     var weekNumber: Int!
+    var sections: [Section]!
     
     // MARK: - Initializers
     
