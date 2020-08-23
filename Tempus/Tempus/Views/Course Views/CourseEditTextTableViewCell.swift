@@ -57,21 +57,25 @@ class CourseEditTextTableViewCell: UITableViewCell {
         // Label/
         contentView.addSubview(label)
         label.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(contentView.frame.width * 0.06)
+            make.left.equalToSuperview().offset(contentView.frame.width * 0.05)
             make.centerY.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.25)
+            make.width.equalToSuperview().offset(contentView.frame.width * 0.45)
         }
         
         // Text field.
         contentView.addSubview(textField)
         textField.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(contentView.frame.width * 0.36)
+            make.left.equalToSuperview().offset(contentView.frame.width * 0.5)
             make.centerY.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.65)
+            make.width.equalToSuperview().offset(contentView.frame.width * 0.5)
         }
     }
     
-    func updateValues(labelText: String) {
-        label.text = labelText
+    func updateValues(labelText: String?, validIntegers: ClosedRange<Int>?) {
+        if let labelText = labelText {
+            label.text = labelText
+        } else {
+            textField.isEnabled = false
+        }
     }
 }

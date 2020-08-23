@@ -227,13 +227,8 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        for course in courses.courses {
-            for section in course.sections {
-                drawCourse(course: course, section: section)
-            }
-        }
         
+        drawCourses()
         drawCurrentTimeLine()
         drawCurrentWeekdayLine()
     }
@@ -272,9 +267,9 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
     }
     
     @objc func presentAddingView() {
-        let courseEditViewController = CourseEditViewController()
-        courseEditViewController.updateValues(delegate: self)
-        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+//        let courseEditViewController = CourseEditViewController()
+//        courseEditViewController.updateValues(delegate: self, course: Course(name: "", sections: [Section(weekday: 1, start: 1, end: 2, classroom: "")], instructor: ""))
+//        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
     }
     
     func drawCourse(course: Course, section: Section) {
@@ -288,12 +283,12 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
                 )
             )
             
-            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed)))
+            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(viewLongPressed(_:))))
             view.alpha = 0.8
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
             view.backgroundColor = UIColor.sky.withAlphaComponent(0.6)
-            view.tag = 1
+            view.tag = courses.courses.firstIndex(of: course)!
             
             return view
         }()
@@ -315,10 +310,22 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         courseCollectionView.addSubview(courseView)
     }
     
-    @objc func viewLongPressed() {
-        let courseEditViewController = CourseEditViewController()
-        courseEditViewController.updateValues(delegate: self)
-        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+    @objc func viewLongPressed(_ longGestureRecognizer: UILongPressGestureRecognizer) {
+//        let view = longGestureRecognizer.view!
+//        let courseIndex = view.tag
+//        let course = courses.courses[courseIndex]
+//
+//        let courseEditViewController = CourseEditViewController()
+//        courseEditViewController.updateValues(delegate: self, course: course)
+//        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+    }
+    
+    func drawCourses() {
+        for course in courses.courses {
+            for section in course.sections {
+                drawCourse(course: course, section: section)
+            }
+        }
     }
     
     func drawCurrentTimeLine() {
@@ -402,16 +409,12 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
 
         // Draws new courses.
         for view in courseCollectionView.subviews {
-            if view.tag == 1  {  // Course view.
+            if view.tag != 0  {  // Course view.
                 view.removeFromSuperview()
             }
         }
     
-        for course in courses.courses {
-            for section in course.sections {
-                drawCourse(course: course, section: section)
-            }
-        }
+        drawCourses()
     }
 }
 

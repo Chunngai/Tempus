@@ -10,6 +10,10 @@ import UIKit
 
 class CourseEditViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    // MARK: - Models
+    
+    var course: Course!
+    
     // MARK: - Controllers
     
     var delegate: CourseViewController!
@@ -37,13 +41,6 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         return tableView
     }()
     
-    var courseNameCellIndexPath: IndexPath {
-        return IndexPath(row: 0, section: 0)
-    }
-    var instructorCellIndexPath: IndexPath {
-        return IndexPath(row: 1, section: 0)
-    }
-    
     // MARK: - Init
     
     override func viewDidLoad() {
@@ -69,8 +66,10 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         view.addSubview(courseEditTableView)
     }
     
-    func updateValues(delegate: CourseViewController) {
+    func updateValues(delegate: CourseViewController, course: Course) {
         self.delegate = delegate
+        
+        self.course = course
     }
     
     // MARK: - Customized funcs
@@ -80,33 +79,87 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @objc func saveButtonTapped() {
-        
+//        print(getCell(at: courseNameCellIndexPath).textField)
+    }
+    
+    func getLabelText(at indexPath: IndexPath) -> String {
+        return ""
+    }
+    
+    func getValidIntegers(at indexPath: IndexPath) -> ClosedRange<Int> {
+        return 1...100
     }
     
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1 + course.sections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 3 : 4
+        if section == 0 {
+            return 3
+        } else {
+            return 4
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath == courseNameCellIndexPath {
-            let cell = CourseEditTextTableViewCell()
-            cell.updateValues(labelText: "Course: ")
-            return cell
-        }
-        if indexPath == instructorCellIndexPath {
-            let cell = CourseEditTextTableViewCell()
-            cell.updateValues(labelText: "Instructor: ")
-            return cell
-        }
         
-        return CourseEditTextTableViewCell()
+        let cell = CourseEditTextTableViewCell()
+        cell.updateValues(labelText: getLabelText(at: indexPath), validIntegers: getValidIntegers(at: indexPath))
+        return cell
     }
+}
+
+extension CourseEditViewController {
+//    var courseNameCellIndexPath: IndexPath {
+//        return IndexPath(row: 0, section: 0)
+//    }
+//    var instructorCellIndexPath: IndexPath {
+//        return IndexPath(row: 1, section: 0)
+//    }
+//    var weekNumberCellIndexPath: IndexPath {
+//        return IndexPath(row: 2, section: 0)
+//    }
+//
+//    var weekdayCellIndexPath: IndexPath {
+//        return IndexPath(row: 0, section: 2)
+//    }
+//    var startCellIndexPath: IndexPath {
+//        return IndexPath(row: 1, section: 2)
+//    }
+//    var endCellIndexPath: IndexPath {
+//        return IndexPath(row: 2, section: 2)
+//    }
+//    var classroomCellIndexPath: IndexPath {
+//        return IndexPath(row: 3, section: 2)
+//    }
+//
+//    var labelTexts: [IndexPath: String] {
+//        return [
+//            courseNameCellIndexPath: "Course",
+//            instructorCellIndexPath: "Instructor",
+//            weekNumberCellIndexPath: "Weeks",
+//
+//            weekdayCellIndexPath: "On",
+//            startCellIndexPath: "From Section",
+//            endCellIndexPath: "To Section",
+//            classroomCellIndexPath: "At"
+//        ]
+//    }
+//
+//    var validIntegers: [IndexPath: ClosedRange<Int>] {
+//        return [
+//            weekNumberCellIndexPath: 1...16,
+//
+//            weekdayCellIndexPath: 1...7,
+//            startCellIndexPath: 1...15,
+//            endCellIndexPath: 1...15,
+//        ]
+//    }
     
-    // MARK: - Table view delegate
+    func getCell(at indexPath: IndexPath) -> CourseEditTextTableViewCell {
+        return courseEditTableView.cellForRow(at: indexPath) as! CourseEditTextTableViewCell
+    }
 }

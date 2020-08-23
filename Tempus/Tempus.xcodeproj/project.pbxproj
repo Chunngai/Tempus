@@ -39,6 +39,7 @@
 		FF6544D124F0E7FE0089AA3F /* CourseEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6544D024F0E7FE0089AA3F /* CourseEditViewController.swift */; };
 		FF6544D324F0F00E0089AA3F /* CourseEditTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6544D224F0F00E0089AA3F /* CourseEditTextTableViewCell.swift */; };
 		FF9E18C724EE42C50083D97E /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9E18C624EE42C50083D97E /* Section.swift */; };
+		FFAFD54B24F25DE20018BD9E /* TimeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFAFD54A24F25DE20018BD9E /* TimeTable.swift */; };
 		FFBC1DE924926C6200C81ACD /* Interval.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC1DE824926C6200C81ACD /* Interval.swift */; };
 		FFBF90BC2421127000313C7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BB2421127000313C7D /* AppDelegate.swift */; };
 		FFBF90BE2421127000313C7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBF90BD2421127000313C7D /* SceneDelegate.swift */; };
@@ -117,6 +118,7 @@
 		FF6544D024F0E7FE0089AA3F /* CourseEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseEditViewController.swift; sourceTree = "<group>"; };
 		FF6544D224F0F00E0089AA3F /* CourseEditTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseEditTextTableViewCell.swift; sourceTree = "<group>"; };
 		FF9E18C624EE42C50083D97E /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		FFAFD54A24F25DE20018BD9E /* TimeTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTable.swift; sourceTree = "<group>"; };
 		FFBC1DE824926C6200C81ACD /* Interval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interval.swift; sourceTree = "<group>"; };
 		FFBF90B82421127000313C7D /* Tempus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tempus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFBF90BB2421127000313C7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				FF3BE371242FA0B5006677A2 /* ToDo.swift */,
 				FF5028D824E14338000A74E6 /* Course.swift */,
 				FF9E18C624EE42C50083D97E /* Section.swift */,
+				FFAFD54A24F25DE20018BD9E /* TimeTable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				FFBF90D12421151200313C7D /* TabBarViewController.swift in Sources */,
 				FF3E63D22423C4090006B8FA /* ScheduleTableViewCell.swift in Sources */,
 				FF3CA81A2430E1B60054BB49 /* ToDoEditNavigationController.swift in Sources */,
+				FFAFD54B24F25DE20018BD9E /* TimeTable.swift in Sources */,
 				FF511FC024D526B40088F79D /* Repetition.swift in Sources */,
 				FF4812DF24958DD100682A99 /* ToDoNavigationController.swift in Sources */,
 				FF41FEFD24E1175000475086 /* CourseDateCollectionViewCell.swift in Sources */,
