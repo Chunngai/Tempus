@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CourseEditTextTableViewCell: UITableViewCell {
+class CourseEditTextTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     // MARK: - Views
     
@@ -24,6 +24,7 @@ class CourseEditTextTableViewCell: UITableViewCell {
         let textField = UITextField()
         
         textField.textColor = .white
+        textField.textAlignment = .center
 
         return textField
     }()
@@ -54,7 +55,7 @@ class CourseEditTextTableViewCell: UITableViewCell {
         backgroundColor = UIColor.sky.withAlphaComponent(0)
         selectionStyle = .none
         
-        // Label/
+        // Label.
         contentView.addSubview(label)
         label.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(contentView.frame.width * 0.05)
@@ -64,18 +65,37 @@ class CourseEditTextTableViewCell: UITableViewCell {
         
         // Text field.
         contentView.addSubview(textField)
+        textField.delegate = self
         textField.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(contentView.frame.width * 0.5)
             make.centerY.equalToSuperview()
-            make.width.equalToSuperview().offset(contentView.frame.width * 0.5)
+            make.width.equalToSuperview().multipliedBy(0.5)
         }
     }
     
-    func updateValues(labelText: String?, validIntegers: ClosedRange<Int>?) {
+    func updateValues(labelText: String?, textFieldText: String, validIntegers: ClosedRange<Int>?) {
         if let labelText = labelText {
             label.text = labelText
         } else {
             textField.isEnabled = false
         }
+        
+        textField.text = textFieldText
+        
+        if validIntegers != nil {
+            textField.keyboardType = .numberPad
+        }
+    }
+    
+    // MARK: - Text field delegate
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.textColor = .white
+    }
+    
+    // MARK: - Customized funcs
+    
+    func switchToWarningColor() {
+        textField.textColor = .red
     }
 }

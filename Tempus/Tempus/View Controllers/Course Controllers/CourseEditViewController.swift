@@ -18,6 +18,8 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
     
     var delegate: CourseViewController!
     
+    var courseIndex: Int?
+    
     // MARK: - Views
     
     lazy var courseEditTableView: UITableView = {
@@ -66,8 +68,10 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         view.addSubview(courseEditTableView)
     }
     
-    func updateValues(delegate: CourseViewController, course: Course) {
+    func updateValues(delegate: CourseViewController, course: Course, courseIndex: Int?) {
         self.delegate = delegate
+        
+        self.courseIndex = courseIndex
         
         self.course = course
     }
@@ -79,15 +83,140 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @objc func saveButtonTapped() {
-//        print(getCell(at: courseNameCellIndexPath).textField)
+        course.name = getTextFieldText(at: IndexPath(row: 0, section: 0))
+        course.instructor = getTextFieldText(at: IndexPath(row: 1, section: 0))
+        let weekNumberCellIndexPath = IndexPath(row: 2, section: 0)
+        if let weekNumber = validateInteger(at: weekNumberCellIndexPath) {
+            course.weekNumber = weekNumber
+        } else {
+//            getCell(at: weekNumberCellIndexPath).switchToWarningColor()
+            return
+        }
+        
+        
+        for section in 1..<courseEditTableView.numberOfSections {
+            let weekdayCellIndexPath = IndexPath(row: 0, section: section)
+            if let weekday = validateInteger(at: weekdayCellIndexPath) {
+                course.sections[section - 1].weekday = weekday
+            } else {
+//                getCell(at: weekdayCellIndexPath).switchToWarningColor()
+                return
+            }
+            
+            let startCellIndexPath = IndexPath(row: 1, section: section)
+            if let start = validateInteger(at: startCellIndexPath) {
+                course.sections[section - 1].start = start
+            } else {
+//                getCell(at: startCellIndexPath).switchToWarningColor()
+                return
+            }
+            
+            let endCellIndexPath = IndexPath(row: 2, section: section)
+            if let end = validateInteger(at: endCellIndexPath) {
+                course.sections[section - 1].end = end
+            } else {
+//                getCell(at: endCellIndexPath).switchToWarningColor()
+                return
+            }
+            
+            course.sections[section - 1].classroom = getTextFieldText(at: IndexPath(row: 3, section: section))
+        }
+        
+        delegate.editCourse(course, at: courseIndex)
+        delegate.dismiss(animated: true, completion: nil)
     }
     
-    func getLabelText(at indexPath: IndexPath) -> String {
+    func validateInteger(at indexPath: IndexPath) -> Int? {
+        let validIntegers = getValidIntegersForCell(at: indexPath)!
+        if let currentValue = Int(getTextFieldText(at: indexPath)),
+            validIntegers.contains(currentValue) {
+            return Int(currentValue)
+        } else {
+            return nil
+        }
+    }
+    
+    func invalidNumberWarning(withText: String, withRange: ClosedRange<Int>) {
+        
+    }
+    
+    func getLabelTextForCell(at indexPath: IndexPath) -> String {
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        var labelText = ""
+        if section == 0 {
+            if row == 0 {
+                labelText = "Course"
+            } else if row == 1 {
+                labelText = "Instructor"
+            } else if row == 2 {
+                labelText = "Weeks"
+            }
+        } else {
+            if row == 0 {
+                labelText = "On"
+            } else if row == 1 {
+                labelText = "from Section"
+            } else if row == 2 {
+                labelText = "to Section"
+            } else if row == 3 {
+                labelText = "At"
+            }
+        }
+        if !labelText.isEmpty {
+            labelText += ": "
+        }
+        
+        return labelText
+    }
+    
+    func getValidIntegersForCell(at indexPath: IndexPath) -> ClosedRange<Int>? {
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        if section == 0 && row == 2 {
+            return 1...16
+        }
+        
+        if section != 0 && row == 0 {
+            return 1...7
+        }
+        
+        if section != 0 && (row == 1 || row == 2) {
+            return 1...15
+        }
+        
+        return nil
+    }
+    
+    func getTextFieldTextForCell(at indexPath: IndexPath) -> String {
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        if section == 0 {
+            if row == 0 {
+                return course.name
+            } else if row == 1 {
+                return course.instructor
+            } else if row == 2 {
+                return course.weekNumber != 0 ? String(course.weekNumber) : ""
+            }
+        } else {
+            let section = course.sections[section - 1]
+            
+            if row == 0 {
+                return section.weekday != 0 ? String(section.weekday) : ""
+            } else if row == 1 {
+                return section.start != 0 ? String(section.start) : ""
+            } else if row == 2 {
+                return section.end != 0 ? String(section.end) : ""
+            } else if row == 3 {
+                return section.classroom
+            }
+        }
+        
         return ""
-    }
-    
-    func getValidIntegers(at indexPath: IndexPath) -> ClosedRange<Int> {
-        return 1...100
     }
     
     // MARK: - Table view data source
@@ -98,18 +227,34 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 3
-        } else {
             return 4
+        } else {
+            return 5
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = CourseEditTextTableViewCell()
-        cell.updateValues(labelText: getLabelText(at: indexPath), validIntegers: getValidIntegers(at: indexPath))
+        cell.updateValues(labelText: getLabelTextForCell(at: indexPath), textFieldText: getTextFieldTextForCell(at: indexPath), validIntegers: getValidIntegersForCell(at: indexPath))
         return cell
     }
+    
+    // MARK: - Table view delegate
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let headerView = ToDoHeaderView()
+//
+//        var sectionName = ""
+//        if section == 0 {
+//            sectionName = "Course"
+//        } else {
+//            sectionName = "Section"
+//        }
+//        headerView.updateValues(sectionName: sectionName)
+//
+//        return headerView
+//    }
 }
 
 extension CourseEditViewController {
@@ -162,4 +307,12 @@ extension CourseEditViewController {
     func getCell(at indexPath: IndexPath) -> CourseEditTextTableViewCell {
         return courseEditTableView.cellForRow(at: indexPath) as! CourseEditTextTableViewCell
     }
+    
+    func getTextFieldText(at indexPath: IndexPath) -> String {
+        return getCell(at: indexPath).textField.text!
+    }
+}
+
+protocol CourseEditViewControllerDelegate {
+    func editCourse(_ course: Course, at courseIndex: Int?)
 }
