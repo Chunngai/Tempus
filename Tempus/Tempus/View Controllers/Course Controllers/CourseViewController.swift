@@ -9,6 +9,7 @@
 import UIKit
 
 class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegate, CourseEditViewControllerDelegate {
+   
     // MARK: Models
     
     var courses: Courses! {
@@ -16,6 +17,17 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
             // Saves to disk.
             Courses.saveCourses(self.courses)
         }
+    }
+    
+    var sections: [Section] {
+        var sections: [Section] = []
+        for course in courses.courses {
+            for section in course.sections {
+                sections.append(section)
+            }
+        }
+        
+        return sections
     }
     
     // MARK: Views
@@ -117,6 +129,16 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
     }()
     
     var semesterPickerView: CourseSemesterPickerPopView!
+    
+    lazy var wholeScreenView: UIView = {
+        let wholeScreenView = UIView()
+
+        wholeScreenView.frame = courseCollectionView.frame
+        wholeScreenView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        wholeScreenView.tag = 999
+
+        return wholeScreenView
+    }()
     
     // MARK: Init
     
@@ -247,7 +269,8 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
             view.backgroundColor = UIColor.sky.withAlphaComponent(0.6)
-            view.tag = courses.courses.firstIndex(of: course)! + 1  // Cannot be the default value 0.
+//            view.tag = courses.courses.firstIndex(of: course)! + 1  // Cannot be the default value 0.
+            view.tag = sections.firstIndex(of: section)! + 1
             
             return view
         }()
@@ -260,7 +283,6 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
             label.font = UIFont.boldSystemFont(ofSize: 10)
             label.textAlignment = .left
             label.textColor = UIColor.white
-//            label.tag = self.sections.firstIndex(of: section)!
             
             return label
         }()
@@ -270,17 +292,81 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
     }
     
     @objc func viewLongPressed(_ longGestureRecognizer: UILongPressGestureRecognizer) {
-        if let courseEditViewController = presentedViewController, courseEditViewController is CourseEditNavigationController {
+        if view.subviews.contains(where: { (view) -> Bool in
+            view.tag == 999
+        }) {
             return
         }
-        
-        let view = longGestureRecognizer.view!
-        let courseIndex = view.tag - 1
-        let course = courses.courses[courseIndex]
+            
+        let courseView = longGestureRecognizer.view!
 
-        let courseEditViewController = CourseEditViewController()
-        courseEditViewController.updateValues(delegate: self, course: course, courseIndex: courseIndex)
-        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+        view.addSubview(wholeScreenView)
+        
+        let editButton = UIButton()
+        wholeScreenView.addSubview(editButton)
+        editButton.addTarget(self, action: #selector(presentEditingView(_:)), for: .touchUpInside)
+        editButton.setTitle("Edit", for: .normal)
+        editButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
+        editButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
+        editButton.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
+        editButton.layer.cornerRadius = 10
+        editButton.layer.masksToBounds = true
+        editButton.tag = courseView.tag
+        editButton.snp.makeConstraints { (make) in
+            make.top.left.right.equalTo(courseView)
+            make.height.equalTo(courseView).multipliedBy(0.5)
+        }
+
+        let deleteButton = UIButton()
+        wholeScreenView.addSubview(deleteButton)
+        deleteButton.addTarget(self, action: #selector(deleteSection(_:)), for: .touchUpInside)
+        deleteButton.setTitle("Delete", for: .normal)
+        deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
+        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
+        deleteButton.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
+        deleteButton.layer.cornerRadius = 10
+        deleteButton.layer.masksToBounds = true
+        deleteButton.tag = courseView.tag
+        deleteButton.snp.makeConstraints { (make) in
+            make.bottom.left.right.equalTo(courseView)
+            make.height.equalTo(courseView).multipliedBy(0.5)
+        }
+    }
+    
+    @objc func presentEditingView(_ button: UIButton) {
+        //        let view = longGestureRecognizer.view!
+        //        let courseIndex = view.tag - 1
+        //        let course = courses.courses[courseIndex]
+        //
+        //        let courseEditViewController = CourseEditViewController()
+        //        courseEditViewController.updateValues(delegate: self, course: course, courseIndex: courseIndex)
+        //        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+    }
+    
+    @objc func deleteSection(_ button: UIButton) {
+//        print(button.tag)
+    }
+    
+    // Taps to make disappear.
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.25, animations: {
+            for subView in self.wholeScreenView.subviews {
+                subView.removeFromSuperview()
+            }
+        }) { (view) in
+            self.wholeScreenView.removeFromSuperview()
+        }
+    }
+    
+    // Taps to make disappear.
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        UIView.animate(withDuration: 0.25, animations: {
+            for subView in self.wholeScreenView.subviews {
+                subView.removeFromSuperview()
+            }
+        }) { (view) in
+            self.wholeScreenView.removeFromSuperview()
+        }
     }
     
     func drawCourses() {
