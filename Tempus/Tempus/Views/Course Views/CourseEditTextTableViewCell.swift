@@ -66,6 +66,7 @@ class CourseEditTextTableViewCell: UITableViewCell, UITextFieldDelegate {
         // Text field.
         contentView.addSubview(textField)
         textField.delegate = self
+        textField.inputAccessoryView = addDoneButton()
         textField.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(contentView.frame.width * 0.5)
             make.centerY.equalToSuperview()
@@ -97,5 +98,23 @@ class CourseEditTextTableViewCell: UITableViewCell, UITextFieldDelegate {
     
     func switchToWarningColor() {
         textField.textColor = .red
+    }
+    
+    @objc func finishEditing() {
+        contentView.endEditing(false)
+    }
+    
+    func addDoneButton() -> UIToolbar {
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textField.frame.width, height: 20))
+        
+        toolBar.tintColor = .sky
+        
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let barButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(finishEditing))
+        
+        toolBar.items = [spaceButton, barButton]
+        toolBar.sizeToFit()
+        
+        return toolBar
     }
 }

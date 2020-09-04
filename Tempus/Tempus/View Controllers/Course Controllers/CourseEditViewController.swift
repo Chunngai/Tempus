@@ -30,7 +30,8 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
                           y: navigationController!.navigationBar.frame.height,
                           width: view.frame.width,
                           height: view.frame.height
-                            - navigationController!.navigationBar.frame.height),
+                            - navigationController!.navigationBar.frame.height
+                            - navigationController!.navigationBar.frame.maxY),
             style: .plain
         )
         
@@ -42,6 +43,10 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         
         return tableView
     }()
+    
+    var addSectionIndex: Int {
+        return courseEditTableView.numberOfSections - 1
+    }
     
     // MARK: - Init
     
@@ -65,6 +70,7 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
         
         // Table view.
+        courseEditTableView.isEditing = true
         view.addSubview(courseEditTableView)
     }
     
@@ -94,7 +100,7 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
         }
         
         
-        for section in 1..<courseEditTableView.numberOfSections {
+        for section in 1..<courseEditTableView.numberOfSections - 1 {
             let weekdayCellIndexPath = IndexPath(row: 0, section: section)
             if let weekday = validateInteger(at: weekdayCellIndexPath) {
                 course.sections[section - 1].weekday = weekday
@@ -222,21 +228,27 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: - Table view data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 + course.sections.count
+        return 1 + course.sections.count + 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 4
-        } else {
+        } else if section != addSectionIndex {
             return 5
+        } else {
+            return 1
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = CourseEditTextTableViewCell()
-        cell.updateValues(labelText: getLabelTextForCell(at: indexPath), textFieldText: getTextFieldTextForCell(at: indexPath), validIntegers: getValidIntegersForCell(at: indexPath))
+        if indexPath.section != addSectionIndex {
+            cell.updateValues(labelText: getLabelTextForCell(at: indexPath), textFieldText: getTextFieldTextForCell(at: indexPath), validIntegers: getValidIntegersForCell(at: indexPath))
+        } else {
+            cell.updateValues(labelText: "Add a section", textFieldText: "", validIntegers: nil)
+        }
         return cell
     }
     
@@ -255,6 +267,48 @@ class CourseEditViewController: UIViewController, UITableViewDataSource, UITable
 //
 //        return headerView
 //    }
+    
+    // Override to support conditional editing of the table view.
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return indexPath.section != 2 ? true : false
+        return indexPath.section != addSectionIndex ? false : true
+    }
+
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let category = (tableView.cellForRow(at: indexPath) as! ToDoCategoryTableViewCell).textField.text!
+//            if categories.contains(category) {
+//                let idx = toDoList.getCategoryIdx(category: category)
+//                if !toDoList[idx].tasks.isEmpty {  // There are tasks of the category.
+//                    notEmptyCategoryDeletionAlert()
+//                    return
+//                }
+//            }
+//
+//            categories.remove(at: indexPath.row)
+//            tableView.deleteRows(at: [indexPath], with: .fade)
+//
+//            originalCategories = categories
+//        } else if editingStyle == .insert {
+//            categories.append("")
+//            tableView.insertRows(at: [IndexPath(row: categories.count - 1, section: 0)], with: .automatic)
+//        }
+        course.sections.append(Section(weekday: 0, start: 0, end: 0, classroom: ""))
+        courseEditTableView.reloadData()
+    }
+    
+    // Editing style.
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//        if indexPath.section == 0 {  // Normal categories.
+//            return .delete
+//        } else if indexPath.section == 1 {  // Add button.
+//            return .insert
+//        } else {
+//            return .none
+//        }
+        return indexPath.section != addSectionIndex ? .none : .insert
+    }
 }
 
 extension CourseEditViewController {

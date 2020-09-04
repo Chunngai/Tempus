@@ -134,7 +134,7 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         let wholeScreenView = UIView()
 
         wholeScreenView.frame = courseCollectionView.frame
-        wholeScreenView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        wholeScreenView.backgroundColor = UIColor.lightText.withAlphaComponent(0)
         wholeScreenView.tag = 999
 
         return wholeScreenView
@@ -268,7 +268,7 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
             view.alpha = 0.8
             view.layer.cornerRadius = 10
             view.layer.masksToBounds = true
-            view.backgroundColor = UIColor.sky.withAlphaComponent(0.6)
+            view.backgroundColor = .sky
 //            view.tag = courses.courses.firstIndex(of: course)! + 1  // Cannot be the default value 0.
             view.tag = sections.firstIndex(of: section)! + 1
             
@@ -308,13 +308,13 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         editButton.setTitle("Edit", for: .normal)
         editButton.setTitleColor(UIColor.blue.withAlphaComponent(0.3), for: .normal)
         editButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
-        editButton.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
+        editButton.backgroundColor = courseView.backgroundColor
         editButton.layer.cornerRadius = 10
         editButton.layer.masksToBounds = true
         editButton.tag = courseView.tag
         editButton.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(courseView)
-            make.height.equalTo(courseView).multipliedBy(0.5)
+            make.height.equalTo(courseView).multipliedBy(0.8)
         }
 
         let deleteButton = UIButton()
@@ -323,50 +323,83 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         deleteButton.setTitle("Delete", for: .normal)
         deleteButton.setTitleColor(UIColor.red.withAlphaComponent(0.5), for: .normal)
         deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 10)
-        deleteButton.backgroundColor = UIColor.lightText.withAlphaComponent(0.2)
+        deleteButton.backgroundColor = courseView.backgroundColor
         deleteButton.layer.cornerRadius = 10
         deleteButton.layer.masksToBounds = true
         deleteButton.tag = courseView.tag
         deleteButton.snp.makeConstraints { (make) in
             make.bottom.left.right.equalTo(courseView)
-            make.height.equalTo(courseView).multipliedBy(0.5)
+            make.height.equalTo(courseView).multipliedBy(0.2)
         }
     }
     
+    func getCourseIndex(of section_: Section) -> Int? {
+        for courseIndex in 0..<courses.courses.count {
+            for section in courses.courses[courseIndex].sections {
+                if section == section_ {
+                    return courseIndex
+                }
+            }
+        }
+        
+        return nil
+    }
+    
     @objc func presentEditingView(_ button: UIButton) {
-        //        let view = longGestureRecognizer.view!
-        //        let courseIndex = view.tag - 1
-        //        let course = courses.courses[courseIndex]
-        //
-        //        let courseEditViewController = CourseEditViewController()
-        //        courseEditViewController.updateValues(delegate: self, course: course, courseIndex: courseIndex)
-        //        navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+        let sectionIndex = button.tag - 1
+        let section = sections[sectionIndex]
+        if let courseIndex = getCourseIndex(of: section) {
+            let course = courses.courses[courseIndex]
+            let courseEditViewController = CourseEditViewController()
+            courseEditViewController.updateValues(delegate: self, course: course, courseIndex: courseIndex)
+            navigationController?.present(CourseEditNavigationController(rootViewController: courseEditViewController), animated: true, completion: nil)
+        }
+        
+        removeEditAndDeleteButtons()
+    }
+    
+    func getSectionIndex(of section: Section) -> Int? {
+        for course in courses.courses {
+            for sectionIndex in 0..<course.sections.count {
+                if section == course.sections[sectionIndex] {
+                    return sectionIndex
+                }
+            }
+        }
+        
+        return nil
     }
     
     @objc func deleteSection(_ button: UIButton) {
-//        print(button.tag)
+        let sectionIndex = button.tag - 1
+        let section = sections[sectionIndex]
+        if let sectionIndexInCourse = getSectionIndex(of: section), let courseIndex = getCourseIndex(of: section) {
+            courses.courses[courseIndex].sections.remove(at: sectionIndexInCourse)
+        }
+        
+        removeEditAndDeleteButtons()
+        
+        drawCourses()
+    }
+    
+    func removeEditAndDeleteButtons() {
+        UIView.animate(withDuration: 0.25, animations: {
+            for subView in self.wholeScreenView.subviews {
+                subView.removeFromSuperview()
+            }
+        }) { (view) in
+            self.wholeScreenView.removeFromSuperview()
+        }
     }
     
     // Taps to make disappear.
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        UIView.animate(withDuration: 0.25, animations: {
-            for subView in self.wholeScreenView.subviews {
-                subView.removeFromSuperview()
-            }
-        }) { (view) in
-            self.wholeScreenView.removeFromSuperview()
-        }
+        removeEditAndDeleteButtons()
     }
     
     // Taps to make disappear.
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        UIView.animate(withDuration: 0.25, animations: {
-            for subView in self.wholeScreenView.subviews {
-                subView.removeFromSuperview()
-            }
-        }) { (view) in
-            self.wholeScreenView.removeFromSuperview()
-        }
+        removeEditAndDeleteButtons()
     }
     
     func drawCourses() {
@@ -472,21 +505,7 @@ class CourseViewController: UIViewController, CourseSemesterPickerPopViewDelegat
         if let courseIndex = courseIndex {
             courses.courses[courseIndex] = course
         } else {
-            var isInCourses = false
-            for courseIndex in 0..<courses.courses.count {
-                let courseInCourses = courses.courses[courseIndex]
-                if courseInCourses.name == course.name
-                    && courseInCourses.instructor == course.instructor
-                    && courseInCourses.weekNumber == course.weekNumber {
-                    
-                    isInCourses = true
-                    courses.courses[courseIndex].sections.append(course.sections[0])
-                    break
-                }
-            }
-            if !isInCourses {
-                courses.courses.append(course)
-            }
+            courses.courses.append(course)
         }
         
         drawCourses()
